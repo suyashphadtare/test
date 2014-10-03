@@ -674,7 +674,6 @@ class TestStockEntry(unittest.TestCase):
 		se.get("mtn_details")[0].serial_no = "ABCD\nEFGH"
 		se.get("mtn_details")[0].transfer_qty = 2
 		se.insert()
-
 		self.assertRaises(SerialNoNotExistsError, se.submit)
 
 	def test_serial_duplicate(self):
@@ -701,8 +700,8 @@ class TestStockEntry(unittest.TestCase):
 		return se, serial_nos
 
 	def test_serial_item_error(self):
+		self._clear_stock_account_balance()
 		se, serial_nos = self.test_serial_by_series()
-		make_serialized_item("_Test Serialized Item", "ABCD\nEFGH")
 
 		se = frappe.copy_doc(test_records[0])
 		se.purpose = "Material Transfer"

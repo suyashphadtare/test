@@ -20,7 +20,6 @@ erpnext.selling.QuotationController = erpnext.selling.SellingController.extend({
 			doc.quotation_to = "Customer";
 		else if(doc.lead && !doc.quotation_to)
 			doc.quotation_to = "Lead";
-
 	},
 	refresh: function(doc, dt, dn) {
 		this._super(doc, dt, dn);

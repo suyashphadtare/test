@@ -45,6 +45,7 @@ class PricingRule(Document):
 		if self.min_qty and self.max_qty and flt(self.min_qty) > flt(self.max_qty):
 			throw(_("Min Qty can not be greater than Max Qty"))
 
+
 	def cleanup_fields_value(self):
 		for logic_field in ["apply_on", "applicable_for", "price_or_discount"]:
 			fieldname = frappe.scrub(self.get(logic_field) or "")
@@ -258,3 +259,4 @@ def apply_internal_priority(pricing_rules, field_set, args):
 			if filtered_rules: break
 
 	return filtered_rules or pricing_rules
+

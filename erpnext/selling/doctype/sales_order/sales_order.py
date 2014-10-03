@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 import frappe
 import frappe.utils
 from frappe.utils import cstr, flt, getdate, comma_and
+
 from frappe import _
 from frappe.model.mapper import get_mapped_doc
 

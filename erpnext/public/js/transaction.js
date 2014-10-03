@@ -293,6 +293,11 @@ erpnext.TransactionController = erpnext.stock.StockController.extend({
 
 	qty: function(doc, cdt, cdn) {
 		this.apply_pricing_rule(frappe.get_doc(cdt, cdn), true);
+		if(doc.doctype=='Sales Order')
+		{
+			this.item_code(doc,cdt,cdn)
+		}
+		this.calculate_taxes_and_totals();
 	},
 
 	// tax rate

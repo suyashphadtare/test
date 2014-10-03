@@ -2924,7 +2924,7 @@ The name of your company for which you are setting up this system.,De naam van u
 The net weight of this package. (calculated automatically as sum of net weight of items),Het nettogewicht van dit pakket. (Wordt automatisch berekend als de som van de netto-gewicht van items)
 The new BOM after replacement,De nieuwe BOM na vervanging
 The rate at which Bill Currency is converted into company's base currency,De snelheid waarmee Bill valuta worden omgezet in basis bedrijf munt
-The unique id for tracking all recurring invoices. It is generated on submit.,De unieke id voor het bijhouden van alle terugkerende facturen. Het wordt geproduceerd op te dienen.
+The unique id for tracking all recurring invoices. It is generated on submit.,De unieke id voor het bijhouden van alle terugkerende facturen. Het wordt geproduceerd op te dienen.
 "Then Pricing Rules are filtered out based on Customer, Customer Group, Territory, Supplier, Supplier Type, Campaign, Sales Partner etc.","Dan prijsregels worden uitgefilterd op basis van Klant, Customer Group, Territory, Leverancier, Leverancier Type, Campagne, Sales Partner etc."
 There are more holidays than working days this month.,Er zijn meer vakanties dan werkdagen deze maand .
 "There can only be one Shipping Rule Condition with 0 or blank value for ""To Value""","Er kan maar een Verzenden Regel Voorwaarde met 0 of blanco waarde voor ""To Value """

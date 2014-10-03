@@ -53,7 +53,6 @@ erpnext.stock.StockController = frappe.ui.form.Controller.extend({
 				frappe.set_route("query-report", "Stock Ledger");
 			}, "icon-bar-chart");
 		}
-
 	},
 
 	show_general_ledger: function() {

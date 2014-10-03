@@ -186,7 +186,6 @@ def get_price_list_rate(args, item_doc, out):
 
 		price_list_rate = frappe.db.get_value("Item Price",
 			{"price_list": args.price_list, "item_code": args.item_code}, "price_list_rate")
-
 		if not price_list_rate: return {}
 
 		out.price_list_rate = flt(price_list_rate) * flt(args.plc_conversion_rate) \

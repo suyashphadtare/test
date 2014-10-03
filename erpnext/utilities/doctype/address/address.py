@@ -81,6 +81,3 @@ def get_territory_from_address(address):
 			break
 
 	return territory
-
-
-

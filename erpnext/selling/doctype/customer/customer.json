@@ -20,11 +20,18 @@
   {
    "fieldname": "naming_series", 
    "fieldtype": "Select", 
-   "label": "Series", 
+   "label": "Customer Code Series", 
    "no_copy": 1, 
    "options": "CUST-", 
    "permlevel": 0, 
    "print_hide": 0
+  }, 
+  {
+   "fieldname": "customer_code", 
+   "fieldtype": "Data", 
+   "label": "Customer Code", 
+   "permlevel": 0, 
+   "reqd": 1
   }, 
   {
    "fieldname": "customer_name", 
@@ -374,4 +381,5 @@
  ], 
  "search_fields": "customer_name,customer_group,territory", 
  "title_field": "customer_name"
+
 }

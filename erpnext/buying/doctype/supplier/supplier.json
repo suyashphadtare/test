@@ -257,4 +257,5 @@
  ], 
  "search_fields": "supplier_name,supplier_type", 
  "title_field": "supplier_name"
+
 }

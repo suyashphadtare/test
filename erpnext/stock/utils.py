@@ -352,6 +352,5 @@ Please rectify these issues:
 ---
 Regards,
 Administrator""" % ("\n\n".join(exceptions_list),)
-
 	from frappe.utils.user import get_system_managers
 	sendmail(get_system_managers(), subject=subject, msg=msg)

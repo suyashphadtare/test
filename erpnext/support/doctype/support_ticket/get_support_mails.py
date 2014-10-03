@@ -17,7 +17,6 @@ class SupportMailbox(POP3Mailbox):
 			"username": self.email_settings.mail_login,
 			"password": self.email_settings.mail_password
 		})
-
 	def process_message(self, mail):
 		if mail.from_email == self.email_settings.get('support_email'):
 			return
@@ -76,7 +75,6 @@ def add_support_communication(subject, content, sender, docname=None, mail=None)
 		ticket.ignore_permissions = True
 		ticket.ignore_mandatory = True
 		ticket.insert()
-
 	_make(content=content, sender=sender, subject = subject,
 		doctype="Support Ticket", name=ticket.name,
 		date=mail.date if mail else today(), sent_or_received="Received")

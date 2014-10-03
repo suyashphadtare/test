@@ -100,6 +100,18 @@
    "permlevel": 0,
    "read_only": 0
   },
+    {
+   "fieldname": "part_number", 
+   "fieldtype": "Data", 
+   "label": "Part Number", 
+   "permlevel": 0
+  }, 
+  {
+   "fieldname": "drawing_number", 
+   "fieldtype": "Data", 
+   "label": "Drawing Number", 
+   "permlevel": 0
+  }, 
   {
    "fieldname": "column_break0",
    "fieldtype": "Column Break",

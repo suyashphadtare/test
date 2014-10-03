@@ -54,7 +54,7 @@
    "fieldtype": "Link", 
    "hidden": 0, 
    "in_filter": 1, 
-   "label": "Customer", 
+   "label": "Customer Code", 
    "oldfieldname": "customer", 
    "oldfieldtype": "Link", 
    "options": "Customer", 

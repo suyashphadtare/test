@@ -21,7 +21,7 @@ class Quotation(SellingController):
 		super(Quotation, self).validate()
 		self.set_status()
 		self.validate_order_type()
-		self.validate_for_items()
+		#self.validate_for_items()
 		self.validate_uom_is_integer("stock_uom", "qty")
 		self.quotation_to = "Customer" if self.customer else "Lead"
 

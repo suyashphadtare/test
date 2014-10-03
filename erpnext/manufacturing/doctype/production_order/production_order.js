@@ -32,10 +32,14 @@ $.extend(cur_frm.cscript, {
 		}
 	},
 
-	production_item: function(doc) {
+	production_item: function(doc,cdt,cdn) {
+		get_server_fields('bom_operations','','',doc,cdt,cdn,1,function(r){refresh_field('bom_operation')})
 		return this.frm.call({
 			method: "get_item_details",
-			args: { item: doc.production_item }
+			args: { item: doc.production_item },
+			callback: function(r) {	
+				refresh_field('bom_operation')							
+			}
 		});
 	},
 

@@ -52,7 +52,8 @@ doc_events = {
 	},
 	"User": {
 		"validate": "erpnext.hr.doctype.employee.employee.validate_employee_role",
-		"on_update": "erpnext.hr.doctype.employee.employee.update_user_permissions"
+		"on_update": "erpnext.hr.doctype.employee.employee.update_user_permissions",
+		"on_update": "erpnext.hr.doctype.employee.employee.update_user_default"
 	}
 }
 
@@ -75,4 +76,3 @@ scheduler_events = {
 		"erpnext.setup.doctype.backup_manager.backup_manager.take_backups_weekly"
 	]
 }
-

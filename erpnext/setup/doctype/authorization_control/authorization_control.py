@@ -118,6 +118,8 @@ class AuthorizationControl(TransactionBase):
 		for r in based_on:
 			if r in final_based_on and r != 'Itemwise Discount': final_based_on.remove(r)
 
+		# Specific Role
+		# ===============
 		# Check for authorization set on particular roles
 		based_on = [x[0] for x in frappe.db.sql("""select based_on
 			from `tabAuthorization Rule`

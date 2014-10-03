@@ -76,7 +76,6 @@ def setup_account(args=None):
 
 		frappe.clear_cache()
 		frappe.db.commit()
-
 	except:
 		traceback = frappe.get_traceback()
 		for hook in frappe.get_hooks("setup_wizard_exception"):

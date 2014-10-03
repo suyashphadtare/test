@@ -28,7 +28,6 @@ erpnext.selling.SalesOrderController = erpnext.selling.SellingController.extend(
 				// delivery note
 				if(flt(doc.per_delivered, 2) < 100 && ["Sales", "Shopping Cart"].indexOf(doc.order_type)!==-1)
 					cur_frm.add_custom_button(__('Make Delivery'), this.make_delivery_note, "icon-truck");
-
 				// indent
 				if(!doc.order_type || ["Sales", "Shopping Cart"].indexOf(doc.order_type)!==-1)
 					cur_frm.add_custom_button(__('Make ') + __('Material Request'),
@@ -77,6 +76,33 @@ erpnext.selling.SalesOrderController = erpnext.selling.SellingController.extend(
 						}
 					})
 				}, "icon-download", "btn-default");
+				});
+			//rohit
+			cur_frm.add_custom_button(__('From HLB'),
+				function() {
+					frappe.model.map_current_doc({
+						method: "erpnext.selling.doctype.quotation_for_mulitple_quantity.quotation_for_mulitple_quantity.make_sales_order",
+						source_doctype: "Quotation for Mulitple Quantity",
+						get_query_filters: {
+							docstatus: 1,
+							customer: cur_frm.doc.customer || undefined,
+							company: cur_frm.doc.company
+						}
+					})
+				});
+
+			cur_frm.add_custom_button(__('From Multiple Qty'),
+				function() {
+					frappe.model.map_current_doc({
+						method: "erpnext.selling.doctype.multiple_qty.multiple_qty.make_sales_order",
+						source_doctype: "Multiple Qty",
+						get_query_filters: {
+							docstatus: 1,				
+							customer: cur_frm.doc.customer || undefined,
+							company: cur_frm.doc.company
+						}
+					})
+				});
 		}
 
 		this.order_type(doc);

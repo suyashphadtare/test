@@ -2924,7 +2924,7 @@ The name of your company for which you are setting up this system.,Το όνομ
 The net weight of this package. (calculated automatically as sum of net weight of items),Το καθαρό βάρος του εν λόγω πακέτου. (Υπολογίζονται αυτόματα ως το άθροισμα του καθαρού βάρους των αντικειμένων)
 The new BOM after replacement,Η νέα BOM μετά την αντικατάστασή
 The rate at which Bill Currency is converted into company's base currency,Ο ρυθμός με τον οποίο Νόμισμα Bill μετατρέπεται σε νόμισμα βάσης της εταιρείας
-The unique id for tracking all recurring invoices. It is generated on submit.,Το μοναδικό αναγνωριστικό για την παρακολούθηση όλων των επαναλαμβανόμενες τιμολόγια. Παράγεται σε υποβάλει.
+The unique id for tracking all recurring invoices. It is generated on submit.,Το μοναδικό αναγνωριστικό για την παρακολούθηση όλων των επαναλαμβανόμενες τιμολόγια. Παράγεται σε υποβάλει.
 "Then Pricing Rules are filtered out based on Customer, Customer Group, Territory, Supplier, Supplier Type, Campaign, Sales Partner etc.","Στη συνέχεια, οι κανόνες τιμολόγησης φιλτράρονται με βάση πελατών, των πελατών του Ομίλου, Έδαφος, προμηθευτής, Προμηθευτής Τύπος, Εκστρατεία, Sales Partner κ.λπ."
 There are more holidays than working days this month.,Υπάρχουν περισσότερες διακοπές από εργάσιμων ημερών αυτό το μήνα .
 "There can only be one Shipping Rule Condition with 0 or blank value for ""To Value""","Μπορεί να υπάρχει μόνο μία αποστολή Κανόνας Κατάσταση με 0 ή κενή τιμή για το "" Να Value"""

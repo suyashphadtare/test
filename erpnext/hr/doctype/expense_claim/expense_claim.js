@@ -130,7 +130,6 @@ cur_frm.cscript.calculate_total = function(doc,cdt,cdn){
 		}
 		doc.total_sanctioned_amount += d.sanctioned_amount;
 	});
-
 	refresh_field("total_claimed_amount");
 	refresh_field('total_sanctioned_amount');
 
@@ -141,7 +140,6 @@ cur_frm.cscript.calculate_total_amount = function(doc,cdt,cdn){
 }
 cur_frm.cscript.claim_amount = function(doc,cdt,cdn){
 	cur_frm.cscript.calculate_total(doc,cdt,cdn);
-
 	var child = locals[cdt][cdn];
 	refresh_field("sanctioned_amount", child.name, child.parentfield);
 }

@@ -272,4 +272,5 @@ def make_purchase_invoice(source_name, target_doc=None):
 		}
 	}, target_doc, postprocess)
 
+
 	return doc

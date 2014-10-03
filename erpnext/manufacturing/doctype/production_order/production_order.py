@@ -151,10 +151,55 @@ class ProductionOrder(Document):
 		from erpnext.stock.utils import update_bin
 		update_bin(args)
 
+	def on_update(self):
+		name=self.create_new_po()
+		if not self.production_order_details:
+			self.production_order_details=name
+			self.save()
+
+	def bom_operations(self):
+		bom = frappe.db.sql("""select name from `tabBOM` where item=%s
+		and ifnull(is_default, 0)=1""", self.production_item)
+		if bom:
+			bom_no = bom[0][0]
+			bom_operation=frappe.db.sql("select * from `tabBOM Operation` where parent='%s'"%(bom_no),as_dict=1)
+			self.set('bom_operation', [])
+			for data in bom_operation:
+				nl = self.append('bom_operation', {})
+				nl.operation_no=data['operation_no']
+				nl.opn_description=data['opn_description']
+				nl.workstation=data['workstation']
+				nl.hour_rate=data['hour_rate']
+				nl.time_in_mins=data['time_in_mins']
+				nl.operating_cost=data['operating_cost']
+				nl.set_up_time=data['set_up_time']
+				nl.load_up_time=data['load_up_time']
+				nl.tip_change_time=data['tip_change_time']
+				nl.inspection_time=data['inspection_time']
+		return "Done"
+
+	# Rohit
+	def create_new_po(self):
+		exist_po=frappe.db.get_value("Production Order Details",{'production_number':self.name},'name')
+		if not exist_po:
+			po = frappe.new_doc("Production Order Details")
+			po.customer_code=frappe.db.get_value("Sales Order",self.sales_order,'customer')
+			po.customer_name=frappe.db.get_value("Customer",po.customer_code,'customer_name')
+			po.part_name=frappe.db.get_value("Item",self.production_item,'item_name')
+			po.part_number=frappe.db.get_value("Item",self.production_item,'part_number')
+			po.drawing_number=frappe.db.get_value("Item",self.production_item,'drawing_number')
+			po.production_number=self.name
+			po.sales_order_number=self.sales_order
+			po.due_date=self.expected_delivery_date
+			po.quantity=self.qty
+			po.name=(self.name).replace('PRO','Prod/')
+			po.save(ignore_permissions=True)
+			return po.name
+
 @frappe.whitelist()
 def get_item_details(item):
 	res = frappe.db.sql("""select stock_uom, description
-		from `tabItem` where (ifnull(end_of_life, "0000-00-00")="0000-00-00" or end_of_life > now())
+		from `tabItem` where (ifnull(end_of_life, "")="" or end_of_life > now())
 		and name=%s""", item, as_dict=1)
 
 	if not res:

@@ -96,4 +96,9 @@
  "name": "Packing Slip Item", 
  "owner": "Administrator", 
  "permissions": []
+ "modified": "2013-12-20 19:23:23.000000", 
+ "modified_by": "Administrator", 
+ "module": "Stock", 
+ "name": "Packing Slip Item", 
+ "owner": "Administrator"
 }

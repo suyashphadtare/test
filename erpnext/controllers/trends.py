@@ -24,7 +24,6 @@ def get_columns(filters, trans):
 	conditions = {"based_on_select": based_on_details["based_on_select"], "period_wise_select": period_select,
 		"columns": columns, "group_by": based_on_details["based_on_group_by"], "grbc": group_by_cols, "trans": trans,
 		"addl_tables": based_on_details["addl_tables"], "addl_tables_relational_cond": based_on_details.get("addl_tables_relational_cond", "")}
-
 	return conditions
 
 def validate_filters(filters):

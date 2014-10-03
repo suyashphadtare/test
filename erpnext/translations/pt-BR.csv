@@ -2972,7 +2972,7 @@ The name of your company for which you are setting up this system.,O nome da sua
 The net weight of this package. (calculated automatically as sum of net weight of items),O peso líquido do pacote. (Calculado automaticamente como soma do peso líquido dos itens)
 The new BOM after replacement,A nova LDM após substituição
 The rate at which Bill Currency is converted into company's base currency,A taxa na qual a moeda de faturamento é convertida na moeda base da empresa
-The unique id for tracking all recurring invoices. It is generated on submit.,A ID exclusiva para acompanhar todas as facturas recorrentes. Ele é gerado em enviar.
+The unique id for tracking all recurring invoices. It is generated on submit.,A ID exclusiva para acompanhar todas as facturas recorrentes. Ele é gerado em enviar.
 "Then Pricing Rules are filtered out based on Customer, Customer Group, Territory, Supplier, Supplier Type, Campaign, Sales Partner etc.","Então Preços Regras são filtradas com base no Cliente, Grupo de Clientes, Território, fornecedor, fornecedor Tipo, Campanha, Parceiro de vendas etc"
 There are more holidays than working days this month.,Há mais feriados do que dias úteis do mês.
 "There can only be one Shipping Rule Condition with 0 or blank value for ""To Value""","Só pode haver uma regra de envio Condição com 0 ou valor em branco para "" To Valor """

@@ -8,13 +8,11 @@ from erpnext.utilities.transaction_base import TransactionBase
 from frappe.utils import now, extract_email_id
 
 class SupportTicket(TransactionBase):
-
 	def get_sender(self, comm):
 		return frappe.db.get_value('Support Email Settings',None,'support_email')
 
 	def get_subject(self, comm):
 		return '[' + self.name + '] ' + (comm.subject or 'No Subject Specified')
-
 	def get_content(self, comm):
 		signature = frappe.db.get_value('Support Email Settings',None,'support_signature')
 		content = comm.content

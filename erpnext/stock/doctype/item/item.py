@@ -33,7 +33,6 @@ class Item(WebsiteGenerator):
 
 	def validate(self):
 		super(Item, self).validate()
-
 		if not self.stock_uom:
 			msgprint(_("Please enter default Unit of Measure"), raise_exception=1)
 		if self.image and not self.website_image:
@@ -215,6 +214,14 @@ class Item(WebsiteGenerator):
 		frappe.db.sql("""update `tabItem Price` set item_name=%s,
 			item_description=%s, modified=NOW() where item_code=%s""",
 			(self.item_name, self.description, self.name))
+
+	def get_page_title(self):
+		if self.name==self.item_name:
+			page_name_from = self.name
+		else:
+			page_name_from = self.name + " " + self.item_name
+
+		return page_name_from
 
 	def get_tax_rate(self, tax_type):
 		return { "tax_rate": frappe.db.get_value("Account", tax_type, "tax_rate") }

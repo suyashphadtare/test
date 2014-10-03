@@ -177,7 +177,6 @@ def get_data():
 					"name": "Warehouse-Wise Stock Balance",
 					"doctype": "Warehouse"
 				},
-			]
 		},
 		{
 			"label": _("Standard Reports"),
@@ -203,6 +202,7 @@ def get_data():
 				},
 				{
 					"type": "report",
+					"is_query_report": True,
 					"name": "Serial No Service Contract Expiry",
 					"doctype": "Serial No"
 				},

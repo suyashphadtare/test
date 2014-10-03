@@ -64,7 +64,7 @@
    "fieldtype": "Currency", 
    "in_filter": 1, 
    "in_list_view": 1, 
-   "label": "Rate", 
+   "label": "Single Qty Rate", 
    "oldfieldname": "ref_rate", 
    "oldfieldtype": "Currency", 
    "options": "currency", 
@@ -99,6 +99,33 @@
    "label": "Item Description", 
    "permlevel": 0, 
    "read_only": 1
+  }, 
+  {
+   "fieldname": "section_break_12", 
+   "fieldtype": "Section Break", 
+   "label": "Multiple Range Rate", 
+   "permlevel": 0
+  }, 
+  {
+   "fieldname": "item", 
+   "fieldtype": "Table", 
+   "label": "Item Quantity", 
+   "options": "Price List Quantity", 
+   "permlevel": 0, 
+   "read_only": 1
+  }, 
+  {
+   "fieldname": "multiple_qty_rate", 
+   "fieldtype": "Section Break", 
+   "label": "Multiple Qty Rate", 
+   "permlevel": 0
+  }, 
+  {
+   "fieldname": "singular_price_list", 
+   "fieldtype": "Table", 
+   "label": "Singular Price List", 
+   "options": "Singular Price List", 
+   "permlevel": 0
   }
  ], 
  "icon": "icon-flag", 

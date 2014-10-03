@@ -9,7 +9,6 @@ import unittest
 from frappe.test_runner import make_test_records
 
 test_ignore = ["Price List"]
-
 test_records = frappe.get_test_records('Customer')
 
 class TestCustomer(unittest.TestCase):
