@@ -54,7 +54,7 @@
    "hidden": 0, 
    "label": "Customer Name", 
    "permlevel": 0, 
-   "read_only": 1
+   "read_only": 0
   }, 
   {
    "fieldname": "address_display", 
@@ -88,6 +88,15 @@
    "permlevel": 0, 
    "print_hide": 1, 
    "read_only": 1
+  }, 
+  {
+   "depends_on": "eval:!doc.__islocal", 
+   "fieldname": "percent_completed", 
+   "fieldtype": "Percent", 
+   "in_list_view": 1, 
+   "label": "Manufactured Item's", 
+   "permlevel": 0, 
+   "precision": ""
   }, 
   {
    "default": "Sales", 
@@ -421,7 +430,7 @@
    "label": "Taxes and Charges Calculation", 
    "oldfieldtype": "HTML", 
    "permlevel": 0, 
-   "print_hide": 0
+   "print_hide": 1
   }, 
   {
    "fieldname": "section_break_43", 
@@ -809,7 +818,7 @@
    "fieldname": "per_delivered", 
    "fieldtype": "Percent", 
    "in_filter": 1, 
-   "in_list_view": 1, 
+   "in_list_view": 0, 
    "label": "%  Delivered", 
    "no_copy": 1, 
    "oldfieldname": "per_delivered", 
@@ -830,7 +839,7 @@
    "fieldname": "per_billed", 
    "fieldtype": "Percent", 
    "in_filter": 1, 
-   "in_list_view": 1, 
+   "in_list_view": 0, 
    "label": "% Amount Billed", 
    "no_copy": 1, 
    "oldfieldname": "per_billed", 
@@ -914,6 +923,29 @@
    "options": "Sales Team", 
    "permlevel": 0, 
    "print_hide": 1
+  }, 
+  {
+   "depends_on": "eval:!doc.__islocal", 
+   "fieldname": "item_list", 
+   "fieldtype": "Data", 
+   "in_list_view": 1, 
+   "label": "Item List", 
+   "permlevel": 0, 
+   "precision": ""
+  }, 
+  {
+   "fieldname": "quantity_lable", 
+   "fieldtype": "Data", 
+   "label": "Quantity Lable", 
+   "permlevel": 0, 
+   "precision": ""
+  }, 
+  {
+   "fieldname": "prev_doc", 
+   "fieldtype": "Data", 
+   "label": "prev_doc", 
+   "permlevel": 0, 
+   "precision": ""
   }, 
   {
    "fieldname": "recurring_order", 
@@ -1018,7 +1050,7 @@
  "idx": 1, 
  "is_submittable": 1, 
  "issingle": 0, 
- "modified": "2014-09-18 03:17:33.241162", 
+ "modified": "2014-10-04 16:46:04.733999", 
  "modified_by": "Administrator", 
  "module": "Selling", 
  "name": "Sales Order", 

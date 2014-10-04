@@ -177,6 +177,7 @@ def get_data():
 					"name": "Warehouse-Wise Stock Balance",
 					"doctype": "Warehouse"
 				},
+			]
 		},
 		{
 			"label": _("Standard Reports"),

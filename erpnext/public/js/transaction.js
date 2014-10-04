@@ -152,7 +152,10 @@ erpnext.TransactionController = erpnext.stock.StockController.extend({
 							ignore_pricing_rule: me.frm.doc.ignore_pricing_rule,
 							doctype: item.doctype,
 							name: item.name,
-							project_name: item.project_name || me.frm.doc.project_name
+							project_name: item.project_name || me.frm.doc.project_name,
+							qty:item.qty,
+							qty_label:me.frm.doc.quantity_lable, //Rohit_sw
+							predoc:me.frm.doc.prev_doc
 						}
 					},
 

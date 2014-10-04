@@ -33,11 +33,11 @@
 		</div>
 	</div>
 	<div class="col-xs-1 text-right">
-		{% var completed = doc.per_delivered, title = __("Delivered") %}
+		{% var completed = doc.percent_completed, title = __("Manufactured Items's") +'\n'+ doc.item_list %}
 		{% include "templates/form_grid/includes/progress.html" %}
 	</div>
 	<div class="col-xs-1 text-right">
-		{% var completed = doc.per_billed, title = __("Billed") %}
+		{% var completed = doc.per_delivered, title = __("Delivered") +'\n'+ doc.item_list %}
 		{% include "templates/form_grid/includes/progress.html" %}
 	</div>
 	<div class="col-xs-2 text-right">

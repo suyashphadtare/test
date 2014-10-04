@@ -61,6 +61,7 @@ class StockEntry(StockController):
 		from erpnext.stock.doctype.serial_no.serial_no import update_serial_nos_after_submit
 		update_serial_nos_after_submit(self, "mtn_details")
 		self.update_production_order()
+		self.update_manufactured_sales_order_validate()#anand
 		self.make_gl_entries()
 
 	def on_cancel(self):
@@ -71,13 +72,14 @@ class StockEntry(StockController):
 		self.make_cancel_gl_entries()
 	
 	def update_manufactured_sales_order_validate(self):
-		if self.purpose == "Manufacture/Repack":
+		if self.purpose in ["Manufacture","Repack"]:
 			self.update_manufactured_sales_order()
    
 	def update_manufactured_on_cancel_validate(self):
-		if self.purpose == "Manufacture/Repack":
+		if self.purpose in ["Manufacture","Repack"]:
 			self.update_manufactured_on_cancel()
 	
+	#anand
 	def update_manufactured_sales_order(self):
 		list_of_manufactured_items=''
 		percent_of_items=0
@@ -93,7 +95,7 @@ class StockEntry(StockController):
 				list_of_manufactured_items+=" ("+cstr(count_of_items)+"/"+cstr(total_items_in_sales_order[0][0])+")"
 				percent_of_items=cint(flt(count_of_items)/flt(total_items_in_sales_order[0][0])*100)
 				self.updateDB(list_of_manufactured_items,manufactured_items[0][1],percent_of_items)
-	
+	#anand
 	def update_manufactured_on_cancel(self):
 		sales_order=frappe.db.sql("""select sales_order from `tabProduction Order` where name=(select production_order from `tabStock Entry` where name='%s')"""%(self.name),as_list=1)
 		manufactured_items=frappe.db.sql("""select distinct production_item,sales_order from `tabProduction Order` where qty=produced_qty and sales_order in(select sales_order from `tabProduction Order` where name in(select production_order from `tabStock Entry` where name='%s'))"""%(self.name),as_list=1)
@@ -101,10 +103,10 @@ class StockEntry(StockController):
 			self.update_manufactured_sales_order()
 		else:
 			self.updateDB_canceled_stock_vs_sales_order(sales_order[0][0])
-    	
+    #anand	
 	def updateDB_canceled_stock_vs_sales_order(self,sales_order):
 		frappe.db.sql("""update `tabSales Order` set item_list=(select customer_name from tabCustomer where 1=2),percent_completed=(select customer_name from tabCustomer where 1=2) where name='%s'"""%(sales_order))
-
+    #anand
 	def updateDB(self,list_of_manufactured_items,sales_order,percent_of_items):
 		frappe.db.sql("""update `tabSales Order` set item_list='%s',percent_completed=%s where name='%s'"""%(list_of_manufactured_items,percent_of_items,sales_order))
 	
@@ -433,6 +435,7 @@ class StockEntry(StockController):
 			if self.purpose == "Manufacture":
 				pro_doc.run_method("update_produced_qty")
 				self.update_planned_qty(pro_doc)
+				self.update_po_percent()
 
 	def update_planned_qty(self, pro_doc):
 		from erpnext.stock.utils import update_bin
@@ -443,10 +446,7 @@ class StockEntry(StockController):
 			"planned_qty": (self.docstatus==1 and -1 or 1 ) * flt(self.fg_completed_qty)
 		})
 
-	def get_item_details(self, args):
-		item = frappe.db.sql("""select stock_uom, description, item_name,
-			expense_account, buying_cost_center from `tabItem`
-			where name = %s and (ifnull(end_of_life,'0000-00-00')='0000-00-00' or end_of_life > now())""",
+
 	def update_po_percent(self):
 		frappe.db.sql("update `tabProduction Order` set completed=(produced_qty/qty)*100 where name='%s'"%(self.production_order))
 
@@ -516,7 +516,6 @@ class StockEntry(StockController):
 			# common validations
 			pro_obj = frappe.get_doc('Production Order', self.production_order)
 			if pro_obj:
-				self.validate_production_order(pro_obj)
 				self.bom_no = pro_obj.bom_no
 			else:
 				# invalid production order

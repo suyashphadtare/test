@@ -55,6 +55,13 @@
    "permlevel": 0
   }, 
   {
+   "fieldname": "count", 
+   "fieldtype": "Data", 
+   "label": "Count", 
+   "permlevel": 0, 
+   "precision": ""
+  }, 
+  {
    "fieldname": "column_break_8", 
    "fieldtype": "Column Break", 
    "permlevel": 0
@@ -112,7 +119,7 @@
   }
  ], 
  "icon": "icon-cogs", 
- "modified": "2014-07-01 04:14:52.671010", 
+ "modified": "2014-10-04 11:50:05.695719", 
  "modified_by": "Administrator", 
  "module": "Manufacturing", 
  "name": "Production Order Details", 

@@ -76,7 +76,6 @@ erpnext.selling.SalesOrderController = erpnext.selling.SellingController.extend(
 						}
 					})
 				}, "icon-download", "btn-default");
-				});
 			//rohit
 			cur_frm.add_custom_button(__('From HLB'),
 				function() {

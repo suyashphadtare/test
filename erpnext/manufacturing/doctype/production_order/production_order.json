@@ -158,6 +158,14 @@
    "reqd": 1
   }, 
   {
+   "depends_on": "production_item", 
+   "fieldname": "total_fixed_cost", 
+   "fieldtype": "Float", 
+   "label": "Total Fixed Cost", 
+   "permlevel": 0, 
+   "precision": ""
+  }, 
+  {
    "depends_on": "eval:doc.docstatus==1", 
    "description": "Automatically updated via Stock Entry of type Manufacture/Repack", 
    "fieldname": "produced_qty", 
@@ -292,7 +300,6 @@
   {
    "fieldname": "amended_from", 
    "fieldtype": "Data", 
-   "ignore_restrictions": 1, 
    "label": "Amended From", 
    "no_copy": 1, 
    "oldfieldname": "amended_from", 
@@ -318,7 +325,7 @@
  "idx": 1, 
  "in_create": 0, 
  "is_submittable": 1, 
- "modified": "2014-07-01 04:15:43.216129", 
+ "modified": "2014-10-04 16:17:19.251233", 
  "modified_by": "Administrator", 
  "module": "Manufacturing", 
  "name": "Production Order", 
@@ -326,6 +333,7 @@
  "permissions": [
   {
    "amend": 1, 
+   "apply_user_permissions": 1, 
    "cancel": 1, 
    "create": 1, 
    "delete": 1, 
@@ -339,6 +347,7 @@
    "write": 1
   }, 
   {
+   "apply_user_permissions": 1, 
    "permlevel": 0, 
    "read": 1, 
    "report": 1, 

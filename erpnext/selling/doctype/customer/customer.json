@@ -31,7 +31,7 @@
    "fieldtype": "Data", 
    "label": "Customer Code", 
    "permlevel": 0, 
-   "reqd": 1
+   "precision": ""
   }, 
   {
    "fieldname": "customer_name", 
@@ -289,7 +289,7 @@
  ], 
  "icon": "icon-user", 
  "idx": 1, 
- "modified": "2014-09-10 16:41:07.553182", 
+ "modified": "2014-10-04 12:02:14.631936", 
  "modified_by": "Administrator", 
  "module": "Selling", 
  "name": "Customer", 
@@ -381,5 +381,4 @@
  ], 
  "search_fields": "customer_name,customer_group,territory", 
  "title_field": "customer_name"
-
 }
