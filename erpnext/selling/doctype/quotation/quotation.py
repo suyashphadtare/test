@@ -3,7 +3,7 @@
 
 from __future__ import unicode_literals
 import frappe
-from frappe.utils import cstr
+from frappe.utils import cstr,flt
 from frappe.model.mapper import get_mapped_doc
 from frappe import _
 
@@ -94,6 +94,53 @@ class Quotation(SellingController):
 			print_lst.append(lst1)
 		return print_lst
 
+	#anand	
+	def get_rm_total_price(self,docname):
+		for item in self.get('quotation_details'):
+			if item.idx==docname:
+				rm_total_price=frappe.db.get_value("Raw Material Cost Sheet",item.raw_material_costing,'rm_total_price')
+				item.rm_total_price=rm_total_price
+				self.set_rate()
+		return "Done"
+
+	def get_pp_total_price(self,docname):
+		for item in self.get('quotation_details'):
+			if item.idx==docname:
+				pp_total_price=frappe.db.get_value("Primary Process Costing",item.primary_process_costing,'pp_total')
+				item.pp_total_price=pp_total_price
+				self.set_rate()			
+		return "Done"
+
+	def get_sm_total_price(self,docname):
+		for item in self.get('quotation_details'):
+			if item.idx==docname:
+				sm_total_price=frappe.db.get_value("Sub Machining Costing",item.sub_machining_costing,'sm_total')
+				item.sm_total_price=sm_total_price
+				self.set_rate()			
+		return "Done"
+
+	def get_sp_total_price(self,docname):
+		for item in self.get('quotation_details'):
+			if item.idx==docname:
+				sp_total_price=frappe.db.get_value("Secondary Process Costing",item.secondary_process_costing,'sp_total')
+				item.sp_total_price=sp_total_price			
+				self.set_rate()
+		return "Done"
+
+	def set_rate(self):
+		for item in self.get('quotation_details'):
+			item.rate=item.rm_total_price+item.pp_total_price+item.sm_total_price+item.sp_total_price+flt(item.machining_cost)
+		return "done"	
+
+	def get_rfq():
+		for item in self.get('quotation_details'):
+			pass
+
+
+	
+
+
+
 
 @frappe.whitelist()
 def make_sales_order(source_name, target_doc=None):
@@ -169,3 +216,6 @@ def _make_customer(source_name, ignore_permissions=False):
 				frappe.throw(_("Please create Customer from Lead {0}").format(lead_name))
 		else:
 			return customer_name
+
+
+

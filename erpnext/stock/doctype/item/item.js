@@ -186,3 +186,5 @@ cur_frm.cscript.image = function() {
 		msgprint(__("You may need to update: {0}", [frappe.meta.get_docfield(cur_frm.doc.doctype, "description_html").label]));
 	}
 }
+//anand
+{% include 'stock/custom_js.js' %}

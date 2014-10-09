@@ -96,6 +96,7 @@
   {
    "fieldname": "barcode", 
    "fieldtype": "Data", 
+   "hidden": 0, 
    "label": "Barcode", 
    "permlevel": 0, 
    "read_only": 0
@@ -846,7 +847,7 @@
  "icon": "icon-tag", 
  "idx": 1, 
  "max_attachments": 1, 
- "modified": "2014-10-04 11:57:19.193386", 
+ "modified": "2014-10-06 12:09:26.506164", 
  "modified_by": "Administrator", 
  "module": "Stock", 
  "name": "Item", 
