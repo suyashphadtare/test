@@ -65,6 +65,14 @@
    "set_only_once": 0
   }, 
   {
+   "fieldname": "currency", 
+   "fieldtype": "Link", 
+   "label": "Currency", 
+   "options": "Currency", 
+   "permlevel": 0, 
+   "precision": ""
+  }, 
+  {
    "allow_on_submit": 0, 
    "fieldname": "price", 
    "fieldtype": "Float", 
@@ -222,7 +230,7 @@
  "is_submittable": 0, 
  "issingle": 0, 
  "istable": 1, 
- "modified": "2014-10-08 15:10:47.124081", 
+ "modified": "2014-10-10 11:20:26.424782", 
  "modified_by": "Administrator", 
  "module": "Selling", 
  "name": "Sub Machining Details", 

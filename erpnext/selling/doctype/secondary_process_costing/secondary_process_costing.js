@@ -1,6 +1,11 @@
 cur_frm.cscript.mark_percent=function(doc,cdt,cdn){
 	var d = frappe.get_doc(cdt, cdn);
-	rate=d.unit_cost*d.mark_percent
+	if (d.currency=='USD'){
+		rate=1.3*d.unit_cost*d.mark_percent
+	}
+	else{
+		rate=d.unit_cost*d.mark_percent
+	}
 	d.price_with_markup=rate
    	return $c_obj(doc, 'set_sp_total', d.idx, function(r, rt) {
 			refresh_field("secondary_process")

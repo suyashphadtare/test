@@ -85,6 +85,14 @@
    "set_only_once": 0
   }, 
   {
+   "fieldname": "currency", 
+   "fieldtype": "Link", 
+   "label": "Currency", 
+   "options": "Currency", 
+   "permlevel": 0, 
+   "precision": ""
+  }, 
+  {
    "fieldname": "unit_cost", 
    "fieldtype": "Float", 
    "label": "Unit Cost", 
@@ -230,7 +238,7 @@
  "is_submittable": 0, 
  "issingle": 0, 
  "istable": 1, 
- "modified": "2014-10-08 13:17:31.234296", 
+ "modified": "2014-10-10 11:06:41.068779", 
  "modified_by": "Administrator", 
  "module": "Selling", 
  "name": "Primary Process Details", 

@@ -150,3 +150,41 @@ cur_frm.cscript.on_submit = function(doc, cdt, cdn) {
 	if(cint(frappe.boot.notification_settings.quotation))
 		cur_frm.email_doc(frappe.boot.notification_settings.quotation_message);
 }
+
+
+//anand
+cur_frm.cscript.raw_material_costing=function(doc,cdt,cdn){
+	var d = locals[cdt][cdn]
+	if (d.raw_material_costing){
+	return $c_obj(doc, 'get_rm_total_price', d.idx, function(r, rt) {
+			refresh_field('multiple_qty_item');
+		});
+	}
+}
+//anand
+cur_frm.cscript.primary_process_costing=function(doc,cdt,cdn){
+	var d = locals[cdt][cdn]
+	if (d.primary_process_costing){
+	return $c_obj(doc, 'get_pp_total_price', d.idx, function(r, rt) {
+			refresh_field('multiple_qty_item');
+		});
+	}
+}
+//anand
+cur_frm.cscript.sub_machining_costing=function(doc,cdt,cdn){
+	var d = locals[cdt][cdn]
+	if (d.sub_machining_costing){
+	return $c_obj(doc, 'get_sm_total_price', d.idx, function(r, rt) {
+			refresh_field('multiple_qty_item');
+		});
+	}
+}
+//anand
+cur_frm.cscript.secondary_process_costing=function(doc,cdt,cdn){
+	var d = locals[cdt][cdn]
+	if (d.secondary_process_costing){
+	return $c_obj(doc, 'get_sp_total_price', d.idx, function(r, rt) {
+			refresh_field('multiple_qty_item');
+		});
+	}
+}

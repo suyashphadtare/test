@@ -4,13 +4,14 @@
 from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
+from frappe.utils import cstr,flt
 
 class SubMachiningCosting(Document):
 
 	def set_sm_total(self):
-		total=0
+		total=0.0
 		for d in self.get("sub_machining"):
-			total += d.price_with_markup
+			total += flt(d.price_with_markup)
 		self.sm_total=total
 		return "done"
 
@@ -26,14 +27,11 @@ class SubMachiningCosting(Document):
 		return "done"
 
 	def update_new_rfq(self,idx):
-		rfq_name=frappe.db.sql("select name from `tabSub Machining RFQ` order by creation desc limit 1",as_list=1)
+		rfq_name=frappe.db.sql("select name from `tabSub Machining RFQ` where docstatus=0 order by creation desc limit 1",as_list=1)
 		if rfq_name:
 			for item in self.get('sub_machining'):
 				if item.idx==idx:
 					mrfq=frappe.get_doc("Sub Machining RFQ",rfq_name[0][0])
-					crfq=mrfq.append("sub_machining_rfq_details",{})
-					crfq.mat_spec_and_type=item.type
-					mrfq.save(ignore_permissions=True)
 					item.quote_ref=mrfq.name
 		return "done"
 

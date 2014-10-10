@@ -122,6 +122,38 @@ class QuotationforMulitpleQuantity(Document):
 		npl.save(ignore_permissions=True)
 		return npl.name
 
+	#anand	
+	def get_rm_total_price(self,docname):
+		for item in self.get('multiple_quantity_item'):
+			if item.idx==docname:
+				rm_total_price=frappe.db.get_value("Raw Material Cost Sheet",item.raw_material_costing,'rm_total_price')
+				spec=frappe.db.get_value("Raw Material Costing Details",{"parent":item.raw_material_costing},'spec')
+				spec_type=frappe.db.get_value("Raw Material Costing Details",{"parent":item.raw_material_costing},'type')
+				item.rm_total_price=rm_total_price
+				item.spec=cstr(spec)+' '+cstr(spec_type)
+		return "Done"
+
+	def get_pp_total_price(self,docname):
+		for item in self.get('multiple_quantity_item'):
+			if item.idx==docname:
+				pp_total_price=frappe.db.get_value("Primary Process Costing",item.primary_process_costing,'pp_total')
+				item.pp_total_price=pp_total_price
+		return "Done"
+
+	def get_sm_total_price(self,docname):
+		for item in self.get('multiple_quantity_item'):
+			if item.idx==docname:
+				sm_total_price=frappe.db.get_value("Sub Machining Costing",item.sub_machining_costing,'sm_total')
+				item.sm_total_price=sm_total_price
+		return "Done"
+
+	def get_sp_total_price(self,docname):
+		for item in self.get('multiple_quantity_item'):
+			if item.idx==docname:
+				sp_total_price=frappe.db.get_value("Secondary Process Costing",item.secondary_process_costing,'sp_total')
+				item.sp_total_price=sp_total_price
+		return "Done"
+
 @frappe.whitelist()
 def make_sales_order(source_name, target_doc=None):
 	return _make_sales_order(source_name, target_doc)

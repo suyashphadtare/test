@@ -99,8 +99,12 @@ class Quotation(SellingController):
 		for item in self.get('quotation_details'):
 			if item.idx==docname:
 				rm_total_price=frappe.db.get_value("Raw Material Cost Sheet",item.raw_material_costing,'rm_total_price')
+				spec=frappe.db.get_value("Raw Material Costing Details",{"parent":item.raw_material_costing},'spec')
+				spec_type=frappe.db.get_value("Raw Material Costing Details",{"parent":item.raw_material_costing},'type')
 				item.rm_total_price=rm_total_price
-				self.set_rate()
+				item.spec=cstr(spec)+' '+cstr(spec_type)
+				if rm_total_price:
+					self.set_rate()
 		return "Done"
 
 	def get_pp_total_price(self,docname):
@@ -108,7 +112,8 @@ class Quotation(SellingController):
 			if item.idx==docname:
 				pp_total_price=frappe.db.get_value("Primary Process Costing",item.primary_process_costing,'pp_total')
 				item.pp_total_price=pp_total_price
-				self.set_rate()			
+				if pp_total_price:
+					self.set_rate()			
 		return "Done"
 
 	def get_sm_total_price(self,docname):
@@ -116,15 +121,17 @@ class Quotation(SellingController):
 			if item.idx==docname:
 				sm_total_price=frappe.db.get_value("Sub Machining Costing",item.sub_machining_costing,'sm_total')
 				item.sm_total_price=sm_total_price
-				self.set_rate()			
+				if sm_total_price:
+					self.set_rate()			
 		return "Done"
 
 	def get_sp_total_price(self,docname):
 		for item in self.get('quotation_details'):
 			if item.idx==docname:
 				sp_total_price=frappe.db.get_value("Secondary Process Costing",item.secondary_process_costing,'sp_total')
-				item.sp_total_price=sp_total_price			
-				self.set_rate()
+				item.sp_total_price=sp_total_price
+				if sp_total_price:
+					self.set_rate()
 		return "Done"
 
 	def set_rate(self):
@@ -132,17 +139,40 @@ class Quotation(SellingController):
 			item.rate=item.rm_total_price+item.pp_total_price+item.sm_total_price+item.sp_total_price+flt(item.machining_cost)
 		return "done"	
 
-	def get_rfq():
-		for item in self.get('quotation_details'):
-			pass
 
+	def get_rfq(self,args):
+		for d in self.get('quotation_details'):
+			cost_docname=args["parent_cost"]
+			cost_child=args["child_docname"]
+			field_name=d.get(args["field_name"])
+			cost=frappe.get_doc(cost_docname,field_name).get(cost_child)
+			for c in cost:
+				if c.quote_ref:
+					self.update_rfq_with_quotattion_values(c,args,d)
+		return "done"
+
+	def update_rfq_with_quotattion_values(self,c,args,d):
+		rfq=frappe.get_doc(args['rfq_doctype'],c.quote_ref)
+		rfqc=rfq.append(args['rfq_child'],{})
+		rfqc.quotation_no=self.name
+		rfqc.part_no=d.part_number
+		rfqc.drawing_no=d.item_code
+		rfqc.mat_spec__type=d.spec
+		if args['rfq_doctype']=='Material RFQ':
+			rfqc.mat_spec_type=d.spec
+			rfqc.od=cstr(c.od)+' '+cstr(c.od_uom)
+			rfqc.id=cstr(c.id)+' '+cstr(c.id_uom)
+			rfqc.lg=cstr(c.lg)+' '+cstr(c.lg_uom)
+		elif args['rfq_doctype']=='Primary Process RFQ':
+			rfqc.primary_process=c.spec
+		elif args['rfq_doctype']=='Secondary Process RFQ':
+			rfqc.secondary_process=c.spec
+		elif args['rfq_doctype']=='Sub Machining RFQ':
+			rfqc.sub_machining=c.type
+		rfq.save(ignore_permissions=True)
+		return "done"
 
 	
-
-
-
-
-@frappe.whitelist()
 def make_sales_order(source_name, target_doc=None):
 	return _make_sales_order(source_name, target_doc)
 
@@ -216,6 +246,8 @@ def _make_customer(source_name, ignore_permissions=False):
 				frappe.throw(_("Please create Customer from Lead {0}").format(lead_name))
 		else:
 			return customer_name
+
+
 
 
 

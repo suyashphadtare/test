@@ -1,0 +1,42 @@
+"Data Import Template"
+"Table:","Custom Field"
+""
+""
+"Notes:"
+"Please do not change the template headings."
+"First data column must be blank."
+"If you are uploading new records, leave the ""name"" (ID) column blank."
+"If you are uploading new records, ""Naming Series"" becomes mandatory, if present."
+"Only mandatory fields are necessary for new records. You can delete non-mandatory columns if you wish."
+"For updating, you can update only selective columns."
+"You can only upload upto 5000 records in one go. (may be less in some cases)"
+""
+"DocType:","Custom Field","","","","","","","","","","","","","","","","","","","","","",""
+"Column Labels:","ID","Document","Field Type","Label","Insert After","Precision","Options","Field Description","Fieldname","Permission Level","Is Mandatory Field","Read Only","Ignore User Permissions","Width","Default Value","Hidden","Depends On","Print Hide","No Copy","Allow on Submit","In Report Filter","In List View","Report Hide"
+"Column Name:","name","dt","fieldtype","label","insert_after","precision","options","description","fieldname","permlevel","reqd","read_only","ignore_user_permissions","width","default","hidden","depends_on","print_hide","no_copy","allow_on_submit","in_filter","in_list_view","report_hide"
+"Mandatory:","Yes","Yes","Yes","No","No","No","No","No","No","No","No","No","No","No","No","No","No","No","No","No","No","No","No"
+"Type:","Data (text)","Link","Select","Data","Select","Select","Text","Text","Data","Int","Check","Check","Check","Data","Text","Check","Data","Check","Check","Check","Check","Check","Check"
+"Info:","","Valid DocType","One of: Button, Check, Code, Column Break, Currency, Data, Date, Datetime, Dynamic Link, Float, HTML, Image, Int, Link, Long Text, Password, Percent, Read Only, Section Break, Select, Small Text, Table, Text, Text Editor, Time","","","One of: 1, 2, 3, 4, 5, 6","","","","Integer","0 or 1","0 or 1","0 or 1","","","0 or 1","","0 or 1","0 or 1","0 or 1","0 or 1","0 or 1","0 or 1"
+"Start entering data below this line"
+"","""Quotation Item-quantity""","Quotation Item","Float","Quantity","s2","","","","quantity",0,0,0,0,"","",0,"",0,0,0,0,0,0
+"","""Quotation Item-machining_cost""","Quotation Item","Float","Machining Cost","quantity","","","","machining_cost",0,0,0,0,"","",0,"",0,0,0,0,0,0
+"","""Quotation Item-sp_total_price""","Quotation Item","Float","Price With Markup","sub_machining_costing","","","","sp_total_price",0,0,1,0,"","",0,"",0,0,0,0,0,0
+"","""Quotation Item-sm_total_price""","Quotation Item","Float","SM Total Price","sub_machining_costing","","","","sm_total_price",0,0,1,0,"","",0,"",0,0,0,0,0,0
+"","""Quotation Item-pp_total_price""","Quotation Item","Float","Price With Markup","primary_process_costing","","","","pp_total_price",0,0,1,0,"","",0,"",0,0,0,0,0,0
+"","""Quotation Item-rm_total_price""","Quotation Item","Float","Price With Markup","raw_material_costing","","","","rm_total_price",0,0,1,0,"","",0,"",0,0,0,0,0,0
+"","""Quotation Item-c3""","Quotation Item","Column Break","","quantity","","","","c3",0,0,0,0,"","",0,"",0,0,0,0,0,0
+"","""Quotation Item-s2""","Quotation Item","Section Break","","sm_total_price","","","","s2",0,0,0,0,"","",0,"",0,0,0,0,0,0
+"","""Quotation Item-secondary_process_costing""","Quotation Item","Link","Secondary Process Costing","sp_total_price","","Secondary Process Costing","","secondary_process_costing",0,0,0,0,"","",0,"",0,0,0,0,0,0
+"","""Quotation Item-c2""","Quotation Item","Column Break","","sm_total_price","","","","c2",0,0,0,0,"","",0,"",0,0,0,0,0,0
+"","""Quotation Item-sub_machining_costing""","Quotation Item","Link","Sub Machining Costing","s1","","Sub Machining Costing","","sub_machining_costing",0,0,0,0,"","",0,"",0,0,0,0,0,0
+"","""Quotation Item-s1""","Quotation Item","Section Break","","pp_total_price","","","","s1",0,0,0,0,"","",0,"",0,0,0,0,0,0
+"","""Quotation Item-primary_process_costing""","Quotation Item","Link","Primary Process Costing","s","","Primary Process Costing","","primary_process_costing",0,0,0,0,"","",0,"",0,0,0,0,0,0
+"","""Quotation Item-s""","Quotation Item","Column Break","","s","","","","s",0,0,0,0,"","",0,"",0,0,0,0,0,0
+"","""Quotation Item-raw_material_costing""","Quotation Item","Link","Raw Material Costing","costing","","Raw Material Cost Sheet","","raw_material_costing",0,0,0,0,"","",0,"",0,0,0,0,0,0
+"","""Quotation Item-costing""","Quotation Item","Section Break","Costing","pricing_rule","","","","costing",0,0,0,0,"","",0,"",0,0,0,0,0,0
+"","""Item-group""","Item","Link","Group","item_group","","Group","","group",0,0,0,0,"","",0,"",0,0,0,0,0,0
+"","""Item-supplier""","Item","Link","Supplier Code","barcode","","Supplier","","supplier",0,0,0,0,"","",0,"",0,0,0,0,0,0
+"","""Item-material_type""","Item","Select","Material Type","name_and_description_section","","
+Raw Material
+Processes
+Sub-Machining","","material_type",0,0,0,0,"","",0,"",0,0,0,0,0,0
