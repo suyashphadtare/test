@@ -18,7 +18,25 @@
 "Type:","Data (text)","Link","Select","Data","Select","Select","Text","Text","Data","Int","Check","Check","Check","Data","Text","Check","Data","Check","Check","Check","Check","Check","Check"
 "Info:","","Valid DocType","One of: Button, Check, Code, Column Break, Currency, Data, Date, Datetime, Dynamic Link, Float, HTML, Image, Int, Link, Long Text, Password, Percent, Read Only, Section Break, Select, Small Text, Table, Text, Text Editor, Time","","","One of: 1, 2, 3, 4, 5, 6","","","","Integer","0 or 1","0 or 1","0 or 1","","","0 or 1","","0 or 1","0 or 1","0 or 1","0 or 1","0 or 1","0 or 1"
 "Start entering data below this line"
+"","""Quotation-customer_ref""","Quotation","Data","Customer Ref","customer_name","","","","customer_ref",0,0,0,0,"","",0,"",0,0,0,0,0,0
+"","""Secondary Process Details-exchange_rate""","Secondary Process Details","Float","Exchange Rate","currency","","","","exchange_rate",0,0,0,0,"","",0,"",0,0,0,0,0,0
+"","""Primary Process Details-exchange_rate""","Primary Process Details","Float","Exchange Rate","currency","","","","exchange_rate",0,0,0,0,"","",0,"",0,0,0,0,0,0
+"","""Raw Material Costing Details-unit_cost""","Raw Material Costing Details","Float","Unit Cost","exchange_rate","","","","unit_cost",0,0,0,0,"","",0,"",0,0,0,0,0,0
 "","""Multiple Qty Item-spec""","Multiple Qty Item","Data","spec","amount","","","","spec",0,0,1,0,"","",0,"",0,0,0,0,0,0
+"","""Multiple Qty Item-qty10""","Multiple Qty Item","Data","qty10","qty9","","","","qty10",0,0,1,0,"","",0,"",0,0,0,0,0,0
+"","""Multiple Qty Item-qty9""","Multiple Qty Item","Data","qty9","qty8","","","","qty9",0,0,1,0,"","",0,"",0,0,0,0,0,0
+"","""Multiple Qty Item-qty8""","Multiple Qty Item","Data","qty8","qty7","","","","qty8",0,0,1,0,"","",0,"",0,0,0,0,0,0
+"","""Multiple Qty Item-qty7""","Multiple Qty Item","Data","qty7","qty6","","","","qty7",0,0,1,0,"","",0,"",0,0,0,0,0,0
+"","""Multiple Qty Item-qty6""","Multiple Qty Item","Data","qty6","total","","","","qty6",0,0,1,0,"","",0,"",0,0,0,0,0,0
+"","""Multiple Qty Item-total""","Multiple Qty Item","Section Break","Total","parent1","","","","total",0,0,0,0,"","",0,"",0,0,0,0,0,0
+"","""Multiple Quantity Item-spec""","Multiple Quantity Item","Data","spec","parent1","","","","spec",0,0,1,0,"","",0,"",0,0,0,0,0,0
+"","""Quotation for Mulitple Quantity-spec""","Quotation for Mulitple Quantity","Data","spec","rq3","","","","spec",0,0,1,0,"","",1,"",0,0,0,0,0,0
+"","""Multiple Quantity Item-r_qty_6""","Multiple Quantity Item","Data","","r_qty3","","","","r_qty_6",0,0,1,0,"","",0,"",0,0,0,0,0,0
+"","""Multiple Quantity Item-r_qty_5""","Multiple Quantity Item","Data","","r_qty3","","","","r_qty_5",0,0,0,0,"","",0,"",0,0,0,0,0,0
+"","""Multiple Quantity Item-r_qty_4""","Multiple Quantity Item","Data","","r_qty3","","","","r_qty_4",0,0,1,0,"","",0,"",0,0,0,0,0,0
+"","""Multiple Quantity Item-total""","Multiple Quantity Item","Section Break","Total","","","","","total",0,0,0,0,"","",0,"",0,0,0,0,0,0
+"","""Quotation for Mulitple Quantity-qty_label""","Quotation for Mulitple Quantity","Data","qty_label","quantity_lable","","","","qty_label",0,0,0,0,"","",0,"",0,0,0,0,0,0
+"","""Multiple Qty-qty_label""","Multiple Qty","Data","qty_label","","","","","qty_label",0,0,1,0,"","",0,"",0,0,0,0,0,0
 "","""Multiple Qty Item-secondary_process_costing""","Multiple Qty Item","Link","SP Costing","c2","","Secondary Process Costing","","secondary_process_costing",0,0,0,0,"","",0,"",0,0,0,0,0,0
 "","""Multiple Qty Item-sub_machining_costing""","Multiple Qty Item","Link","SM Costing","s2","","Sub Machining Costing","","sub_machining_costing",0,0,0,0,"","",0,"",0,0,0,0,0,0
 "","""Multiple Qty Item-primary_process_costing""","Multiple Qty Item","Link","PP Costing","c","","Primary Process Costing","","primary_process_costing",0,0,0,0,"","",0,"",0,0,0,0,0,0
