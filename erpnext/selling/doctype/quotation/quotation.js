@@ -53,7 +53,7 @@ erpnext.selling.QuotationController = erpnext.selling.SellingController.extend({
 			cur_frm.add_custom_button(__('Create RFQ for Material'), cur_frm.cscript.rfq_material, "icon-mobile-phone");
 			cur_frm.add_custom_button(__('Create RFQ for PP'), cur_frm.cscript.rfq_pp, "icon-mobile-phone");
 			cur_frm.add_custom_button(__('Create RFQ for SP'), cur_frm.cscript.rfq_sp, "icon-mobile-phone");
-			cur_frm.add_custom_button(__('Create RGQ for SM'), cur_frm.cscript.rfq_sm, "icon-mobile-phone");
+			cur_frm.add_custom_button(__('Create RFQ for SM'), cur_frm.cscript.rfq_sm, "icon-mobile-phone");
 		}
 
 		if (!doc.__islocal) {

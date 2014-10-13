@@ -2,21 +2,16 @@ cur_frm.cscript.onload=function(){
 	console.log(this)
 }
 //anand
-cur_frm.cscript.exchange_rate=function(doc,cdt,cdn){
+cur_frm.cscript.unit_cost=function(doc,cdt,cdn){
 	var d = frappe.get_doc(cdt, cdn);
-	rate=d.exchange_rate*d.lg
+	rate=d.unit_cost*d.lg
 	d.price=rate
 	refresh_field("raw_material_costing_details")
 }
 //anand
 cur_frm.cscript.mark_percent=function(doc,cdt,cdn){
 	var d = frappe.get_doc(cdt, cdn);
-	if (d.currency=='USD'){
-		rate=1.3*d.price*d.mark_percent	
-	}
-	else{
-		rate=d.price*d.mark_percent
-	}
+	rate=d.exchange_rate*d.price*d.mark_percent	
 	d.price_with_markup=rate
 	return $c_obj(doc, 'set_rm_total', d.idx, function(r, rt) {
 			refresh_field("raw_material_costing_details")

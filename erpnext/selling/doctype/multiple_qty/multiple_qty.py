@@ -4,7 +4,7 @@
 from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
-from frappe.utils import cstr,cint
+from frappe.utils import cstr,cint,flt
 from frappe.model.mapper import get_mapped_doc
 from frappe import _,msgprint
 from erpnext.controllers.selling_controller import SellingController
@@ -39,12 +39,18 @@ class MultipleQty(Document):
 
 
 	def set_label(self):
+		label1=['qty6','qty7','qty8','qty9','qty10']
 		label_dict={}
+		label1_dict={}
+		i=0
 		args=frappe.db.sql("select field,value from `tabSingles` where doctype='Range Master' and field in('qty1','qty2','qty3','qty4','qty5')",as_list=1)
 		for s in range(0,len(args)):
 			if args[s][1]:
 				label_dict.setdefault(args[s][0],args[s][1])
+				label1_dict.setdefault(label1[i],args[s][1])
+			i+=1	
 		self.quantity_lable=json.dumps(label_dict)
+		self.qty_label=json.dumps(label1_dict)
 		return "Done"
 
 	def get_item_details(self,item_code):
@@ -118,6 +124,8 @@ class MultipleQty(Document):
 				spec_type=frappe.db.get_value("Raw Material Costing Details",{"parent":item.raw_material_costing},'type')
 				item.rm_total_price=rm_total_price
 				item.spec=cstr(spec)+' '+cstr(spec_type)
+				if rm_total_price:
+					self.set_rate()
 		return "Done"
 
 	def get_pp_total_price(self,docname):
@@ -125,6 +133,8 @@ class MultipleQty(Document):
 			if item.idx==docname:
 				pp_total_price=frappe.db.get_value("Primary Process Costing",item.primary_process_costing,'pp_total')
 				item.pp_total_price=pp_total_price
+				if pp_total_price:
+					self.set_rate()
 		return "Done"
 
 	def get_sm_total_price(self,docname):
@@ -132,6 +142,8 @@ class MultipleQty(Document):
 			if item.idx==docname:
 				sm_total_price=frappe.db.get_value("Sub Machining Costing",item.sub_machining_costing,'sm_total')
 				item.sm_total_price=sm_total_price
+				if sm_total_price:
+					self.set_rate()
 		return "Done"
 
 	def get_sp_total_price(self,docname):
@@ -139,8 +151,47 @@ class MultipleQty(Document):
 			if item.idx==docname:
 				sp_total_price=frappe.db.get_value("Secondary Process Costing",item.secondary_process_costing,'sp_total')
 				item.sp_total_price=sp_total_price
+				if sp_total_price:
+					self.set_rate()
 		return "Done"
 
+	def set_rate(self):
+		for item in self.get('multiple_qty_item'):
+			item.qty6=flt(item.rm_total_price)+flt(item.pp_total_price)+flt(item.sm_total_price)+flt(item.sp_total_price)+flt(item.qty1)
+			item.qty7=flt(item.rm_total_price)+flt(item.pp_total_price)+flt(item.sm_total_price)+flt(item.sp_total_price)+flt(item.qty2)
+			item.qty8=flt(item.rm_total_price)+flt(item.pp_total_price)+flt(item.sm_total_price)+flt(item.sp_total_price)+flt(item.qty3)
+			item.qty9=flt(item.rm_total_price)+flt(item.pp_total_price)+flt(item.sm_total_price)+flt(item.sp_total_price)+flt(item.qty4)
+			item.qty10=flt(item.rm_total_price)+flt(item.pp_total_price)+flt(item.sm_total_price)+flt(item.sp_total_price)+flt(item.qty5)
+
+	def get_rfq(self,args):
+		for d in self.get('multiple_qty_item'):
+			cost_docname=args["parent_cost"]
+			cost_child=args["child_docname"]
+			field_name=d.get(args["field_name"])
+			cost=frappe.get_doc(cost_docname,field_name).get(cost_child)
+			for c in cost:
+				if c.quote_ref:
+					self.update_rfq_with_quotattion_values(c,args,d)
+		return "done"
+
+	def update_rfq_with_quotattion_values(self,c,args,d):
+		rfq=frappe.get_doc(args['rfq_doctype'],c.quote_ref)
+		rfqc=rfq.append(args['rfq_child'],{})
+		rfqc.quotation_no=self.name
+		rfqc.mat_spec__type=d.spec
+		if args['rfq_doctype']=='Material RFQ':
+			rfqc.mat_spec_type=d.spec
+			rfqc.od=cstr(c.od)+' '+cstr(c.od_uom)
+			rfqc.id=cstr(c.id)+' '+cstr(c.id_uom)
+			rfqc.lg=cstr(c.lg)+' '+cstr(c.lg_uom)
+		elif args['rfq_doctype']=='Primary Process RFQ':
+			rfqc.primary_process=c.spec
+		elif args['rfq_doctype']=='Secondary Process RFQ':
+			rfqc.secondary_process=c.spec
+		elif args['rfq_doctype']=='Sub Machining RFQ':
+			rfqc.sub_machining=c.type
+		rfq.save(ignore_permissions=True)
+		return "done"
 
 @frappe.whitelist()
 def make_sales_order(source_name, target_doc=None):
