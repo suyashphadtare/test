@@ -2930,7 +2930,7 @@ The name of your company for which you are setting up this system.,El nombre de 
 The net weight of this package. (calculated automatically as sum of net weight of items),El peso neto de este paquete . ( calculados automáticamente como la suma del peso neto del material)
 The new BOM after replacement,La nueva lista de materiales después de la sustitución
 The rate at which Bill Currency is converted into company's base currency,La velocidad a la que Bill moneda se convierte en la moneda base de la compañía
-The unique id for tracking all recurring invoices. It is generated on submit.,El identificador único para el seguimiento de todas las facturas recurrentes. Se genera en enviar .
+The unique id for tracking all recurring invoices. It is generated on submit.,El identificador único para el seguimiento de todas las facturas recurrentes. Se genera en enviar .
 "Then Pricing Rules are filtered out based on Customer, Customer Group, Territory, Supplier, Supplier Type, Campaign, Sales Partner etc.","Entonces reglas de precios son filtradas en base a cliente, grupo de clientes, Territorio, proveedor, tipo de proveedor, Campaña, socio de ventas, etc"
 There are more holidays than working days this month.,Hay más vacaciones que los días de trabajo de este mes.
 "There can only be one Shipping Rule Condition with 0 or blank value for ""To Value""","Sólo puede haber una regla Condición inicial con 0 o valor en blanco de ""To Value"""

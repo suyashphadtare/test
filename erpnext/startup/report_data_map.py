@@ -292,5 +292,4 @@ data_map = {
 		"conditions": ["docstatus < 2"],
 		"order_by": "creation"
 	}
-
 }

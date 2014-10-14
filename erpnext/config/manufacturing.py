@@ -19,6 +19,11 @@ def get_data():
 				},
 				{
 					"type": "doctype",
+					"name": "Production Order Details",
+					"description": _("Orders released for production."),
+				},
+				{
+					"type": "doctype",
 					"name": "Item",
 					"description": _("All Products or Services."),
 				},

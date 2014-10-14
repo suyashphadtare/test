@@ -20,7 +20,7 @@
     "parentfield": "other_charges", 
     "rate": 100.0, 
     "tax_amount": 100.0,
-	"cost_center": "Main - _TC"
+   	"cost_center": "Main - _TC"
    }, 
    {
     "account_head": "_Test Account VAT - _TC", 

@@ -297,7 +297,6 @@ class ProductionPlanningTool(Document):
 					flt(w.ordered_qty), flt(w.actual_qty)])
 			if item_qty:
 				item_list.append(['', '', '', '', 'Total', i_qty, o_qty, a_qty])
-
 		return item_list
 
 	def raise_purchase_request(self):

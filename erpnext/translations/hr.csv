@@ -2924,7 +2924,7 @@ The name of your company for which you are setting up this system.,Ime vaše tvr
 The net weight of this package. (calculated automatically as sum of net weight of items),Neto težina tog paketa. (Automatski izračunava kao zbroj neto težini predmeta)
 The new BOM after replacement,Novi BOM nakon zamjene
 The rate at which Bill Currency is converted into company's base currency,Stopa po kojoj Bill valuta pretvara u tvrtke bazne valute
-The unique id for tracking all recurring invoices. It is generated on submit.,Jedinstveni ID za praćenje svih ponavljajući fakture. To je izrađen podnijeti.
+The unique id for tracking all recurring invoices. It is generated on submit.,Jedinstveni ID za praćenje svih ponavljajući fakture. To je izrađen podnijeti.
 "Then Pricing Rules are filtered out based on Customer, Customer Group, Territory, Supplier, Supplier Type, Campaign, Sales Partner etc.","Zatim Cjenovna Pravila filtriraju se temelji na Kupca, Kupac Group, Teritorij, dobavljač, proizvođač tip, Kampanja, prodajni partner i sl."
 There are more holidays than working days this month.,Postoji više odmor nego radnih dana ovog mjeseca .
 "There can only be one Shipping Rule Condition with 0 or blank value for ""To Value""","Tu može biti samo jedan Dostava Pravilo Stanje sa 0 ili prazni vrijednost za "" Da Value """

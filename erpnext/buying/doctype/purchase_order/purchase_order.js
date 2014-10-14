@@ -49,7 +49,6 @@ erpnext.buying.PurchaseOrderController = erpnext.buying.BuyingController.extend(
 			frm: cur_frm
 		})
 	},
-
 	make_purchase_invoice: function() {
 		frappe.model.open_mapped_doc({
 			method: "erpnext.buying.doctype.purchase_order.purchase_order.make_purchase_invoice",
@@ -162,7 +161,6 @@ cur_frm.cscript['Unstop Purchase Order'] = function() {
 
 cur_frm.pformat.indent_no = function(doc, cdt, cdn){
 	//function to make row of table
-
 	var make_row = function(title,val1, val2, bold){
 		var bstart = '<b>'; var bend = '</b>';
 

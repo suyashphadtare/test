@@ -96,7 +96,9 @@
   {
    "fieldname": "income_year_to_date", 
    "fieldtype": "Check", 
+
    "hidden": 0, 
+
    "label": "Income Year to Date", 
    "permlevel": 0
   }, 

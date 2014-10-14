@@ -16,7 +16,6 @@ class ExpenseClaim(Document):
 		self.validate_exp_details()
 		self.validate_expense_approver()
 		set_employee_name(self)
-
 	def on_submit(self):
 		if self.approval_status=="Draft":
 			frappe.throw(_("""Approval Status must be 'Approved' or 'Rejected'"""))

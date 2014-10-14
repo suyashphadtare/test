@@ -38,7 +38,6 @@ $.extend(cur_frm.cscript, {
 				"subject": doc.subject,
 				"content": doc.description});
 		}
-
 		cur_frm.communication_view = new frappe.views.CommunicationList({
 			list: comm_list,
 			parent: wrapper,

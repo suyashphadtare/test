@@ -31,7 +31,6 @@ def execute(filters=None):
 		else:
 			buying_amount = get_buying_amount(row.parenttype, row.name, row.item_row,
 				stock_ledger_entries.get((row.item_code, row.warehouse), []))
-
 		buying_amount = buying_amount > 0 and buying_amount or 0
 
 		gross_profit = selling_amount - buying_amount

@@ -7,7 +7,6 @@ frappe.pages['stock-ledger'].onload = function(wrapper) {
 		title: __('Stock Ledger'),
 		single_column: true
 	});
-
 	new erpnext.StockLedger(wrapper);
 	wrapper.appframe.add_module_icon("Stock")
 }
@@ -107,7 +106,6 @@ erpnext.StockLedger = erpnext.StockGridReport.extend({
 				.prop("disabled", true);
 		}
 	},
-
 	init_filter_values: function() {
 		this._super();
 		this.filter_inputs.warehouse.get(0).selectedIndex = 0;
@@ -142,8 +140,6 @@ erpnext.StockLedger = erpnext.StockGridReport.extend({
 		this.serialized_buying_rates = this.get_serialized_buying_rates();
 		var from_datetime = dateutil.str_to_obj(me.from_date + " 00:00:00");
 		var to_datetime = dateutil.str_to_obj(me.to_date + " 23:59:59");
-
-		//
 		for(var i=0, j=data.length; i<j; i++) {
 			var sl = data[i];
 			var item = me.item_by_name[sl.item_code]
@@ -175,14 +171,12 @@ erpnext.StockLedger = erpnext.StockGridReport.extend({
 					}
 				}
 			}
-
 			if(!before_end) break;
 
 			// apply filters
 			if(me.apply_filters(sl)) {
 				out.push(sl);
 			}
-
 			// update balance
 			if((!me.is_default("warehouse") ? me.apply_filter(sl, "warehouse") : true)) {
 				sl.balance = me.item_by_name[sl.item_code].balance + sl.qty;
@@ -203,7 +197,6 @@ erpnext.StockLedger = erpnext.StockGridReport.extend({
 			total_out.balance_value = -total_out.balance_value;
 			var out = [opening].concat(out).concat([total_in, total_out, closing]);
 		}
-
 		this.data = out;
 	},
 	get_plot_data: function() {

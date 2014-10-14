@@ -539,7 +539,6 @@ erpnext.selling.SellingController = erpnext.TransactionController.extend({
 	change_grid_labels: function(company_currency) {
 		var me = this;
 		var field_label_map = {};
-
 		var setup_field_label_map = function(fields_list, currency, parentfield) {
 			var grid_doctype = me.frm.fields_dict[parentfield].grid.doctype;
 			$.each(fields_list, function(i, fname) {
@@ -551,7 +550,6 @@ erpnext.selling.SellingController = erpnext.TransactionController.extend({
 				}
 			});
 		}
-
 		setup_field_label_map(["base_rate", "base_price_list_rate", "base_amount"],
 			company_currency, this.fname);
 

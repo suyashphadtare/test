@@ -2923,7 +2923,7 @@ The name of your company for which you are setting up this system.,اسم الش
 The net weight of this package. (calculated automatically as sum of net weight of items),وزن صافي من هذه الحزمة. (تحسب تلقائيا مجموع الوزن الصافي للسلعة)
 The new BOM after replacement,وBOM الجديدة بعد استبدال
 The rate at which Bill Currency is converted into company's base currency,المعدل الذي يتم تحويل العملة إلى عملة بيل قاعدة الشركة
-The unique id for tracking all recurring invoices. It is generated on submit.,المعرف الفريد لتتبع جميع الفواتير المتكررة. يتم إنشاؤها على تقديم.
+The unique id for tracking all recurring invoices. It is generated on submit.,المعرف الفريد لتتبع جميع الفواتير المتكررة. يتم إنشاؤها على تقديم.
 "Then Pricing Rules are filtered out based on Customer, Customer Group, Territory, Supplier, Supplier Type, Campaign, Sales Partner etc.",ثم يتم تصفيتها من قوانين التسعير على أساس العملاء، مجموعة العملاء، الأرض، مورد، مورد نوع، حملة، شريك المبيعات الخ
 There are more holidays than working days this month.,هناك أكثر من العطلات أيام عمل من هذا الشهر.
 "There can only be one Shipping Rule Condition with 0 or blank value for ""To Value""","يمكن أن يكون هناك واحد فقط الشحن القاعدة الحالة مع 0 أو قيمة فارغة ل "" إلى القيمة """

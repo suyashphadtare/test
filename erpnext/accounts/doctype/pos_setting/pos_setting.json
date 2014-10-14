@@ -62,7 +62,7 @@
    "options": "Price List", 
    "permlevel": 0, 
    "read_only": 0, 
-   "reqd": 0
+   "reqd": 1
   }, 
   {
    "fieldname": "company", 
@@ -147,7 +147,7 @@
    "options": "Warehouse", 
    "permlevel": 0, 
    "read_only": 0, 
-   "reqd": 0
+   "reqd": 1
   }, 
   {
    "fieldname": "cost_center", 

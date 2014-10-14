@@ -25,6 +25,8 @@ before_tests = "erpnext.setup.utils.before_tests"
 
 website_generators = ["Item Group", "Item", "Sales Partner"]
 
+fixtures=["Custom Field","Customize Form"]
+
 standard_queries = "Customer:erpnext.selling.doctype.customer.customer.get_customer_list"
 
 permission_query_conditions = {
@@ -52,7 +54,8 @@ doc_events = {
 	},
 	"User": {
 		"validate": "erpnext.hr.doctype.employee.employee.validate_employee_role",
-		"on_update": "erpnext.hr.doctype.employee.employee.update_user_permissions"
+		"on_update": "erpnext.hr.doctype.employee.employee.update_user_permissions",
+		
 	}
 }
 
@@ -75,4 +78,3 @@ scheduler_events = {
 		"erpnext.setup.doctype.backup_manager.backup_manager.take_backups_weekly"
 	]
 }
-

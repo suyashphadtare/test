@@ -525,6 +525,7 @@ class AccountsController(TransactionBase):
 		if total_outstanding:
 			frappe.get_doc('Account', account).check_credit_limit(total_outstanding)
 
+
 @frappe.whitelist()
 def get_tax_rate(account_head):
 	return frappe.db.get_value("Account", account_head, "tax_rate")

@@ -76,7 +76,6 @@ def setup_account(args=None):
 
 		frappe.clear_cache()
 		frappe.db.commit()
-
 	except:
 		if args:
 			traceback = frappe.get_traceback()

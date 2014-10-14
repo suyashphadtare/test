@@ -55,7 +55,6 @@ def update_packing_list_item(obj, packing_item_code, qty, warehouse, line, packi
 	if not pi.batch_no:
 		pi.batch_no = cstr(line.get("batch_no"))
 	pi.idx = packing_list_idx
-
 	packing_list_idx += 1
 
 
@@ -87,7 +86,6 @@ def cleanup_packing_list(obj, parent_items):
 
 	if not delete_list:
 		return obj
-
 	packing_details = obj.get("packing_details")
 	obj.set("packing_details", [])
 	for d in packing_details:

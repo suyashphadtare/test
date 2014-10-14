@@ -45,7 +45,6 @@ class Project(Document):
 			frappe.db.set_value("Project", self.name, "percent_complete",
 			 	int(float(completed) / total * 100))
 
-
 	def add_calendar_event(self):
 		# delete any earlier event for this project
 		delete_events(self.doctype, self.name)

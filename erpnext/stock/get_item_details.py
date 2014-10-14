@@ -66,7 +66,7 @@ def get_item_details(args):
 	if args.transaction_date and item.lead_time_days:
 		out.schedule_date = out.lead_time_date = add_days(args.transaction_date,
 			item.lead_time_days)
-
+	# frappe.errprint(out)
 	return out
 
 def process_args(args):
@@ -170,6 +170,9 @@ def get_basic_details(args, item_doc):
 		"base_amount": 0.0,
 		"discount_percentage": 0.0
 	})
+    
+	if args.doctype=='Sales Order Item':
+		out['qty']=args.get('qty') or 0.0  #Rohit
 
 	for fieldname in ("item_name", "item_group", "barcode", "brand", "stock_uom"):
 		out[fieldname] = item.get(fieldname)
@@ -182,11 +185,13 @@ def get_price_list_rate(args, item_doc, out):
 	if meta.get_field("currency"):
 		validate_price_list(args)
 		validate_conversion_rate(args, meta)
-
-
-		price_list_rate = frappe.db.get_value("Item Price",
+		if args.doctype=='Sales Order Item' and args.qty_label:  # Rohit
+			from erpnext.selling.custom_methods import get_so_price_list
+			so_rate=get_so_price_list(args, item_doc, out)
+			price_list_rate=so_rate
+		else:
+			price_list_rate = frappe.db.get_value("Item Price",
 			{"price_list": args.price_list, "item_code": args.item_code}, "price_list_rate")
-
 		if not price_list_rate: return {}
 
 		out.price_list_rate = flt(price_list_rate) * flt(args.plc_conversion_rate) \

@@ -73,5 +73,6 @@ $.extend(erpnext.queries, {
 		return {
 			filters: [["Warehouse", "company", "in", ["", cstr(doc.company)]]]
 		}
+
 	}
 });

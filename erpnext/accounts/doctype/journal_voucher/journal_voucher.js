@@ -7,6 +7,7 @@ erpnext.accounts.JournalVoucher = frappe.ui.form.Controller.extend({
 	onload: function() {
 		this.load_defaults();
 		this.setup_queries();
+
 		this.setup_balance_formatter();
 	},
 
@@ -121,6 +122,7 @@ erpnext.accounts.JournalVoucher = frappe.ui.form.Controller.extend({
 			}
 		});
 	}
+
 });
 
 cur_frm.script_manager.make(erpnext.accounts.JournalVoucher);

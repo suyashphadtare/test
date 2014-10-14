@@ -2972,7 +2972,7 @@ The name of your company for which you are setting up this system.,您的公司�
 The net weight of this package. (calculated automatically as sum of net weight of items),淨重這個包。 （當項目的淨重量總和自動計算）
 The new BOM after replacement,更換後的新物料清單
 The rate at which Bill Currency is converted into company's base currency,在該條例草案的貨幣轉換成公司的基礎貨幣的比率
-The unique id for tracking all recurring invoices. It is generated on submit.,唯一ID來跟踪所有的經常性發票。它是在提交生成的。
+The unique id for tracking all recurring invoices. It is generated on submit.,唯一ID來跟踪所有的經常性發票。它是在提交生成的。
 "Then Pricing Rules are filtered out based on Customer, Customer Group, Territory, Supplier, Supplier Type, Campaign, Sales Partner etc.",然後定價規則將被過濾掉基於客戶，客戶組，領地，供應商，供應商類型，活動，銷售合作夥伴等。
 There are more holidays than working days this month.,還有比這個月工作日更多的假期。
 "There can only be one Shipping Rule Condition with 0 or blank value for ""To Value""",只能有一個運輸規則條件為0或空值“ To值”

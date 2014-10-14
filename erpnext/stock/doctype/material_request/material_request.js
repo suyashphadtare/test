@@ -90,7 +90,6 @@ erpnext.buying.MaterialRequestController = erpnext.buying.BuyingController.exten
 			refresh_field("indent_details");
 		}
 	},
-
 	get_items_from_bom: function() {
 		var d = new frappe.ui.Dialog({
 			title: __("Get Items from BOM"),
@@ -162,7 +161,6 @@ erpnext.buying.MaterialRequestController = erpnext.buying.BuyingController.exten
 
 // for backward compatibility: combine new and previous states
 $.extend(cur_frm.cscript, new erpnext.buying.MaterialRequestController({frm: cur_frm}));
-
 cur_frm.cscript.qty = function(doc, cdt, cdn) {
 	var d = locals[cdt][cdn];
 	if (flt(d.qty) < flt(d.min_order_qty))
@@ -183,7 +181,6 @@ cur_frm.cscript['Stop Material Request'] = function() {
 cur_frm.cscript['Unstop Material Request'] = function(){
 	var doc = cur_frm.doc;
 	var check = confirm(__("Do you really want to UNSTOP this Material Request?"));
-
 	if (check) {
 		return $c('runserverobj', args={'method':'update_status', 'arg': 'Submitted','docs': doc}, function(r,rt) {
 			cur_frm.refresh();

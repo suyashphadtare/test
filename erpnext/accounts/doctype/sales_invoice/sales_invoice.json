@@ -114,6 +114,19 @@
    "read_only": 0
   }, 
   {
+   "fieldname": "amended_from", 
+   "fieldtype": "Link", 
+   "ignore_restrictions": 1, 
+   "label": "Amended From", 
+   "no_copy": 1, 
+   "oldfieldname": "amended_from", 
+   "oldfieldtype": "Link", 
+   "options": "Sales Invoice", 
+   "permlevel": 0, 
+   "print_hide": 1, 
+   "read_only": 1
+  }, 
+  {
    "fieldname": "company", 
    "fieldtype": "Link", 
    "in_filter": 1, 

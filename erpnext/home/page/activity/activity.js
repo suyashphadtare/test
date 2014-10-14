@@ -8,7 +8,6 @@ frappe.pages['activity'].onload = function(wrapper) {
 		single_column: true
 	})
 	wrapper.appframe.add_module_icon("Activity");
-
 	var list = new frappe.ui.Listing({
 		hide_refresh: true,
 		appframe: wrapper.appframe,
@@ -27,6 +26,7 @@ frappe.pages['activity'].onload = function(wrapper) {
 		wrapper.appframe.add_button(__('Build Report'), function() {
 			frappe.set_route('Report', "Feed");
 		}, 'icon-th');
+
 	}
 }
 
@@ -44,14 +44,12 @@ erpnext.ActivityFeed = Class.extend({
 	scrub_data: function(data) {
 		data.by = frappe.user_info(data.owner).fullname;
 		data.imgsrc = frappe.utils.get_file_link(frappe.user_info(data.owner).image);
-
 		// feedtype
 		if(!data.feed_type) {
 			data.feed_type = __(data.doc_type);
 			data.add_class = "label-info";
 			data.onclick = repl('onclick="window.location.href=\'#!List/%(feed_type)s\';"', data)
 		}
-
 		// color for comment
 		if(data.feed_type=='Comment') {
 			data.add_class = "label-danger";

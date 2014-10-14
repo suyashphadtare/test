@@ -8,8 +8,6 @@ frappe.pages['sales-analytics'].onload = function(wrapper) {
 		single_column: true
 	});
 	new erpnext.SalesAnalytics(wrapper);
-
-
 	wrapper.appframe.add_module_icon("Selling")
 
 }
@@ -144,7 +142,6 @@ erpnext.SalesAnalytics = frappe.views.TreeGridReport.extend({
 		if (!this.tl || !this.tl[this.based_on]) {
 			this.make_transaction_list(this.based_on, this.based_on + " Item");
 		}
-
 		if(!this.data || me.item_type != me.tree_type) {
 			if(me.tree_type=='Customer') {
 				var items = frappe.report_dump.data["Customer"];
@@ -162,7 +159,6 @@ erpnext.SalesAnalytics = frappe.views.TreeGridReport.extend({
 			me.parent_map = {};
 			me.item_by_name = {};
 			me.data = [];
-
 			$.each(items, function(i, v) {
 				var d = copy_dict(v);
 

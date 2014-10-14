@@ -11,9 +11,9 @@
 % Milestones Completed,
 % Received,% erhalten
 % Tasks Completed,
-% of materials billed against this Purchase Order.,% der für diese Bestellung in Rechnung gestellten Materialien.
+% of materials billed against this Purchase Order.,% der für diese Bestellung in Rechnung gestellten Materialien.
 % of materials billed against this Sales Order,% der für diesen Kundenauftrag in Rechnung gestellten Materialien
-% of materials delivered against this Delivery Note,% der für diesen Lieferschein gelieferten Materialien
+% of materials delivered against this Delivery Note,% der für diesen Lieferschein gelieferten Materialien
 % of materials delivered against this Sales Order,% der für diesen Kundenauftrag gelieferten Materialien
 % of materials ordered against this Material Request,% der für diese Materialanfrage bestellten Materialien
 % of materials received against this Purchase Order,% der für diese Bestellung erhaltenen Materialeien
@@ -518,7 +518,7 @@ Check how the newsletter looks in an email by sending it to your email.,"Prüfen
 "Check if you need automatic recurring invoices. After submitting any sales invoice, Recurring section will be visible.","Aktivieren, wenn Sie automatisch wiederkehrende Rechnungen benötigen. Nach dem Absenden einer Verkaufsrechnung, wird der Bereich für wiederkehrende Rechnungen angezeigt."
 Check if you want to send salary slip in mail to each employee while submitting salary slip,"Aktivieren, wenn Sie die Gehaltsabrechnung per Post an jeden Mitarbeiter senden möchten."
 Check this if you want to force the user to select a series before saving. There will be no default if you check this.,"Aktivieren, wenn Sie den Benutzer zwingen möchten, vor dem Speichern eine Serie auszuwählen. Wenn Sie dies aktivieren, gibt es keine Standardeinstellung."
-Check this if you want to show in website,"Aktivieren, wenn Sie den Inhalt auf der Website anzeigen möchten."
+Check this if you want to show in website,"Aktivieren, wenn Sie den Inhalt auf der Website anzeigen möchten."
 Check this to disallow fractions. (for Nos),"Aktivieren, um keine Brüche zuzulassen. (für Nr.)"
 Check this to pull emails from your mailbox,"Aktivieren, um E-Mails aus Ihrem Postfach zu ziehen"
 Check to activate,"Aktivieren, um zu aktivieren"
@@ -990,7 +990,7 @@ Enter Verification Code,Sicherheitscode eingeben
 Enter campaign name if the source of lead is campaign.,"Namen der Kampagne eingeben, wenn die Lead-Quelle eine Kampagne ist."
 Enter department to which this Contact belongs,"Abteilung eingeben, zu der dieser Kontakt gehört"
 Enter designation of this Contact,Bezeichnung dieses Kontakts eingeben
-"Enter email id separated by commas, invoice will be mailed automatically on particular date","Geben Sie die durch Kommas getrennte E-Mail-ID  ein, die Rechnung wird automatisch an einem bestimmten Rechnungsdatum abgeschickt"
+"Enter email id separated by commas, invoice will be mailed automatically on particular date","Geben Sie die durch Kommas getrennte E-Mail-ID  ein, die Rechnung wird automatisch an einem bestimmten Rechnungsdatum abgeschickt"
 "Enter email id separated by commas, order will be mailed automatically on particular date",
 Enter items and planned qty for which you want to raise production orders or download raw materials for analysis.,"Geben Sie die Posten und die geplante Menge ein, für die Sie die Fertigungsaufträge erhöhen möchten, oder laden Sie Rohstoffe für die Analyse herunter."
 Enter name of campaign if source of enquiry is campaign,"Geben Sie den Namen der Kampagne ein, wenn der Ursprung der Anfrage eine Kampagne ist"
@@ -1215,7 +1215,7 @@ Grocery,Lebensmittelgeschäft
 Gross Margin %,Bruttoergebnis %
 Gross Margin Value,Bruttoergebniswert
 Gross Pay,Bruttolohn
-Gross Pay + Arrear Amount +Encashment Amount - Total Deduction,Bruttolohn +  ausstehender Betrag +   Inkassobetrag - Gesamtabzug
+Gross Pay + Arrear Amount +Encashment Amount - Total Deduction,Bruttolohn +  ausstehender Betrag +   Inkassobetrag - Gesamtabzug
 Gross Profit,Rohgewinn
 Gross Profit (%),Rohgewinn (%)
 Gross Weight,Bruttogewicht
@@ -1246,7 +1246,7 @@ Health Concerns,Gesundheitliche Bedenken
 Health Details,Gesundheitsdetails
 Held On,Abgehalten am
 Help HTML,HTML-Hilfe
-"Help: To link to another record in the system, use ""#Form/Note/[Note Name]"" as the Link URL. (don't use ""http://"")","Hilfe: Um eine Verknüpfung zu einem anderen Datensatz im System herzustellen, verwenden Sie ""#Formular/Anmerkung/[Anmerkungsname]"" als Link-URL. (verwenden Sie nicht ""http://"")"
+"Help: To link to another record in the system, use ""#Form/Note/[Note Name]"" as the Link URL. (don't use ""http://"")","Hilfe: Um eine Verknüpfung zu einem anderen Datensatz im System herzustellen, verwenden Sie ""#Formular/Anmerkung/[Anmerkungsname]"" als Link-URL. (verwenden Sie nicht ""http://"")"
 "Here you can maintain family details like name and occupation of parent, spouse and children","Hier können Sie Familiendetails wie Namen und Beruf der Eltern, Ehepartner und Kinder angeben"
 "Here you can maintain height, weight, allergies, medical concerns etc","Hier können Sie Größe, Gewicht, Allergien, medizinische Bedenken usw. eingeben"
 Hide Currency Symbol,Währungssymbol ausblenden
@@ -1270,7 +1270,7 @@ How frequently?,Wie häufig?
 "How should this currency be formatted? If not set, will use system defaults","Wie soll diese Währung formatiert werden? Wenn nicht festgelegt, werden die Systemstands verwendet"
 Human Resources,Personalwesen
 Identification of the package for the delivery (for print),Bezeichnung des Pakets für die Lieferung (für den Druck)
-If Income or Expense,Wenn Ertrag oder Aufwand
+If Income or Expense,Wenn Ertrag oder Aufwand
 If Monthly Budget Exceeded,Wenn Monatsbudget überschritten
 "If Supplier Part Number exists for given Item, it gets stored here","Falls für eine bestimmte Position eine Lieferantenteilenummer vorhanden ist, wird sie hier gespeichert"
 If Yearly Budget Exceeded,Wenn Jahresbudget überschritten
@@ -1316,11 +1316,11 @@ In Words (Company Currency),In Words (Unternehmenswährung)
 In Words (Export) will be visible once you save the Delivery Note.,"In Words (Export) wird sichtbar, wenn Sie den Lieferschein speichern."
 In Words will be visible once you save the Delivery Note.,"In Words wird sichtbar, sobald Sie den Lieferschein speichern."
 In Words will be visible once you save the Purchase Invoice.,"In Words wird sichtbar, sobald Sie die Einkaufsrechnung speichern."
-In Words will be visible once you save the Purchase Order.,"In Words wird sichtbar, sobald Sie die Bestellung speichern."
+In Words will be visible once you save the Purchase Order.,"In Words wird sichtbar, sobald Sie die Bestellung speichern."
 In Words will be visible once you save the Purchase Receipt.,"In Words wird sichtbar, sobald Sie den Kaufbeleg speichern."
 In Words will be visible once you save the Quotation.,"In Words wird sichtbar, sobald Sie den Kostenvoranschlag speichern."
 In Words will be visible once you save the Sales Invoice.,"In Words wird sichtbar, sobald Sie die Verkaufsrechnung speichern."
-In Words will be visible once you save the Sales Order.,"In Words wird sichtbar, sobald Sie den Kundenauftrag speichern."
+In Words will be visible once you save the Sales Order.,"In Words wird sichtbar, sobald Sie den Kundenauftrag speichern."
 Incentives,Anreiz
 Include Reconciled Entries,Fügen versöhnt Einträge
 Include holidays in Total no. of Working Days,Urlaub in die Gesamtzahl der Arbeitstage einschließen
@@ -1555,17 +1555,17 @@ Leave Approver,Urlaubsgenehmiger
 Leave Approvers,Urlaubsgenehmiger
 Leave Balance Before Application,Urlaubskonto vor Anwendung
 Leave Block List,Urlaubssperrenliste
-Leave Block List Allow,Urlaubssperrenliste zulassen
+Leave Block List Allow,Urlaubssperrenliste zulassen
 Leave Block List Allowed,Urlaubssperrenliste zugelassen
 Leave Block List Date,Urlaubssperrenliste Datum
-Leave Block List Dates,Urlaubssperrenliste Termine
+Leave Block List Dates,Urlaubssperrenliste Termine
 Leave Block List Name,Urlaubssperrenliste Name
 Leave Blocked,Gesperrter Urlaub
 Leave Control Panel,Urlaubskontrolloberfläche
 Leave Encashed?,Urlaub eingelöst?
 Leave Encashment Amount,Urlaubseinlösung Betrag
 Leave Type,Urlaubstyp
-Leave Type Name,Urlaubstyp Name
+Leave Type Name,Urlaubstyp Name
 Leave Without Pay,Unbezahlter Urlaub
 Leave application has been approved.,Urlaubsantrag genehmigt wurde .
 Leave application has been rejected.,Urlaubsantrag wurde abgelehnt.
@@ -1601,7 +1601,7 @@ Loading...,Wird geladen ...
 Loans (Liabilities),Kredite ( Passiva)
 Loans and Advances (Assets),Forderungen ( Assets)
 Local,lokal
-"Log of Activities performed by users against Tasks that can be used for tracking time, billing.","Protokoll der von Benutzern durchgeführten Aktivitäten bei Aufgaben, die zum Protokollieren von Zeit und zur Rechnungslegung verwendet werden."
+"Log of Activities performed by users against Tasks that can be used for tracking time, billing.","Protokoll der von Benutzern durchgeführten Aktivitäten bei Aufgaben, die zum Protokollieren von Zeit und zur Rechnungslegung verwendet werden."
 Login,Anmelden
 Login with your new User ID,Loggen Sie sich mit Ihrem neuen Benutzer-ID
 Logo,Logo
@@ -1804,7 +1804,7 @@ New Enquiries,Neue Anfragen
 New Leads,Neue Leads
 New Leave Application,Neuer Urlaubsantrag
 New Leaves Allocated,Neue Urlaubszuordnung
-New Leaves Allocated (In Days),Neue Urlaubszuordnung (in Tagen)
+New Leaves Allocated (In Days),Neue Urlaubszuordnung (in Tagen)
 New Material Requests,Neue Materialanfragen
 New Projects,Neue Projekte
 New Purchase Orders,Neue Bestellungen
@@ -1981,7 +1981,7 @@ POS View,POS-Ansicht
 PR Detail,PR-Detail
 Package Item Details,Artikeldetails zum Paket
 Package Items,Artikel im Paket
-Package Weight Details,Details Paketgewicht
+Package Weight Details,Details Paketgewicht
 Packed Item,Verpackter Artikel
 Packed quantity must equal quantity for Item {0} in row {1},Lunch Menge muss Menge für Artikel gleich {0} in Zeile {1}
 Packing Details,Verpackungsdetails
@@ -2015,7 +2015,7 @@ Partly Billed,Teilweise abgerechnet
 Partly Delivered,Teilweise geliefert
 Partner Target Detail,Partner Zieldetail
 Partner Type,Partnertyp
-Partner's Website,Webseite des Partners
+Partner's Website,Webseite des Partners
 Party,Gruppe
 Party Account,Party Account
 Party Type,Party- Typ
@@ -2218,7 +2218,7 @@ Price List Exchange Rate,Preisliste Wechselkurs
 Price List Master,Preislistenstamm
 Price List Name,Preislistenname
 Price List Rate,Preislistenrate
-Price List Rate (Company Currency),Preislistenrate (Unternehmenswährung)
+Price List Rate (Company Currency),Preislistenrate (Unternehmenswährung)
 Price List master.,Preisliste Master.
 Price List must be applicable for Buying or Selling,Preisliste ist gültig für Kauf oder Verkauf sein
 Price List not selected,Preisliste nicht ausgewählt
@@ -2400,7 +2400,7 @@ Rate at which customer's currency is converted to company's base currency,"Kurs,
 Rate at which supplier's currency is converted to company's base currency,"Kurs, zu dem die Lieferantenwährung in die Basiswährung des Unternehmens umgerechnet wird"
 Rate at which this tax is applied,"Kurs, zu dem dieser Steuersatz angewendet wird"
 Raw Material,Rohstoff
-Raw Material Item Code,Artikelcode Rohstoffe
+Raw Material Item Code,Artikelcode Rohstoffe
 Raw Materials Supplied,Gelieferte Rohstoffe
 Raw Materials Supplied Cost,Kosten gelieferter Rohstoffe
 Raw material cannot be same as main Item,Raw Material nicht wie Haupt Titel
@@ -2411,15 +2411,15 @@ Re-order Level,Nachbestellungsebene
 Re-order Qty,Nachbestellungsmenge
 Read,Lesen
 Reading 1,Ablesung 1
-Reading 10,Ablesung 10
-Reading 2,Ablesung 2
-Reading 3,Ablesung 3
-Reading 4,Ablesung 4
-Reading 5,Ablesung 5
-Reading 6,Ablesung 6
-Reading 7,Ablesung 7
-Reading 8,Ablesung 8
-Reading 9,Ablesung 9
+Reading 10,Ablesung 10
+Reading 2,Ablesung 2
+Reading 3,Ablesung 3
+Reading 4,Ablesung 4
+Reading 5,Ablesung 5
+Reading 6,Ablesung 6
+Reading 7,Ablesung 7
+Reading 8,Ablesung 8
+Reading 9,Ablesung 9
 Real Estate,Immobilien
 Reason,Grund
 Reason for Leaving,Grund für das Verlassen
@@ -2443,13 +2443,13 @@ Recipients,Empfänger
 Reconcile,versöhnen
 Reconciliation Data,Tilgungsdatum
 Reconciliation HTML,Tilgung HTML
-Reconciliation JSON,Tilgung JSON
+Reconciliation JSON,Tilgung JSON
 Record item movement.,Verschiebung Datenposition
 Recurring Id,Wiederkehrende ID
 Recurring Invoice,Wiederkehrende Rechnung
 Recurring Order,
 Recurring Type,Wiederkehrender Typ
-Reduce Deduction for Leave Without Pay (LWP),Abzug für unbezahlten Urlaub (LWP) senken
+Reduce Deduction for Leave Without Pay (LWP),Abzug für unbezahlten Urlaub (LWP) senken
 Reduce Earning for Leave Without Pay (LWP),Verdienst für unbezahlten Urlaub (LWP) senken
 Ref,Ref.
 Ref Code,Ref-Code
@@ -2668,7 +2668,7 @@ Secured Loans,Secured Loans
 Securities & Commodity Exchanges,Securities & Warenbörsen
 Securities and Deposits,Wertpapiere und Einlagen
 "See ""Rate Of Materials Based On"" in Costing Section",Siehe „Rate der zu Grunde liegenden Materialien“ im Abschnitt Kalkulation
-"Select ""Yes"" for sub - contracting items",Wählen Sie „Ja“ für  Zulieferer-Artikel
+"Select ""Yes"" for sub - contracting items",Wählen Sie „Ja“ für  Zulieferer-Artikel
 "Select ""Yes"" if this item is used for some internal purpose in your company.","Wählen Sie „Ja“, wenn diese Position zu internen Zwecke in Ihrem Unternehmen verwendet wird."
 "Select ""Yes"" if this item represents some work like training, designing, consulting etc.","Wählen Sie „Ja“, wenn diese Position Arbeit wie Schulung, Entwurf, Beratung usw. beinhaltet."
 "Select ""Yes"" if you are maintaining stock of this item in your Inventory.","Wählen Sie „Ja“, wenn Sie den Bestand dieses Artikels in Ihrem Inventar verwalten."
@@ -2681,10 +2681,10 @@ Select DocType,Dokumenttyp auswählen
 Select Fiscal Year...,Wählen Sie das Geschäftsjahr ...
 Select Items,Artikel auswählen
 Select Project...,Wählen Sie Projekt ...
-Select Sales Orders,Kundenaufträge auswählen
+Select Sales Orders,Kundenaufträge auswählen
 Select Sales Orders from which you want to create Production Orders.,"Kundenaufträge auswählen, aus denen Sie Fertigungsaufträge erstellen möchten."
 Select Time Logs and Submit to create a new Sales Invoice.,"Wählen Sie Zeitprotokolle und ""Absenden"" aus, um eine neue Verkaufsrechnung zu erstellen."
-Select Transaction,Transaktion auswählen
+Select Transaction,Transaktion auswählen
 Select Warehouse...,Wählen Sie Warehouse ...
 Select Your Language,Wählen Sie Ihre Sprache
 Select account head of the bank where cheque was deposited.,"Wählen Sie den Kontenführer der Bank, bei der der Scheck eingereicht wurde."
@@ -2955,8 +2955,8 @@ Support Ticket,Support-Ticket
 Support queries from customers.,Support-Anfragen von Kunden.
 Symbol,Symbol
 Sync Support Mails,Sync Unterstützungs E-Mails
-Sync with Dropbox,Mit Dropbox synchronisieren
-Sync with Google Drive,Mit Google Drive synchronisieren
+Sync with Dropbox,Mit Dropbox synchronisieren
+Sync with Google Drive,Mit Google Drive synchronisieren
 System,System
 System Balance,
 System Manager,
@@ -2995,7 +2995,7 @@ Tax template for selling transactions.,Tax -Vorlage für Verkaufsgeschäfte .
 Taxes,Steuer
 Taxes and Charges,Steuern und Abgaben
 Taxes and Charges Added,Steuern und Abgaben hinzugefügt
-Taxes and Charges Added (Company Currency),Steuern und Abgaben hinzugefügt (Unternehmenswährung)
+Taxes and Charges Added (Company Currency),Steuern und Abgaben hinzugefügt (Unternehmenswährung)
 Taxes and Charges Calculation,Berechnung der Steuern und Abgaben
 Taxes and Charges Deducted,Steuern und Abgaben abgezogen
 Taxes and Charges Deducted (Company Currency),Steuern und Abgaben abgezogen (Unternehmenswährung)
@@ -3042,12 +3042,12 @@ The date on which recurring order will be stop,
 The day(s) on which you are applying for leave are holiday. You need not apply for leave.,"Der Tag (e) , auf dem Sie sich bewerben für Urlaub sind Ferien. Sie müssen nicht, um Urlaub ."
 The first Leave Approver in the list will be set as the default Leave Approver,Der erste Urlaubsgenehmiger auf der Liste wird als standardmäßiger Urlaubsgenehmiger festgesetzt
 The first user will become the System Manager (you can change that later).,"Der erste Benutzer wird der System-Manager (du , dass später ändern können ) ."
-The gross weight of the package. Usually net weight + packaging material weight. (for print),Das Bruttogewicht des Pakets. Normalerweise Nettogewicht + Gewicht des Verpackungsmaterials (Für den Ausdruck)
+The gross weight of the package. Usually net weight + packaging material weight. (for print),Das Bruttogewicht des Pakets. Normalerweise Nettogewicht + Gewicht des Verpackungsmaterials (Für den Ausdruck)
 The name of your company for which you are setting up this system.,"Der Name der Firma, für die Sie die Einrichtung dieses Systems."
 The net weight of this package. (calculated automatically as sum of net weight of items),Das Nettogewicht dieses Pakets. (automatisch als Summe der einzelnen Nettogewichte berechnet)
 The new BOM after replacement,Die neue Stückliste nach dem Austausch
 The rate at which Bill Currency is converted into company's base currency,"Der Kurs, mit dem die Rechnungswährung in die Basiswährung des Unternehmens umgerechnet wird"
-The unique id for tracking all recurring invoices. It is generated on submit.,Die eindeutige ID für Tracking alle wiederkehrenden Rechnungen. Es basiert auf einreichen generiert.
+The unique id for tracking all recurring invoices. It is generated on submit.,Die eindeutige ID für Tracking alle wiederkehrenden Rechnungen. Es basiert auf einreichen generiert.
 "Then Pricing Rules are filtered out based on Customer, Customer Group, Territory, Supplier, Supplier Type, Campaign, Sales Partner etc.","Dann Preisregeln werden auf Basis von Kunden gefiltert, Kundengruppe, Territory, Lieferant, Lieferant Typ, Kampagne, Vertriebspartner usw."
 There are more holidays than working days this month.,Es gibt mehr Feiertage als Arbeitstage in diesem Monat.
 "There can only be one Shipping Rule Condition with 0 or blank value for ""To Value""","Es kann nur einen Versand Regel sein Zustand mit 0 oder Blindwert für "" auf den Wert"""
@@ -3150,7 +3150,7 @@ Total Sanctioned Amount,Gesamtsumme genehmigter Betrag
 Total Score (Out of 5),Gesamtwertung (von 5)
 Total Tax (Company Currency),Gesamtsteuerlast (Unternehmenswährung)
 Total Taxes and Charges,Steuern und Ausgaben insgesamt
-Total Taxes and Charges (Company Currency),Steuern und Ausgaben insgesamt (Unternehmenswährung)
+Total Taxes and Charges (Company Currency),Steuern und Ausgaben insgesamt (Unternehmenswährung)
 Total allocated percentage for sales team should be 100,Insgesamt zugeordnet Prozentsatz für Vertriebsteam sollte 100 sein
 Total amount of invoices received from suppliers during the digest period,Gesamtbetrag der vom Lieferanten während des Berichtszeitraums eingereichten Rechnungen
 Total amount of invoices sent to the customer during the digest period,"Gesamtbetrag der Rechnungen, die während des Berichtszeitraums an den Kunden gesendet wurden"
@@ -3218,7 +3218,7 @@ Update Cost,Update- Kosten
 Update Finished Goods,Aktualisieren Fertigwaren
 Update Series,Serie aktualisieren
 Update Series Number,Seriennummer aktualisieren
-Update Stock,Lagerbestand aktualisieren
+Update Stock,Lagerbestand aktualisieren
 Update additional costs to calculate landed cost of items,
 Update bank payment dates with journals.,Aktualisieren Sie die Zahlungstermine anhand der Journale.
 Update clearance date of Journal Entries marked as 'Bank Vouchers',"Update- Clearance Datum der Journaleinträge als ""Bank Gutscheine 'gekennzeichnet"
@@ -3229,7 +3229,7 @@ Upload Backups to Dropbox,Backups in Dropbox hochladen
 Upload Backups to Google Drive,Backups auf Google Drive hochladen
 Upload HTML,Upload-HTML
 Upload a .csv file with two columns: the old name and the new name. Max 500 rows.,"Laden Sie eine CSV-Datei mit zwei Spalten hoch: In der einen der alte, in der anderen der neue Name. Höchstens 500 Zeilen."
-Upload attendance from a .csv file,Teilnahme aus  einer CSV-Datei hochladen
+Upload attendance from a .csv file,Teilnahme aus  einer CSV-Datei hochladen
 Upload stock balance via csv.,Bestandsbilanz über CSV hochladen
 Upload your letter head and logo - you can edit them later.,Laden Sie Ihr Briefkopf und Logo - Sie können sie später zu bearbeiten.
 Upper Income,Oberes Einkommen
@@ -3318,7 +3318,7 @@ Warranty Period (in days),Garantiezeitraum (in Tagen)
 We buy this Item,Wir kaufen Artikel
 We sell this Item,Wir verkaufen Artikel
 Website,Webseite
-Website Description,Website Beschreibung
+Website Description,Website Beschreibung
 Website Item Group,Webseite Artikelgruppe
 Website Item Groups,Webseite Artikelgruppen
 Website Manager,
@@ -3335,7 +3335,7 @@ Welcome,Willkommen
 Welcome to ERPNext. Over the next few minutes we will help you setup your ERPNext account. Try and fill in as much information as you have even if it takes a bit longer. It will save you a lot of time later. Good Luck!,"Willkommen auf ERPNext . In den nächsten Minuten werden wir Ihnen helfen, Ihre Setup ERPNext Konto. Versuchen Sie, und füllen Sie so viele Informationen wie Sie haben , auch wenn es etwas länger dauert . Es wird Ihnen eine Menge Zeit später. Viel Glück!"
 Welcome to ERPNext. Please select your language to begin the Setup Wizard.,"Willkommen auf ERPNext . Bitte wählen Sie Ihre Sprache , um den Setup-Assistenten zu starten."
 What does it do?,Was macht sie?
-"When any of the checked transactions are ""Submitted"", an email pop-up automatically opened to send an email to the associated ""Contact"" in that transaction, with the transaction as an attachment. The user may or may not send the email.","Wenn eine der geprüften Transaktionen den Status ""Abgesendet/Eingereicht"" hat, wird automatisch eine Popup-E-Mail geöffnet, damit die Transaktion als Anhang per E-Mail an den zugeordneten ""Kontakt"" dieser Transaktion gesendet werden kann.  Der Benutzer kann diese E-Mail absenden oder nicht."
+"When any of the checked transactions are ""Submitted"", an email pop-up automatically opened to send an email to the associated ""Contact"" in that transaction, with the transaction as an attachment. The user may or may not send the email.","Wenn eine der geprüften Transaktionen den Status ""Abgesendet/Eingereicht"" hat, wird automatisch eine Popup-E-Mail geöffnet, damit die Transaktion als Anhang per E-Mail an den zugeordneten ""Kontakt"" dieser Transaktion gesendet werden kann.  Der Benutzer kann diese E-Mail absenden oder nicht."
 "When submitted, the system creates difference entries to set the given stock and valuation on this date.","Wenn vorgelegt , erstellt das System Unterschied Einträge, um die Lager -und Bewertungs gegeben an diesem Tag eingestellt ."
 Where items are stored.,Wo Artikel gelagert werden.
 Where manufacturing operations are carried out.,Wo Herstellungsvorgänge durchgeführt werden.
@@ -3357,9 +3357,9 @@ Workstation,Arbeitsstation
 Workstation Name,Name der Arbeitsstation
 Write Off Account,"Abschreiben, Konto"
 Write Off Amount,"Abschreiben, Betrag"
-Write Off Amount <=,"Abschreiben, Betrag <="
+Write Off Amount <=,"Abschreiben, Betrag <="
 Write Off Based On,Abschreiben basiert auf
-Write Off Cost Center,"Abschreiben, Kostenstelle"
+Write Off Cost Center,"Abschreiben, Kostenstelle"
 Write Off Outstanding Amount,"Abschreiben, ausstehender Betrag"
 Write Off Voucher,"Abschreiben, Gutschein"
 Wrong Template: Unable to find head row.,Falsche Vorlage: Kopfzeile nicht gefunden

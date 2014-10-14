@@ -69,7 +69,7 @@
    "oldfieldtype": "Currency", 
    "options": "currency", 
    "permlevel": 0, 
-   "reqd": 1, 
+   "reqd": 0, 
    "search_index": 0
   }, 
   {
@@ -99,13 +99,43 @@
    "label": "Item Description", 
    "permlevel": 0, 
    "read_only": 1
+  }, 
+  {
+   "fieldname": "section_break_12", 
+   "fieldtype": "Section Break", 
+   "label": "Multiple Range Rate", 
+   "permlevel": 0, 
+   "precision": ""
+  }, 
+  {
+   "fieldname": "item", 
+   "fieldtype": "Table", 
+   "label": "Item Quantity", 
+   "options": "Price List Quantity", 
+   "permlevel": 0, 
+   "precision": ""
+  }, 
+  {
+   "fieldname": "section_break_14", 
+   "fieldtype": "Section Break", 
+   "label": "Multiple Qty Rate", 
+   "permlevel": 0, 
+   "precision": ""
+  }, 
+  {
+   "fieldname": "singular_price_list", 
+   "fieldtype": "Table", 
+   "label": "Singular Price List", 
+   "options": "Singular Price List", 
+   "permlevel": 0, 
+   "precision": ""
   }
  ], 
  "icon": "icon-flag", 
  "idx": 1, 
  "in_create": 0, 
  "istable": 0, 
- "modified": "2014-07-08 15:38:23.653034", 
+ "modified": "2014-10-04 18:07:46.101748", 
  "modified_by": "Administrator", 
  "module": "Stock", 
  "name": "Item Price", 

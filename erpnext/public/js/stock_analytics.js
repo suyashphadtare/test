@@ -72,7 +72,6 @@ erpnext.StockAnalytics = erpnext.StockGridReport.extend({
 	setup_filters: function() {
 		var me = this;
 		this._super();
-
 		this.trigger_refresh_on_change(["value_or_qty", "brand", "warehouse", "range"]);
 
 		this.show_zero_check();
@@ -84,7 +83,6 @@ erpnext.StockAnalytics = erpnext.StockGridReport.extend({
 	},
 	prepare_data: function() {
 		var me = this;
-
 		if(!this.data) {
 			var items = this.prepare_tree("Item", "Item Group");
 
@@ -179,7 +177,6 @@ erpnext.StockAnalytics = erpnext.StockGridReport.extend({
 						balance = item[col.field];
 					}
 				});
-
 				var parent = me.parent_map[item.name];
 				while(parent) {
 					parent_group = me.item_by_name[parent];

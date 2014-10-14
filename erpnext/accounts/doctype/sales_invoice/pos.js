@@ -367,6 +367,7 @@ erpnext.POS = Class.extend({
 		this.hide_payment_button();
 
 		// If quotation to is not Customer then remove party
+
 		if (this.frm.doctype == "Quotation" && this.frm.doc.quotation_to!="Customer") {
 			this.party_field.$wrapper.remove();
 		}

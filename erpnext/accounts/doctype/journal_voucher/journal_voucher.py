@@ -6,6 +6,7 @@ import frappe
 
 from frappe.utils import cint, cstr, flt, fmt_money, formatdate, getdate
 from frappe import msgprint, _, scrub
+from frappe import msgprint, _
 from erpnext.setup.utils import get_company_currency
 
 from erpnext.controllers.accounts_controller import AccountsController
@@ -369,7 +370,6 @@ class JournalVoucher(AccountsController):
 						"cost_center": d.cost_center
 					})
 				)
-
 		if gl_map:
 			make_gl_entries(gl_map, cancel=cancel, adv_adj=adv_adj)
 

@@ -28,6 +28,17 @@ def get_data():
 				},
 				{
 					"type": "doctype",
+					"label":"Quotation For HLB",
+					"name": "Quotation for Mulitple Quantity",
+					"description": _("Quotation for Mulitple Quantity."),
+				},
+				{
+					"type": "doctype",
+					"name": "Multiple Qty",
+					"description": _("Quotes to Leads or Customers."),
+				},
+				{
+					"type": "doctype",
 					"name": "Sales Order",
 					"description": _("Confirmed orders from Customers."),
 				},
@@ -46,6 +57,11 @@ def get_data():
 					"name": "Item",
 					"description": _("All Products or Services."),
 				},
+			{
+				    	"type":"doctype",
+				    	"name":"Range Master",
+				    	"description":_("Quantity Range Master"),
+				}
 			]
 		},
 		{

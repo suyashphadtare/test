@@ -19,6 +19,10 @@ class Customer(TransactionBase):
 			if frappe.db.exists("Supplier", self.customer_name):
 				msgprint(_("A Supplier exists with same name"), raise_exception=1)
 			self.name = self.customer_name
+		elif cust_master_name=='Customer Code':
+			if frappe.db.exists("Supplier", self.customer_code):
+				msgprint(_("A Supplier exists with same name"), raise_exception=1)
+			self.name = self.customer_code
 		else:
 			self.name = make_autoname(self.naming_series+'.#####')
 
@@ -56,7 +60,6 @@ class Customer(TransactionBase):
 					(self.name, self.customer_name, self.lead_name))
 
 			lead = frappe.db.get_value("Lead", self.lead_name, ["lead_name", "email_id", "phone", "mobile_no"], as_dict=True)
-
 			c = frappe.new_doc('Contact')
 			c.first_name = lead.lead_name
 			c.email_id = lead.email_id
