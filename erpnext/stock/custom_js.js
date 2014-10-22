@@ -20,7 +20,10 @@ check_label=function(doc,cdt,cdn){
 		label='Machining'
 		cur_frm.cscript.set_label(label);
 	}
-	
+	else{
+		label='Item'
+		cur_frm.cscript.set_label(label);	
+	}
 }
 
 cur_frm.cscript.set_label=function(label){

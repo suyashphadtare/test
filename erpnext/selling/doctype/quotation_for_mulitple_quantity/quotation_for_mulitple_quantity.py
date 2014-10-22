@@ -179,10 +179,12 @@ class QuotationforMulitpleQuantity(Document):
 			cost_child=args["child_docname"]
 			field_name=d.get(args["field_name"])
 			cost=frappe.get_doc(cost_docname,field_name).get(cost_child)
+			rfqs=[]
 			for c in cost:
 				if c.quote_ref:
 					self.update_rfq_with_quotattion_values(c,args,d)
-		return "done"
+					rfqs.append(c.quote_ref)
+		return rfqs
 
 	def update_rfq_with_quotattion_values(self,c,args,d):
 		rfq=frappe.get_doc(args['rfq_doctype'],c.quote_ref)

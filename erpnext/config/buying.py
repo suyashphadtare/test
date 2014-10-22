@@ -44,6 +44,31 @@ def get_data():
 			]
 		},
 		{
+			"label": _("PO Process"),
+			"icon": "icon-star",
+			"items": [
+				{
+					"type": "doctype",
+					"name": "PO Material",
+					"description": _("PO Material"),
+				},
+				{
+					"type": "doctype",
+					"name": "PO Primary Process",
+					"description": _("PO Primary Process"),
+				},
+				{
+					"type": "doctype",
+					"name": "PO Secondary Process",
+					"description": _("PO Secondary Process"),
+				},
+				{
+					"type": "doctype",
+					"name": "PO Machining",
+					"description": _("PO Machining"),
+				}		]
+		},
+		{
 			"label": _("Setup"),
 			"icon": "icon-cog",
 			"items": [

@@ -10,6 +10,7 @@ frappe.provide("erpnext.buying");
 frappe.require("assets/erpnext/js/transaction.js");
 {% include "public/js/controllers/accounts.js" %}
 
+
 erpnext.buying.BuyingController = erpnext.TransactionController.extend({
 	onload: function() {
 		this.setup_queries();
@@ -62,6 +63,7 @@ erpnext.buying.BuyingController = erpnext.TransactionController.extend({
 	},
 
 	supplier: function() {
+		
 		var me = this;
 		erpnext.utils.get_party_details(this.frm, null, null, function(){me.apply_pricing_rule()});
 	},

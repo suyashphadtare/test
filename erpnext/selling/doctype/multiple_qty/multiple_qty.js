@@ -16,8 +16,7 @@ erpnext.selling.QuotationController = erpnext.selling.SellingController.extend({
 		this._super(doc, dt, dn);
 		if(doc.__islocal){
 			get_server_fields('set_label','','',doc,dt,dn,1,function(r){refresh_field('multiple_qty_item');
-			 refresh_field('quantity_lable');
-			 refresh_field('qty_label')
+			 refresh_field(['quantity_lable','qty_label','q1','q2','q3','q4','q5'])
 			 me.change_grid_labels()
 
 			})
@@ -282,6 +281,16 @@ cur_frm.cscript.rfq_pp = function() {
 				rfq_doctype:"Primary Process RFQ",
 				rfq_child:"primary_process_rfq_details"
 
+			},
+			callback: function(r) {
+				if(r.exc) {
+					msgprint(__("There were errors."));
+					return;
+				}
+				else if (r.message){
+					msgprint(__("{0} RFQ's Updated.",[r.message]));
+				}
+				cur_frm.refresh();
 			}
 		});
 	
@@ -299,6 +308,16 @@ cur_frm.cscript.rfq_sp = function() {
 				rfq_doctype:"Secondary Process RFQ",
 				rfq_child:"secondary_process_rfq_details"
 
+			},
+			callback: function(r) {
+				if(r.exc) {
+					msgprint(__("There were errors."));
+					return;
+				}
+				else if (r.message){
+					msgprint(__("{0} RFQ's Updated.",[r.message]));
+				}
+				cur_frm.refresh();
 			}
 		});
 	
@@ -316,6 +335,16 @@ cur_frm.cscript.rfq_sm = function() {
 				rfq_doctype:"Sub Machining RFQ",
 				rfq_child:"sub_machining_rfq_details"
 
+			},
+			callback: function(r) {
+				if(r.exc) {
+					msgprint(__("There were errors."));
+					return;
+				}
+				else if (r.message){
+					msgprint(__("{0} RFQ's Updated.",[r.message]));
+				}
+				cur_frm.refresh();
 			}
 		});
 }

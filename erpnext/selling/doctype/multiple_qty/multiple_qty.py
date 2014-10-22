@@ -42,6 +42,7 @@ class MultipleQty(Document):
 		label1=['qty6','qty7','qty8','qty9','qty10']
 		label_dict={}
 		label1_dict={}
+		labels=''
 		i=0
 		args=frappe.db.sql("select field,value from `tabSingles` where doctype='Range Master' and field in('qty1','qty2','qty3','qty4','qty5')",as_list=1)
 		for s in range(0,len(args)):
@@ -51,6 +52,11 @@ class MultipleQty(Document):
 			i+=1	
 		self.quantity_lable=json.dumps(label_dict)
 		self.qty_label=json.dumps(label1_dict)
+		self.q1=label_dict['qty1']
+		self.q2=label_dict['qty2']
+		self.q3=label_dict['qty3']
+		self.q4=label_dict['qty4']
+		self.q5=label_dict['qty5']
 		return "Done"
 
 	def get_item_details(self,item_code):
@@ -170,10 +176,12 @@ class MultipleQty(Document):
 			cost_child=args["child_docname"]
 			field_name=d.get(args["field_name"])
 			cost=frappe.get_doc(cost_docname,field_name).get(cost_child)
+			rfqs=[]
 			for c in cost:
 				if c.quote_ref:
 					self.update_rfq_with_quotattion_values(c,args,d)
-		return "done"
+					rfqs.append(c.quote_ref)
+		return rfqs
 
 	def update_rfq_with_quotattion_values(self,c,args,d):
 		rfq=frappe.get_doc(args['rfq_doctype'],c.quote_ref)

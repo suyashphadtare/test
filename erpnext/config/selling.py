@@ -44,6 +44,11 @@ def get_data():
 				},
 				{
 					"type": "doctype",
+					"name": "Job Order",
+					"description": _("Job Orders"),
+				},
+				{
+					"type": "doctype",
 					"name": "Contact",
 					"description": _("All Contacts."),
 				},
