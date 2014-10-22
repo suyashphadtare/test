@@ -4,7 +4,7 @@
 from __future__ import unicode_literals
 import frappe
 import frappe.utils
-from frappe.utils import cstr, flt, getdate, comma_and
+from frappe.utils import cstr, flt, getdate, comma_and,cint
 
 from frappe import _
 from frappe.model.mapper import get_mapped_doc
@@ -250,6 +250,96 @@ class SalesOrder(SellingController):
 	def get_portal_page(self):
 		return "order" if self.docstatus==1 else None
 
+	def get_batch_no_turnkey(self,idx):
+		for item in self.get('sales_order_details'):
+			if item.idx==idx:
+				if item.b_ref:
+					item.batch_no=item.b_ref
+				else:
+					value=frappe.db.get_value('Selling Settings','','turnkey_batch_no')
+					if value:
+						batch=self.get_batch_no_t(value)
+						item.batch_no=batch
+						item.b_ref=batch
+						frappe.db.set_value('Selling Settings','','turnkey_batch_no',batch)
+
+		return "Done"
+
+	def get_batch_no_t(self,value):
+		import re
+		batch_no=re.sub(r'\d+(?=[^\d]*$)', lambda m: str(int(m.group())+1).zfill(len(m.group())), value)
+		return batch_no
+
+	def create_job_order(self):
+		for item in self.get('sales_order_details'):
+			name_series=self.get_name_series()
+			name=self.get_job_order(item,name_series)
+			self.append_values(name,item.raw_material_costing,"Raw Material Costing Details","Raw Material Cost Sheet","raw_material_costing_details","raw_material_costing","Raw Material Costing",item)
+			self.append_values(name,item.primary_process_costing,"Primary Process Details","Primary Process Costing","primary_process","primary_process_costing","Primary Process Costing",item)
+			self.append_values(name,item.secondary_process_costing,"Secondary Process Details","Secondary Process Costing","secondary_process","secondary_process_costing","Secondary Process Costing",item)
+			self.append_values(name,item.sub_machining_costing,"Sub Machining Details","Sub Machining Costing","sub_machining","sub_machining_costing","Sub Machining Costing",item)
+		return "Done"
+
+	def get_name_series(self):
+		if self.name:
+			name=self.name.split("-")
+			jo_name='JOB-'+name[1]+'-'+cstr(cint(self.id_value)+1)
+			self.id_value=cint(self.id_value)+1
+			return jo_name
+       
+	def get_job_order(self,item,series):
+		jo=frappe.new_doc("Job Order")
+		if series:
+			jo.name=series
+		jo.customer_code=self.customer
+		jo.part_name=item.item_name
+		jo.drawing_no=item.item_code
+		jo.qty=item.qty
+		jo.batch_no=item.batch_no
+		jo.sales_order=self.name
+		jo.po_no=self.po_no
+		jo.start_date=self.from_date
+		jo.delivery_date=self.delivery_date
+		jo.save(ignore_permissions=True)
+		jo.job_order=jo.name
+		jo.save(ignore_permissions=True)
+		return jo.name
+
+	def append_values(self,jo_name,co_name,co_c_name,co_p_doc,co_c_field,jo_c_field,jo_c_name,item):
+		if co_name:
+			jo_obj=frappe.get_doc("Job Order",jo_name)
+			co=self.get_co_details(co_name,co_c_name,co_p_doc,co_c_field)
+			jo=self.set_jo_childs(co,jo_obj,jo_c_field,item)
+
+	def get_co_details(self,co_name,co_c_name,co_p_doc,co_c_field):
+		co_c_list=frappe.get_doc(co_p_doc,co_name).get(co_c_field)
+		return co_c_list
+
+	def set_jo_childs(self,co,jo_obj,field,item):
+		for c in co:
+			c_obj=jo_obj.append(field,{})
+			c_obj.type=c.type
+			c_obj.vendor=c.vendor
+			c_obj.currency=c.currency
+			c_obj.mark_percent=c.mark_percent
+			c_obj.price_with_markup=c.price_with_markup
+			c_obj.quote_ref=c.quote_ref
+			if field=='raw_material_costing':
+				c_obj.spec=c.spec
+				c_obj.od=c.od
+				c_obj.od_uom=c.od_uom
+				c_obj.id=c.id
+				c_obj.id_uom=c.id_uom
+				c_obj.lg=c.lg
+				c_obj.lg_uom=c.lg_uom
+			elif field in ["raw_material_costing","primary_process_costing","secondary_process_costing"]:
+				c_obj.unit_cost=c.unit_cost
+			elif field in ["raw_material_costing","sub_machining_costing"]:
+				c_obj.price=c.price	
+			jo_obj.save(ignore_permissions=True)
+
+
+
 @frappe.whitelist()
 def make_material_request(source_name, target_doc=None):
 	def postprocess(source, doc):
@@ -428,3 +518,7 @@ def make_maintenance_visit(source_name, target_doc=None):
 		}, target_doc)
 
 		return doclist
+
+@frappe.whitelist()
+def create_job_order(doc):
+		frappe.errprint("hii")

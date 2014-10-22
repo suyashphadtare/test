@@ -1,9 +1,8 @@
 {
- "allow_attach": 1, 
  "allow_import": 1, 
  "autoname": "MQFQ/.#######", 
  "creation": "2014-06-26 01:53:16.438571", 
- "default_print_format": "Quotation For Multiple", 
+ "default_print_format": "", 
  "docstatus": 0, 
  "doctype": "DocType", 
  "document_type": "Transaction", 
@@ -93,7 +92,6 @@
   {
    "fieldname": "amended_from", 
    "fieldtype": "Data", 
-   "ignore_restrictions": 1, 
    "label": "Amended From", 
    "no_copy": 1, 
    "oldfieldname": "amended_from", 
@@ -767,33 +765,41 @@
   {
    "fieldname": "quantity_lable", 
    "fieldtype": "Data", 
+   "hidden": 1, 
    "label": "Quantity Lable", 
-   "permlevel": 0
+   "permlevel": 0, 
+   "read_only": 1
   }, 
   {
    "fieldname": "rq1", 
    "fieldtype": "Data", 
+   "hidden": 1, 
    "label": "rq1", 
-   "permlevel": 0
+   "permlevel": 0, 
+   "read_only": 1
   }, 
   {
    "fieldname": "rq2", 
    "fieldtype": "Data", 
+   "hidden": 1, 
    "label": "rq2", 
-   "permlevel": 0
+   "permlevel": 0, 
+   "read_only": 1
   }, 
   {
    "fieldname": "rq3", 
    "fieldtype": "Data", 
+   "hidden": 1, 
    "label": "rq3", 
-   "permlevel": 0
+   "permlevel": 0, 
+   "read_only": 1
   }
  ], 
  "hide_toolbar": 0, 
  "icon": "icon-shopping-cart", 
  "is_submittable": 1, 
  "max_attachments": 1, 
- "modified": "2014-06-27 14:05:34.687703", 
+ "modified": "2014-10-21 22:02:26.471723", 
  "modified_by": "Administrator", 
  "module": "Selling", 
  "name": "Quotation for Mulitple Quantity", 

@@ -1050,7 +1050,7 @@
  "idx": 1, 
  "is_submittable": 1, 
  "issingle": 0, 
- "modified": "2014-10-04 16:46:04.733999", 
+ "modified": "2014-10-16 16:48:42.900950", 
  "modified_by": "Administrator", 
  "module": "Selling", 
  "name": "Sales Order", 
@@ -1134,6 +1134,28 @@
    "permlevel": 1, 
    "read": 1, 
    "role": "Sales Manager", 
+   "write": 1
+  }, 
+  {
+   "amend": 1, 
+   "cancel": 1, 
+   "create": 1, 
+   "delete": 1, 
+   "permlevel": 0, 
+   "read": 1, 
+   "role": "Administrator", 
+   "submit": 1, 
+   "write": 1
+  }, 
+  {
+   "amend": 1, 
+   "cancel": 1, 
+   "create": 1, 
+   "delete": 1, 
+   "permlevel": 0, 
+   "read": 1, 
+   "role": "System Manager", 
+   "submit": 1, 
    "write": 1
   }
  ], 

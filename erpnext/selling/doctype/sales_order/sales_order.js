@@ -102,6 +102,7 @@ erpnext.selling.SalesOrderController = erpnext.selling.SellingController.extend(
 						}
 					})
 				});
+			cur_frm.add_custom_button(__('Create Job Orders'),cur_frm.cscript.create_job_order, "icon-truck");
 		}
 
 		this.order_type(doc);
@@ -128,41 +129,37 @@ erpnext.selling.SalesOrderController = erpnext.selling.SellingController.extend(
 			});
 		}
 	},
-
-	make_material_request: function() {
+	make_material_request: function(){
 		frappe.model.open_mapped_doc({
 			method: "erpnext.selling.doctype.sales_order.sales_order.make_material_request",
 			frm: cur_frm
 		})
 	},
-
-	make_delivery_note: function() {
+	make_delivery_note: function(){
 		frappe.model.open_mapped_doc({
 			method: "erpnext.selling.doctype.sales_order.sales_order.make_delivery_note",
 			frm: cur_frm
 		})
 	},
-
-	make_sales_invoice: function() {
+	make_sales_invoice: function(){
 		frappe.model.open_mapped_doc({
 			method: "erpnext.selling.doctype.sales_order.sales_order.make_sales_invoice",
 			frm: cur_frm
 		})
 	},
-
-	make_maintenance_schedule: function() {
+	make_maintenance_schedule: function(){
 		frappe.model.open_mapped_doc({
 			method: "erpnext.selling.doctype.sales_order.sales_order.make_maintenance_schedule",
 			frm: cur_frm
 		})
 	},
-
-	make_maintenance_visit: function() {
+	make_maintenance_visit: function(){
 		frappe.model.open_mapped_doc({
 			method: "erpnext.selling.doctype.sales_order.sales_order.make_maintenance_visit",
 			frm: cur_frm
 		})
-	},
+	}
+	
 });
 
 // for backward compatibility: combine new and previous states
@@ -224,3 +221,34 @@ cur_frm.cscript.send_sms = function() {
 	frappe.require("assets/erpnext/js/sms_manager.js");
 	var sms_man = new SMSManager(cur_frm.doc);
 };
+
+cur_frm.cscript.batch = function(doc,cdt,cdn) {
+	var d = locals[cdt][cdn]
+	if (d.batch == 'Batch No (Turnkey)'){
+		return $c_obj(doc, 'get_batch_no_turnkey', d.idx, function(r, rt) {
+			refresh_field('sales_order_details');
+		});
+	}
+	else{
+		d.batch_no=''
+		refresh_field('sales_order_details');
+	}
+};
+cur_frm.cscript.create_job_order=function(doc,cdt,cdn){
+		if (cur_frm.doc.name){
+			return frappe.call({
+			doc: cur_frm.doc,
+				method: "create_job_order",
+				callback: function(r) {
+					refresh_field("id_value")
+					if (r.message){
+						msgprint(__("Job Orders Created."));
+					}
+					cur_frm.refresh();
+			}
+		})
+		}
+		else{
+			msgprint(__("Please Save this Sales Order."));
+		}
+}

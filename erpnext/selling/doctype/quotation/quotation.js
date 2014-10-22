@@ -194,7 +194,16 @@ cur_frm.cscript.rfq_material = function() {
 				child_docname:"raw_material_costing_details",
 				rfq_doctype:"Material RFQ",
 				rfq_child:"material_rfq_details"
-
+			},
+			callback: function(r) {
+				if(r.exc) {
+					msgprint(__("There were errors."));
+					return;
+				}
+				else if (r.message){
+					msgprint(__("{0} RFQ's Updated.",[r.message]));
+				}
+				cur_frm.refresh();
 			}
 		});
 }
@@ -211,6 +220,16 @@ cur_frm.cscript.rfq_pp = function() {
 				rfq_doctype:"Primary Process RFQ",
 				rfq_child:"primary_process_rfq_details"
 
+			},
+			callback: function(r) {
+				if(r.exc) {
+					msgprint(__("There were errors."));
+					return;
+				}
+				else if (r.message){
+					msgprint(__("{0} RFQ's Updated.",[r.message]));
+				}
+				cur_frm.refresh();
 			}
 		});
 	
@@ -228,6 +247,16 @@ cur_frm.cscript.rfq_sp = function() {
 				rfq_doctype:"Secondary Process RFQ",
 				rfq_child:"secondary_process_rfq_details"
 
+			},
+			callback: function(r) {
+				if(r.exc) {
+					msgprint(__("There were errors."));
+					return;
+				}
+				else if (r.message){
+					msgprint(__("{0} RFQ's Updated.",[r.message]));
+				}
+				cur_frm.refresh();
 			}
 		});
 	
@@ -245,7 +274,18 @@ cur_frm.cscript.rfq_sm = function() {
 				rfq_doctype:"Sub Machining RFQ",
 				rfq_child:"sub_machining_rfq_details"
 
+			},
+			callback: function(r) {
+				if(r.exc) {
+					msgprint(__("There were errors."));
+					return;
+				}
+				else if (r.message){
+					msgprint(__("{0} RFQ's Updated.",[r.message]));
+				}
+				cur_frm.refresh();
 			}
+
 		});
 }
 //anand

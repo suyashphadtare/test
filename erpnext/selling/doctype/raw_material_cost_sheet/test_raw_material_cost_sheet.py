@@ -9,4 +9,4 @@ test_records = frappe.get_test_records('Raw Material Cost Sheet')
 class TestRawMaterialCostSheet(unittest.TestCase):
 	
 	def validate(self):
-		frappe.errprint("hii")
+		pass

@@ -86,7 +86,7 @@ erpnext.buying.PurchaseOrderController = erpnext.buying.BuyingController.extend(
 				})
 			}, "icon-download", "btn-default"
 		);
-
+		
 		cur_frm.add_custom_button(__('For Supplier'),
 			function() {
 				frappe.model.map_current_doc({

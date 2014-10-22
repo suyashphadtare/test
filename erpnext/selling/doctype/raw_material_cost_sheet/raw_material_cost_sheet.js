@@ -1,6 +1,3 @@
-cur_frm.cscript.onload=function(){
-	console.log(this)
-}
 //anand
 cur_frm.cscript.unit_cost=function(doc,cdt,cdn){
 	var d = frappe.get_doc(cdt, cdn);
