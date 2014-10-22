@@ -162,6 +162,7 @@ class MultipleQty(Document):
 			item.qty8=flt(item.rm_total_price)+flt(item.pp_total_price)+flt(item.sm_total_price)+flt(item.sp_total_price)+flt(item.qty3)
 			item.qty9=flt(item.rm_total_price)+flt(item.pp_total_price)+flt(item.sm_total_price)+flt(item.sp_total_price)+flt(item.qty4)
 			item.qty10=flt(item.rm_total_price)+flt(item.pp_total_price)+flt(item.sm_total_price)+flt(item.sp_total_price)+flt(item.qty5)
+		return "done"	
 
 	def get_rfq(self,args):
 		for d in self.get('multiple_qty_item'):

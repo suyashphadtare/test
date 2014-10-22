@@ -39,8 +39,7 @@ class QuotationforMulitpleQuantity(Document):
 		label_dict={}
 		label1_dict={}
 		i=0	
-		qty_data=frappe.db.sql("select from_quantity, to_quantity from `tabQuantity Range` where parent='Range Master'",as_dict=1)
-
+		qty_data=frappe.db.sql("select from_quantity, to_quantity from `tabQuantity Range` where parent='Range Master' order by idx",as_dict=1)
 		if qty_data:
 			for qty in qty_data:
 				if qty['to_quantity']:

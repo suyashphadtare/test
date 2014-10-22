@@ -130,7 +130,7 @@ erpnext.selling.QuotationController = erpnext.selling.SellingController.extend({
 					}
 				});
 			}
-			setup_field_label_map(["qty5", "qty6", "qty7","qty8","qty9","qty10"],this.fname);
+			setup_field_label_map(["qty6", "qty7","qty8","qty9","qty10"],this.fname);
 			$.each(field_label_map, function(fname, label) {
 				fname = fname.split("-");
 				var df = frappe.meta.get_docfield(fname[0], fname[1], me.frm.doc.name);
@@ -224,31 +224,31 @@ cur_frm.cscript.secondary_process_costing=function(doc,cdt,cdn){
 		});
 	}
 }
-cur_frm.cscript.qty6=function(doc,cdt,cdn){
+cur_frm.cscript.qty1=function(doc,cdt,cdn){
 	var d = locals[cdt][cdn]
 	return $c_obj(doc, 'set_rate', d.idx, function(r, rt) {
 			refresh_field('multiple_qty_item');
 		});
 }
-cur_frm.cscript.qty7=function(doc,cdt,cdn){
+cur_frm.cscript.qty2=function(doc,cdt,cdn){
 	var d = locals[cdt][cdn]
 	return $c_obj(doc, 'set_rate', d.idx, function(r, rt) {
 			refresh_field('multiple_qty_item');
 		});
 }
-cur_frm.cscript.qty8=function(doc,cdt,cdn){
+cur_frm.cscript.qty3=function(doc,cdt,cdn){
 	var d = locals[cdt][cdn]
 	return $c_obj(doc, 'set_rate', d.idx, function(r, rt) {
 			refresh_field('multiple_qty_item');
 		});
 }
-cur_frm.cscript.qty9=function(doc,cdt,cdn){
+cur_frm.cscript.qty4=function(doc,cdt,cdn){
 	var d = locals[cdt][cdn]
 	return $c_obj(doc, 'set_rate', d.idx, function(r, rt) {
 			refresh_field('multiple_qty_item');
 		});
 }
-cur_frm.cscript.qty10=function(doc,cdt,cdn){
+cur_frm.cscript.qty5=function(doc,cdt,cdn){
 	var d = locals[cdt][cdn]
 	return $c_obj(doc, 'set_rate', d.idx, function(r, rt) {
 			refresh_field('multiple_qty_item');
