@@ -162,6 +162,7 @@
   {
    "fieldname": "description_html", 
    "fieldtype": "Small Text", 
+   "hidden": 1, 
    "label": "Description HTML", 
    "permlevel": 0, 
    "read_only": 0
@@ -170,6 +171,7 @@
    "description": "Generates HTML to include selected image in the description", 
    "fieldname": "add_image", 
    "fieldtype": "Button", 
+   "hidden": 1, 
    "label": "Generate Description HTML", 
    "permlevel": 0, 
    "read_only": 0
@@ -847,7 +849,7 @@
  "icon": "icon-tag", 
  "idx": 1, 
  "max_attachments": 1, 
- "modified": "2014-10-06 12:09:26.506164", 
+ "modified": "2014-10-30 11:12:59.302838", 
  "modified_by": "Administrator", 
  "module": "Stock", 
  "name": "Item", 

@@ -43,7 +43,7 @@ erpnext.selling.QuotationController = erpnext.selling.SellingController.extend({
 			});
 		}
 		this.toggle_reqd_lead_customer();
-		if (this.frm.doc.docstatus===0) {
+		if (!doc.__islocal && doc.docstatus!=1) {
 			cur_frm.add_custom_button(__('Create RFQ for Material'), cur_frm.cscript.rfq_material, "icon-mobile-phone");
 			cur_frm.add_custom_button(__('Create RFQ for PP'), cur_frm.cscript.rfq_pp, "icon-mobile-phone");
 			cur_frm.add_custom_button(__('Create RFQ for SP'), cur_frm.cscript.rfq_sp, "icon-mobile-phone");
@@ -188,6 +188,34 @@ cur_frm.cscript.on_submit = function(doc, cdt, cdn) {
 		cur_frm.email_doc(frappe.boot.notification_settings.quotation_message);
 }
 
+cur_frm.fields_dict["multiple_quantity_item"].grid.get_field("raw_material_costing").get_query = function(doc) {
+	return {
+		filters: {
+			'from_quotation': doc.name
+		}
+	}
+}
+cur_frm.fields_dict["multiple_quantity_item"].grid.get_field("primary_process_costing").get_query = function(doc) {
+	return {
+		filters: {
+			'from_quotation': doc.name
+		}
+	}
+}
+cur_frm.fields_dict["multiple_quantity_item"].grid.get_field("secondary_process_costing").get_query = function(doc) {
+	return {
+		filters: {
+			'from_quotation': doc.name
+		}
+	}
+}
+cur_frm.fields_dict["multiple_quantity_item"].grid.get_field("sub_machining_costing").get_query = function(doc) {
+	return {
+		filters: {
+			'from_quotation': doc.name
+		}
+	}
+}
 
 //anand
 cur_frm.cscript.raw_material_costing=function(doc,cdt,cdn){

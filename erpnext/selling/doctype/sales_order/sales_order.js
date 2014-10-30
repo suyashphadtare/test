@@ -102,6 +102,9 @@ erpnext.selling.SalesOrderController = erpnext.selling.SellingController.extend(
 						}
 					})
 				});
+			
+		}
+		if (!doc.__islocal){
 			cur_frm.add_custom_button(__('Create Job Orders'),cur_frm.cscript.create_job_order, "icon-truck");
 		}
 
@@ -234,21 +237,17 @@ cur_frm.cscript.batch = function(doc,cdt,cdn) {
 		refresh_field('sales_order_details');
 	}
 };
+
 cur_frm.cscript.create_job_order=function(doc,cdt,cdn){
-		if (cur_frm.doc.name){
-			return frappe.call({
+		return frappe.call({
 			doc: cur_frm.doc,
-				method: "create_job_order",
-				callback: function(r) {
-					refresh_field("id_value")
-					if (r.message){
-						msgprint(__("Job Orders Created."));
-					}
-					cur_frm.refresh();
+			method: "create_job_order",
+			callback: function(r) {
+				refresh_field("id_value")
+				if (r.message){
+					msgprint(__("Job Orders Created."));
+				}
+				cur_frm.refresh();
 			}
 		})
-		}
-		else{
-			msgprint(__("Please Save this Sales Order."));
-		}
 }

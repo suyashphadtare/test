@@ -49,6 +49,11 @@ def get_data():
 				},
 				{
 					"type": "doctype",
+					"name": "Customer Inspection Report",
+					"description": _("Customer Inspection Report"),
+				},
+				{
+					"type": "doctype",
 					"name": "Contact",
 					"description": _("All Contacts."),
 				},

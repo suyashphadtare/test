@@ -16,6 +16,7 @@ class MultipleQty(Document):
 		self.check_label()
 		self.validate_for_items()
 		self.check_rates()
+		self.update_costings()
 		
 	def check_item_table(self):
 		if not self.get('multiple_qty_item'):
@@ -37,6 +38,22 @@ class MultipleQty(Document):
 			if 0 in [d.qty1,d.qty2,d.qty3,d.qty4,d.qty5]:
 				frappe.throw(_("Please enter rates for Item {0} at row {1}").format(d.item_code,d.idx))
 
+
+
+	def update_costings(self):
+		for d in self.get('multiple_qty_item'):
+			if d.raw_material_costing:
+				frappe.db.set_value("Raw Material Cost Sheet", d.raw_material_costing,
+				 "from_quotation",self.name)
+			if d.primary_process_costing:
+				frappe.db.set_value("Primary Process Costing", d.primary_process_costing,
+				 "from_quotation",self.name)
+			if d.secondary_process_costing:
+				frappe.db.set_value("Secondary Process Costing", d.secondary_process_costing,
+				 "from_quotation",self.name)
+			if d.sub_machining_costing:
+				frappe.db.set_value("Sub Machining Costing", d.sub_machining_costing,
+				 "from_quotation",self.name)
 
 	def set_label(self):
 		label1=['qty6','qty7','qty8','qty9','qty10']

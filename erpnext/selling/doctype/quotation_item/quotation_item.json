@@ -57,6 +57,7 @@
   {
    "fieldname": "drawing_number", 
    "fieldtype": "Data", 
+   "hidden": 1, 
    "label": "Drawing Number", 
    "permlevel": 0, 
    "precision": ""
@@ -346,7 +347,7 @@
  ], 
  "idx": 1, 
  "istable": 1, 
- "modified": "2014-10-04 12:17:31.287658", 
+ "modified": "2014-10-30 16:49:10.591750", 
  "modified_by": "Administrator", 
  "module": "Selling", 
  "name": "Quotation Item", 
