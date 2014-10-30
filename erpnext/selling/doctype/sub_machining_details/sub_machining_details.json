@@ -74,6 +74,13 @@
    "precision": ""
   }, 
   {
+   "fieldname": "exchange_rate", 
+   "fieldtype": "Float", 
+   "label": "Exchange Rate", 
+   "permlevel": 0, 
+   "precision": ""
+  }, 
+  {
    "allow_on_submit": 0, 
    "fieldname": "price", 
    "fieldtype": "Float", 
@@ -231,7 +238,7 @@
  "is_submittable": 0, 
  "issingle": 0, 
  "istable": 1, 
- "modified": "2014-10-16 13:09:27.117863", 
+ "modified": "2014-10-30 19:31:07.398898", 
  "modified_by": "Administrator", 
  "module": "Selling", 
  "name": "Sub Machining Details", 

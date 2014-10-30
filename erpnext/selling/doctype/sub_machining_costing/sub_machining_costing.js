@@ -1,11 +1,6 @@
 cur_frm.cscript.mark_percent=function(doc,cdt,cdn){
 	var d = frappe.get_doc(cdt, cdn);
-	if (d.currency=='USD'){
-		rate=1.3*d.price*d.mark_percent	
-	}
-	else{
-		rate=d.price*d.mark_percent
-	}
+	rate=d.exchange_rate*(d.price+(d.price*d.mark_percent/100))	
 	d.price_with_markup=rate
    	return $c_obj(doc, 'set_sm_total', d.idx, function(r, rt) {
 			refresh_field("sub_machining")
