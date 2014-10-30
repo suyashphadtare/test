@@ -50,10 +50,6 @@ erpnext.selling.QuotationController = erpnext.selling.SellingController.extend({
 						}
 					})
 				}, "icon-download", "btn-default");
-			cur_frm.add_custom_button(__('Create RFQ for Material'), cur_frm.cscript.rfq_material, "icon-mobile-phone");
-			cur_frm.add_custom_button(__('Create RFQ for PP'), cur_frm.cscript.rfq_pp, "icon-mobile-phone");
-			cur_frm.add_custom_button(__('Create RFQ for SP'), cur_frm.cscript.rfq_sp, "icon-mobile-phone");
-			cur_frm.add_custom_button(__('Create RFQ for SM'), cur_frm.cscript.rfq_sm, "icon-mobile-phone");
 		}
 
 		if (!doc.__islocal) {
@@ -64,6 +60,12 @@ erpnext.selling.QuotationController = erpnext.selling.SellingController.extend({
 				recipients: doc.contact_email
 			});
 		}
+		if (!doc.__islocal && doc.docstatus!=1){
+			cur_frm.add_custom_button(__('Create RFQ for Material'), cur_frm.cscript.rfq_material, "icon-mobile-phone");
+			cur_frm.add_custom_button(__('Create RFQ for PP'), cur_frm.cscript.rfq_pp, "icon-mobile-phone");
+			cur_frm.add_custom_button(__('Create RFQ for SP'), cur_frm.cscript.rfq_sp, "icon-mobile-phone");
+			cur_frm.add_custom_button(__('Create RFQ for SM'), cur_frm.cscript.rfq_sm, "icon-mobile-phone");
+		} 
 
 		this.toggle_reqd_lead_customer();
 	},
@@ -183,6 +185,34 @@ cur_frm.cscript.send_sms = function() {
 	var sms_man = new SMSManager(cur_frm.doc);
 }
 
+cur_frm.fields_dict["quotation_details"].grid.get_field("raw_material_costing").get_query = function(doc) {
+	return {
+		filters: {
+			'from_quotation': doc.name
+		}
+	}
+}
+cur_frm.fields_dict["quotation_details"].grid.get_field("primary_process_costing").get_query = function(doc) {
+	return {
+		filters: {
+			'from_quotation': doc.name
+		}
+	}
+}
+cur_frm.fields_dict["quotation_details"].grid.get_field("secondary_process_costing").get_query = function(doc) {
+	return {
+		filters: {
+			'from_quotation': doc.name
+		}
+	}
+}
+cur_frm.fields_dict["quotation_details"].grid.get_field("sub_machining_costing").get_query = function(doc) {
+	return {
+		filters: {
+			'from_quotation': doc.name
+		}
+	}
+}
 cur_frm.cscript.rfq_material = function() {
 	return frappe.call({
 			doc: cur_frm.doc,
@@ -206,25 +236,25 @@ cur_frm.cscript.rfq_material = function() {
 				cur_frm.refresh();
 			}
 		});
+	
 }
 
 cur_frm.cscript.rfq_pp = function() {
 	return frappe.call({
-			doc: cur_frm.doc,
-			method: "get_rfq",
-			args:{
-				field_name:"primary_process_costing",
-				clild_doc_type:"Primary Process Details",
-				parent_cost:"Primary Process Costing",
-				child_docname:"primary_process",
-				rfq_doctype:"Primary Process RFQ",
-				rfq_child:"primary_process_rfq_details"
-
+		doc: cur_frm.doc,
+		method: "get_rfq",
+		args:{
+			field_name:"primary_process_costing",
+			clild_doc_type:"Primary Process Details",
+			parent_cost:"Primary Process Costing",
+			child_docname:"primary_process",
+			rfq_doctype:"Primary Process RFQ",
+			rfq_child:"primary_process_rfq_details"
 			},
-			callback: function(r) {
-				if(r.exc) {
-					msgprint(__("There were errors."));
-					return;
+		callback: function(r) {
+			if(r.exc) {
+				msgprint(__("There were errors."));
+				return;
 				}
 				else if (r.message){
 					msgprint(__("{0} RFQ's Updated.",[r.message]));
@@ -232,7 +262,6 @@ cur_frm.cscript.rfq_pp = function() {
 				cur_frm.refresh();
 			}
 		});
-	
 }
 
 cur_frm.cscript.rfq_sp = function() {
@@ -259,7 +288,6 @@ cur_frm.cscript.rfq_sp = function() {
 				cur_frm.refresh();
 			}
 		});
-	
 }
 
 cur_frm.cscript.rfq_sm = function() {

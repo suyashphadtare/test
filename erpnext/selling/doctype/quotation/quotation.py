@@ -24,6 +24,7 @@ class Quotation(SellingController):
 		#self.validate_for_items()
 		self.validate_uom_is_integer("stock_uom", "qty")
 		self.validate_quotation_to()
+		self.update_costings()#update names of quotation anand
 
 	def has_sales_order(self):
 		return frappe.db.get_value("Sales Order Item", {"prevdoc_docname": self.name, "docstatus": 1})
@@ -60,6 +61,23 @@ class Quotation(SellingController):
 			self.lead = None
 		elif self.lead:
 			self.quotation_to = "Lead"
+
+    #anand
+	def update_costings(self):
+		for d in self.get('quotation_details'):
+			if d.raw_material_costing:
+				frappe.db.set_value("Raw Material Cost Sheet", d.raw_material_costing,
+				 "from_quotation",self.name)
+			if d.primary_process_costing:
+				frappe.db.set_value("Primary Process Costing", d.primary_process_costing,
+				 "from_quotation",self.name)
+			if d.secondary_process_costing:
+				frappe.db.set_value("Secondary Process Costing", d.secondary_process_costing,
+				 "from_quotation",self.name)
+			if d.sub_machining_costing:
+				frappe.db.set_value("Sub Machining Costing", d.sub_machining_costing,
+				 "from_quotation",self.name)
+
 
 	def update_opportunity(self):
 		for opportunity in list(set([d.prevdoc_docname for d in self.get("quotation_details")])):

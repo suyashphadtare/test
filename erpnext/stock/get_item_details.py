@@ -142,6 +142,7 @@ def get_basic_details(args, item_doc):
 		"item_name": item.item_name,
 		"description": item.description_html or item.description,
 		"warehouse": user_default_warehouse or args.warehouse or item.default_warehouse,
+		"part_number":item.part_number,
 		"income_account": (item.income_account
 			or args.income_account
 			or frappe.db.get_value("Item Group", item.item_group, "default_income_account")

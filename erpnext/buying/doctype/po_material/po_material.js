@@ -7,7 +7,6 @@ erpnext.buying.PoMaterialController = frappe.ui.form.Controller.extend({
 		this.frm.dashboard.reset();
 			
 		if(doc.docstatus == 1){
-			alert("hii")
 			cur_frm.add_custom_button(__('Make Purchase Order'),
 					this.make_purchase_order, frappe.boot.doctype_icons["Purchase Receipt"]);
 	

@@ -15,6 +15,7 @@ class QuotationforMulitpleQuantity(Document):
 		self.check_item_table()
 		self.validate_for_items()
 		self.check_rates()
+		self.update_costings()#update names of quotation anand
 		
 	def check_item_table(self):
 		if not self.get('multiple_quantity_item'):
@@ -86,6 +87,23 @@ class QuotationforMulitpleQuantity(Document):
 		if rate:
 			for qty in rate:
 				self.add_price(qty,rate[qty],item_code)
+
+	 #anand
+	def update_costings(self):
+		for d in self.get('multiple_quantity_item'):
+			if d.raw_material_costing:
+				frappe.db.set_value("Raw Material Cost Sheet", d.raw_material_costing,
+				 "from_quotation",self.name)
+			if d.primary_process_costing:
+				frappe.db.set_value("Primary Process Costing", d.primary_process_costing,
+				 "from_quotation",self.name)
+			if d.secondary_process_costing:
+				frappe.db.set_value("Secondary Process Costing", d.secondary_process_costing,
+				 "from_quotation",self.name)
+			if d.sub_machining_costing:
+				frappe.db.set_value("Sub Machining Costing", d.sub_machining_costing,
+				 "from_quotation",self.name)
+
 
 	def add_price(self,qty,rate,item_code):
 		multiple_qty=eval(self.quantity_lable)
