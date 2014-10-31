@@ -9,11 +9,19 @@ erpnext.buying.PoPrimaryProcessController = frappe.ui.form.Controller.extend({
 		if(doc.docstatus == 1){
 			cur_frm.add_custom_button(__('Make Purchase Order'),
 					this.make_purchase_order, frappe.boot.doctype_icons["Purchase Receipt"]);
+			cur_frm.add_custom_button(__('Make DO'),
+					this.make_do, frappe.boot.doctype_icons["Purchase Receipt"]);
 		}
 	},
 	make_purchase_order: function() {
 		frappe.model.open_mapped_doc({
 			method: "erpnext.buying.doctype.po_machining.po_machining.make_purchase_order",
+			frm: cur_frm
+		})
+	},
+	make_do: function() {
+		frappe.model.open_mapped_doc({
+			method: "erpnext.buying.doctype.do_machining.do_machining.get_po",
 			frm: cur_frm
 		})
 	},

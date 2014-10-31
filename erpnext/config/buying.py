@@ -69,6 +69,37 @@ def get_data():
 				}		]
 		},
 		{
+			"label": _("DO Process"),
+			"icon": "icon-star",
+			"items": [
+				{
+					"type": "doctype",
+					"name": "DO Material",
+					"description": _("DO Material"),
+				},
+				{
+					"type": "doctype",
+					"name": "DO Primary Process",
+					"description": _("DO Primary Process"),
+				},
+				{
+					"type": "doctype",
+					"name": "DO Secondary Process",
+					"description": _("DO Secondary Process"),
+				},
+				{
+					"type": "doctype",
+					"name": "DO Machining",
+					"description": _("DO Machining"),
+				},
+				{
+					"type": "doctype",
+					"name": "Certificate Of Conformance",
+					"description": _("Certificate Of Conformance"),
+				}
+						]
+		},
+		{
 			"label": _("Setup"),
 			"icon": "icon-cog",
 			"items": [

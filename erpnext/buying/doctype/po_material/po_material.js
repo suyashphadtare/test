@@ -9,6 +9,8 @@ erpnext.buying.PoMaterialController = frappe.ui.form.Controller.extend({
 		if(doc.docstatus == 1){
 			cur_frm.add_custom_button(__('Make Purchase Order'),
 					this.make_purchase_order, frappe.boot.doctype_icons["Purchase Receipt"]);
+			cur_frm.add_custom_button(__('Make DO'),
+					this.make_do, frappe.boot.doctype_icons["Purchase Receipt"]);
 	
 		}
 	},
@@ -18,6 +20,13 @@ erpnext.buying.PoMaterialController = frappe.ui.form.Controller.extend({
 			frm: cur_frm
 		})
 	},
+	make_do: function() {
+		frappe.model.open_mapped_doc({
+			method: "erpnext.buying.doctype.do_material.do_material.get_po",
+			frm: cur_frm
+		})
+	},
+	
 	tc_name: function() {
 			var me = this;
 		if(this.frm.doc.tc_name) {
