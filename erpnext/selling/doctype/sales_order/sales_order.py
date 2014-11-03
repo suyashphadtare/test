@@ -324,7 +324,10 @@ class SalesOrder(SellingController):
 			c_obj.mark_percent=c.mark_percent
 			c_obj.price_with_markup=c.price_with_markup
 			c_obj.quote_ref=c.quote_ref
+			c_obj.exchange_rate=c.exchange_rate
 			if field=='raw_material_costing':
+				c_obj.price=c.price
+				c_obj.unit_cost=c.unit_cost	
 				c_obj.spec=c.spec
 				c_obj.od=c.od
 				c_obj.od_uom=c.od_uom
@@ -333,6 +336,7 @@ class SalesOrder(SellingController):
 				c_obj.lg=c.lg
 				c_obj.lg_uom=c.lg_uom
 			elif field in ["raw_material_costing","primary_process_costing","secondary_process_costing"]:
+				c_obj.spec=c.spec
 				c_obj.unit_cost=c.unit_cost
 			elif field in ["raw_material_costing","sub_machining_costing"]:
 				c_obj.price=c.price	

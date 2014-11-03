@@ -34,6 +34,7 @@ class POMaterial(Document):
 			c_obj.lg=j.lg
 			c_obj.lg_uom=j.lg_uom
 			c_obj.unit_cost=j.unit_cost
+			c_obj.exchange_rate=j.exchange_rate
 			c_obj.price=j.price	
 		
 		return "done"

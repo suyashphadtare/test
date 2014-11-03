@@ -25,6 +25,7 @@ class POMachining(Document):
 			c_obj.price_with_markup=j.price_with_markup
 			c_obj.quote_ref=j.quote_ref
 			c_obj.price=j.price
+			
 
 		return "done"
 

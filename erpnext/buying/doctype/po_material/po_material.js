@@ -59,25 +59,3 @@ cur_frm.cscript.supplier=function(doc,cdt,cdn){
 	});
 }
 
-cur_frm.cscript.qty1=function(doc,cdt,cdn){
-	console.log(this.frm.wrapper)
-	me=this
-	qty=doc.qty1
-	this.field_list=[]
-	for (i=0;i<qty;i++){
-		l=parseInt(i)+1
-		this.field_list[i]='q'+l
-	}
-	$.each(this.field_list,function(i, field) {
-		console.log($(me.frm.wrapper).find(".form-column col-md-12"))
-		/*frappe.ui.form.make_control({
-			df: {
-				"fieldtype": "Data",
-				"fieldname": field,
-			},
-			parent:$(me.frm.wrapper).find(".form-column col-md-12"),
-			frm: cur_frm
-		}).make_input()*/
-	})
-	
-}

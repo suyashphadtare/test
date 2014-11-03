@@ -26,6 +26,7 @@ class POPrimaryProcess(Document):
 			c_obj.quote_ref=j.quote_ref
 			c_obj.spec=j.spec
 			c_obj.unit_cost=j.unit_cost
+			
 
 		return "Done"
 

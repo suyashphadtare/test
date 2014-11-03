@@ -38,7 +38,7 @@
    "fieldtype": "Data", 
    "in_filter": 1, 
    "in_list_view": 1, 
-   "label": "Item Name", 
+   "label": "Part Name", 
    "oldfieldname": "item_name", 
    "oldfieldtype": "Data", 
    "permlevel": 0, 
@@ -48,6 +48,13 @@
    "reqd": 1, 
    "search_index": 1, 
    "width": "150px"
+  }, 
+  {
+   "fieldname": "part_number", 
+   "fieldtype": "Data", 
+   "label": "Part Number", 
+   "permlevel": 0, 
+   "precision": ""
   }, 
   {
    "fieldname": "col_break1", 
@@ -78,7 +85,7 @@
    "fieldname": "qty1", 
    "fieldtype": "Currency", 
    "in_list_view": 1, 
-   "label": "QTY 2", 
+   "label": "QTY 31", 
    "permlevel": 0, 
    "reqd": 1
   }, 
@@ -86,7 +93,7 @@
    "fieldname": "qty2", 
    "fieldtype": "Currency", 
    "in_list_view": 1, 
-   "label": "QTY 5", 
+   "label": "QTY 32", 
    "permlevel": 0, 
    "reqd": 1
   }, 
@@ -94,7 +101,7 @@
    "fieldname": "qty3", 
    "fieldtype": "Currency", 
    "in_list_view": 1, 
-   "label": "QTY 30", 
+   "label": "QTY 33", 
    "permlevel": 0, 
    "reqd": 1
   }, 
@@ -108,7 +115,7 @@
    "fieldname": "qty4", 
    "fieldtype": "Currency", 
    "in_list_view": 1, 
-   "label": "QTY 40", 
+   "label": "QTY 34", 
    "permlevel": 0, 
    "reqd": 1
   }, 
@@ -116,7 +123,7 @@
    "fieldname": "qty5", 
    "fieldtype": "Currency", 
    "in_list_view": 1, 
-   "label": "QTY 50", 
+   "label": "QTY 35", 
    "permlevel": 0, 
    "reqd": 1
   }, 
@@ -382,7 +389,7 @@
   }
  ], 
  "istable": 1, 
- "modified": "2014-07-18 18:12:29.315624", 
+ "modified": "2014-11-01 18:53:07.638050", 
  "modified_by": "Administrator", 
  "module": "Selling", 
  "name": "Multiple Qty Item", 
