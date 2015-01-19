@@ -21,7 +21,7 @@ class FiscalYear(Document):
 
 	def validate(self):
 		year_start_end_dates = frappe.db.sql("""select year_start_date, year_end_date
-			from `tabFiscal Year` where name=%s""", (self.name))
+			from tabFiscal_Year where name=%s""", (self.name))
 
 		if year_start_end_dates:
 			if getdate(self.year_start_date) != year_start_end_dates[0][0] or getdate(self.year_end_date) != year_start_end_dates[0][1]:
@@ -36,7 +36,7 @@ class FiscalYear(Document):
 			frappe.throw(_("Fiscal Year Start Date and Fiscal Year End Date cannot be more than a year apart."))
 
 		year_start_end_dates = frappe.db.sql("""select name, year_start_date, year_end_date
-			from `tabFiscal Year` where name!=%s""", (self.name))
+			from tabFiscal_Year where name!=%s""", (self.name))
 
 		for fiscal_year, ysd, yed in year_start_end_dates:
 			if (getdate(self.year_start_date) == ysd and getdate(self.year_end_date) == yed) \

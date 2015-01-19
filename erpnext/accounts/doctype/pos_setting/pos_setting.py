@@ -15,7 +15,7 @@ class POSSetting(Document):
 		self.validate_all_link_fields()
 
 	def check_for_duplicate(self):
-		res = frappe.db.sql("""select name, user from `tabPOS Setting`
+		res = frappe.db.sql("""select name, user from tabPOS_Setting
 			where ifnull(user, '') = %s and name != %s and company = %s""",
 			(self.user, self.name, self.company))
 		if res:
@@ -57,7 +57,7 @@ class POSSetting(Document):
 			condition = ""
 
 		pos_view_users = frappe.db.sql_list("""select user
-			from `tabPOS Setting` {0}""".format(condition))
+			from tabPOS_Setting {0}""".format(condition))
 
 		for user in pos_view_users:
 			if user:

@@ -36,7 +36,7 @@ class PurchaseReceipt(BuyingController):
 		}]
 
 	def onload(self):
-		billed_qty = frappe.db.sql("""select sum(ifnull(qty, 0)) from `tabPurchase Invoice Item`
+		billed_qty = frappe.db.sql("""select sum(ifnull(qty, 0)) from tabPurchase_Invoice_Item
 			where purchase_receipt=%s and docstatus=1""", self.name)
 		if billed_qty:
 			total_qty = sum((item.qty for item in self.get("purchase_receipt_details")))
@@ -73,7 +73,7 @@ class PurchaseReceipt(BuyingController):
 	def set_landed_cost_voucher_amount(self):
 		for d in self.get("purchase_receipt_details"):
 			lc_voucher_amount = frappe.db.sql("""select sum(ifnull(applicable_charges, 0))
-				from `tabLanded Cost Item`
+				from tabLanded_Cost_Item
 				where docstatus = 1 and purchase_receipt_item = %s""", d.name)
 			d.landed_cost_voucher_amount = lc_voucher_amount[0][0] if lc_voucher_amount else 0.0
 
@@ -182,7 +182,7 @@ class PurchaseReceipt(BuyingController):
 				})
 
 	def get_already_received_qty(self, po, po_detail):
-		qty = frappe.db.sql("""select sum(qty) from `tabPurchase Receipt Item`
+		qty = frappe.db.sql("""select sum(qty) from tabPurchase_Receipt_Item
 			where prevdoc_detail_docname = %s and docstatus = 1
 			and prevdoc_doctype='Purchase Order' and prevdoc_docname=%s
 			and parent != %s""", (po_detail, po, self.name))
@@ -206,7 +206,7 @@ class PurchaseReceipt(BuyingController):
 
 	def validate_inspection(self):
 		for d in self.get('purchase_receipt_details'):		 #Enter inspection date for all items that require inspection
-			ins_reqd = frappe.db.sql("select inspection_required from `tabItem` where name = %s",
+			ins_reqd = frappe.db.sql("select inspection_required from tabItem where name = %s",
 				(d.item_code,), as_dict = 1)
 			ins_reqd = ins_reqd and ins_reqd[0]['inspection_required'] or 'No'
 			if ins_reqd == 'Yes' and not d.qa_no:
@@ -245,7 +245,7 @@ class PurchaseReceipt(BuyingController):
 
 	def check_next_docstatus(self):
 		submit_rv = frappe.db.sql("""select t1.name
-			from `tabPurchase Invoice` t1,`tabPurchase Invoice Item` t2
+			from tabPurchase_Invoice t1,tabPurchase_Invoice_Item t2
 			where t1.name = t2.parent and t2.purchase_receipt = %s and t1.docstatus = 1""",
 			(self.name))
 		if submit_rv:
@@ -257,7 +257,7 @@ class PurchaseReceipt(BuyingController):
 		self.check_for_stopped_status(pc_obj)
 		# Check if Purchase Invoice has been submitted against current Purchase Order
 		submitted = frappe.db.sql("""select t1.name
-			from `tabPurchase Invoice` t1,`tabPurchase Invoice Item` t2
+			from tabPurchase_Invoice t1,tabPurchase_Invoice_Item t2
 			where t1.name = t2.parent and t2.purchase_receipt = %s and t1.docstatus = 1""",
 			self.name)
 		if submitted:
@@ -277,7 +277,7 @@ class PurchaseReceipt(BuyingController):
 	def get_current_stock(self):
 		for d in self.get('pr_raw_material_details'):
 			if self.supplier_warehouse:
-				bin = frappe.db.sql("select actual_qty from `tabBin` where item_code = %s and warehouse = %s", (d.rm_item_code, self.supplier_warehouse), as_dict = 1)
+				bin = frappe.db.sql("select actual_qty from tabBin where item_code = %s and warehouse = %s", (d.rm_item_code, self.supplier_warehouse), as_dict = 1)
 				d.current_stock = bin and flt(bin[0]['actual_qty']) or 0
 
 	def get_rate(self,arg):
@@ -358,9 +358,9 @@ class PurchaseReceipt(BuyingController):
 			# and charges added via Landed Cost Voucher,
 			# post valuation related charges on "Stock Received But Not Billed"
 
-			negative_expense_booked_in_pi = frappe.db.sql("""select name from `tabPurchase Invoice Item` pi
+			negative_expense_booked_in_pi = frappe.db.sql("""select name from tabPurchase_Invoice_Item pi
 				where docstatus = 1 and purchase_receipt=%s
-				and exists(select name from `tabGL Entry` where voucher_type='Purchase Invoice'
+				and exists(select name from tabGL_Entry where voucher_type='Purchase Invoice'
 					and voucher_no=pi.parent and account=%s)""", (self.name, expenses_included_in_valuation))
 
 			if negative_expense_booked_in_pi:
@@ -443,7 +443,7 @@ def get_invoiced_qty_map(purchase_receipt):
 	"""returns a map: {pr_detail: invoiced_qty}"""
 	invoiced_qty_map = {}
 
-	for pr_detail, qty in frappe.db.sql("""select pr_detail, qty from `tabPurchase Invoice Item`
+	for pr_detail, qty in frappe.db.sql("""select pr_detail, qty from tabPurchase_Invoice_Item
 		where purchase_receipt=%s and docstatus=1""", purchase_receipt):
 			if not invoiced_qty_map.get(pr_detail):
 				invoiced_qty_map[pr_detail] = 0

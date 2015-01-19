@@ -251,7 +251,7 @@ class SalesInvoice(SellingController):
 	def validate_customer_account(self):
 		"""Validates Debit To Account and Customer Matches"""
 		if self.customer and self.debit_to and not cint(self.is_pos):
-			acc_head = frappe.db.sql("select master_name from `tabAccount` where name = %s and docstatus != 2", self.debit_to)
+			acc_head = frappe.db.sql("select master_name from tabAccount where name = %s and docstatus != 2", self.debit_to)
 
 			if (acc_head and cstr(acc_head[0][0]) != cstr(self.customer)) or \
 				(not acc_head and (self.debit_to != cstr(self.customer) + " - " + self.get_company_abbr())):
@@ -266,9 +266,9 @@ class SalesInvoice(SellingController):
 	def validate_fixed_asset_account(self):
 		"""Validate Fixed Asset and whether Income Account Entered Exists"""
 		for d in self.get('entries'):
-			item = frappe.db.sql("""select name,is_asset_item,is_sales_item from `tabItem`
+			item = frappe.db.sql("""select name,is_asset_item,is_sales_item from tabItem
 				where name = %s""", d.item_code)
-			acc = frappe.db.sql("""select account_type from `tabAccount`
+			acc = frappe.db.sql("""select account_type from tabAccount
 				where name = %s and docstatus != 2""", d.income_account)
 			if item and item[0][1] == 'Yes' and acc and acc[0][0] != 'Fixed Asset':
 				msgprint(_("Account {0} must be of type 'Fixed Asset' as Item {1} is an Asset Item").format(acc[0][0], d.item_code), raise_exception=True)
@@ -336,7 +336,7 @@ class SalesInvoice(SellingController):
 	def validate_proj_cust(self):
 		"""check for does customer belong to same project as entered.."""
 		if self.project_name and self.customer:
-			res = frappe.db.sql("""select name from `tabProject`
+			res = frappe.db.sql("""select name from tabProject
 				where name = %s and (customer = %s or
 					ifnull(customer,'')='')""", (self.project_name, self.customer))
 			if not res:
@@ -370,7 +370,7 @@ class SalesInvoice(SellingController):
 	def validate_c_form(self):
 		""" Blank C-form no if C-form applicable marked as 'No'"""
 		if self.amended_from and self.c_form_applicable == 'No' and self.c_form_no:
-			frappe.db.sql("""delete from `tabC-Form Invoice Detail` where invoice_no = %s
+			frappe.db.sql("""delete from tabC-Form_Invoice_Detail where invoice_no = %s
 					and parent = %s""", (self.amended_from,	self.c_form_no))
 
 			frappe.db.set(self, 'c_form_no', '')
@@ -384,22 +384,22 @@ class SalesInvoice(SellingController):
 	def update_current_stock(self):
 		for d in self.get('entries'):
 			if d.item_code and d.warehouse:
-				bin = frappe.db.sql("select actual_qty from `tabBin` where item_code = %s and warehouse = %s", (d.item_code, d.warehouse), as_dict = 1)
+				bin = frappe.db.sql("select actual_qty from tabBin where item_code = %s and warehouse = %s", (d.item_code, d.warehouse), as_dict = 1)
 				d.actual_qty = bin and flt(bin[0]['actual_qty']) or 0
 
 		for d in self.get('packing_details'):
-			bin = frappe.db.sql("select actual_qty, projected_qty from `tabBin` where item_code =	%s and warehouse = %s", (d.item_code, d.warehouse), as_dict = 1)
+			bin = frappe.db.sql("select actual_qty, projected_qty from tabBin where item_code =	%s and warehouse = %s", (d.item_code, d.warehouse), as_dict = 1)
 			d.actual_qty = bin and flt(bin[0]['actual_qty']) or 0
 			d.projected_qty = bin and flt(bin[0]['projected_qty']) or 0
 
 
 	def get_warehouse(self):
-		user_pos_setting = frappe.db.sql("""select name, warehouse from `tabPOS Setting`
+		user_pos_setting = frappe.db.sql("""select name, warehouse from tabPOS_Setting
 			where ifnull(user,'') = %s and company = %s""", (frappe.session['user'], self.company))
 		warehouse = user_pos_setting[0][1] if user_pos_setting else None
 
 		if not warehouse:
-			global_pos_setting = frappe.db.sql("""select name, warehouse from `tabPOS Setting`
+			global_pos_setting = frappe.db.sql("""select name, warehouse from tabPOS_Setting
 				where ifnull(user,'') = '' and company = %s""", self.company)
 
 			if global_pos_setting:
@@ -439,13 +439,13 @@ class SalesInvoice(SellingController):
 	def check_prev_docstatus(self):
 		for d in self.get('entries'):
 			if d.sales_order:
-				submitted = frappe.db.sql("""select name from `tabSales Order`
+				submitted = frappe.db.sql("""select name from tabSales_Order
 					where docstatus = 1 and name = %s""", d.sales_order)
 				if not submitted:
 					frappe.throw(_("Sales Order {0} is not submitted").format(d.sales_order))
 
 			if d.delivery_note:
-				submitted = frappe.db.sql("""select name from `tabDelivery Note`
+				submitted = frappe.db.sql("""select name from tabDelivery_Note
 					where docstatus = 1 and name = %s""", d.delivery_note)
 				if not submitted:
 					throw(_("Delivery Note {0} is not submitted").format(d.delivery_note))
@@ -604,7 +604,7 @@ def get_income_account(doctype, txt, searchfield, start, page_len, filters):
 	# income account can be any Credit account,
 	# but can also be a Asset account with account_type='Income Account' in special circumstances.
 	# Hence the first condition is an "OR"
-	return frappe.db.sql("""select tabAccount.name from `tabAccount`
+	return frappe.db.sql("""select tabAccount.name from tabAccount
 			where (tabAccount.report_type = "Profit and Loss"
 					or tabAccount.account_type = "Income Account")
 				and tabAccount.group_or_ledger="Ledger"

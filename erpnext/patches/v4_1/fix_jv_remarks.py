@@ -6,7 +6,7 @@ import frappe
 
 def execute():
 	reference_date = guess_reference_date()
-	for name in frappe.db.sql_list("""select name from `tabJournal Voucher`
+	for name in frappe.db.sql_list("""select name from tabJournal_Voucher
 		where date(creation)>=%s""", reference_date):
 		jv = frappe.get_doc("Journal Voucher", name)
 		try:

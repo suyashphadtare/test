@@ -60,7 +60,7 @@ def get_items(filters):
 		si.customer, si.remarks, si.territory, si.company, si_item.item_code, si_item.item_name, 
 		si_item.item_group, si_item.sales_order, si_item.delivery_note, si_item.income_account, 
 		si_item.qty, si_item.base_rate, si_item.base_amount, si.customer_name
-		from `tabSales Invoice` si, `tabSales Invoice Item` si_item 
+		from tabSales_Invoice si, tabSales_Invoice_Item si_item 
 		where si.name = si_item.parent and si.docstatus = 1 %s 
 		order by si.posting_date desc, si_item.item_code desc""" % conditions, filters, as_dict=1)
 		
@@ -70,7 +70,7 @@ def get_tax_accounts(item_list, columns):
 	tax_accounts = []
 	
 	tax_details = frappe.db.sql("""select parent, account_head, item_wise_tax_detail
-		from `tabSales Taxes and Charges` where parenttype = 'Sales Invoice' 
+		from tabSales_Taxes_and_Charges where parenttype = 'Sales Invoice' 
 		and docstatus = 1 and ifnull(account_head, '') != ''
 		and parent in (%s)""" % ', '.join(['%s']*len(item_list)), 
 		tuple([item.parent for item in item_list]))

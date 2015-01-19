@@ -29,9 +29,9 @@ def get_product_list_for_group(product_group=None, start=0, limit=10):
 	# base query
 	query = """select t1.name, t1.item_name, t1.page_name, t1.website_image, t1.item_group,
 			t1.web_long_description as website_description, t2.name as route
-		from `tabItem` t1, `tabWebsite Route` t2
+		from tabItem t1, `tabWebsite Route` t2
 		where t1.show_in_website = 1 and (item_group in (%s)
-			or t1.name in (select parent from `tabWebsite Item Group` where item_group in (%s)))
+			or t1.name in (select parent from tabWebsite_Item_Group where item_group in (%s)))
 			and t1.name = t2.docname and t2.ref_doctype='Item' """ % (child_groups, child_groups)
 
 	query += """order by t1.weightage desc, t1.modified desc limit %s, %s""" % (start, limit)
@@ -43,7 +43,7 @@ def get_product_list_for_group(product_group=None, start=0, limit=10):
 def get_child_groups(item_group_name):
 	item_group = frappe.get_doc("Item Group", item_group_name)
 	return frappe.db.sql("""select name
-		from `tabItem Group` where lft>=%(lft)s and rgt<=%(rgt)s
+		from tabItem_Group where lft>=%(lft)s and rgt<=%(rgt)s
 			and show_in_website = 1""", item_group.as_dict())
 
 def get_item_for_list_in_html(context):
@@ -51,9 +51,9 @@ def get_item_for_list_in_html(context):
 
 def get_group_item_count(item_group):
 	child_groups = ", ".join(['"' + i[0] + '"' for i in get_child_groups(item_group)])
-	return frappe.db.sql("""select count(*) from `tabItem`
+	return frappe.db.sql("""select count(*) from tabItem
 		where docstatus = 0 and show_in_website = 1
 		and (item_group in (%s)
-			or name in (select parent from `tabWebsite Item Group`
+			or name in (select parent from tabWebsite_Item_Group
 				where item_group in (%s))) """ % (child_groups, child_groups))[0][0]
 

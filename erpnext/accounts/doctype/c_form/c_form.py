@@ -15,7 +15,7 @@ class CForm(Document):
 		for d in self.get('invoice_details'):
 			if d.invoice_no:
 				inv = frappe.db.sql("""select c_form_applicable, c_form_no from
-					`tabSales Invoice` where name = %s and docstatus = 1""", d.invoice_no)
+					tabSales_Invoice where name = %s and docstatus = 1""", d.invoice_no)
 
 				if inv and inv[0][0] != 'Yes':
 					frappe.throw("C-form is not applicable for Invoice: %s" % d.invoice_no)
@@ -39,15 +39,15 @@ class CForm(Document):
 
 	def before_cancel(self):
 		# remove cform reference
-		frappe.db.sql("""update `tabSales Invoice` set c_form_no=null where c_form_no=%s""", self.name)
+		frappe.db.sql("""update tabSales_Invoice set c_form_no=null where c_form_no=%s""", self.name)
 
 	def set_cform_in_sales_invoices(self):
 		inv = [d.invoice_no for d in self.get('invoice_details')]
 		if inv:
-			frappe.db.sql("""update `tabSales Invoice` set c_form_no=%s, modified=%s where name in (%s)""" %
+			frappe.db.sql("""update tabSales_Invoice set c_form_no=%s, modified=%s where name in (%s)""" %
 				('%s', '%s', ', '.join(['%s'] * len(inv))), tuple([self.name, self.modified] + inv))
 
-			frappe.db.sql("""update `tabSales Invoice` set c_form_no = null, modified = %s
+			frappe.db.sql("""update tabSales_Invoice set c_form_no = null, modified = %s
 				where name not in (%s) and ifnull(c_form_no, '') = %s""" %
 				('%s', ', '.join(['%s']*len(inv)), '%s'), tuple([self.modified] + inv + [self.name]))
 		else:
@@ -82,7 +82,7 @@ def get_invoice_nos(doctype, txt, searchfield, start, page_len, filters):
 	from erpnext.utilities import build_filter_conditions
 	conditions, filter_values = build_filter_conditions(filters)
 
-	return frappe.db.sql("""select name from `tabSales Invoice` where docstatus = 1
+	return frappe.db.sql("""select name from tabSales_Invoice where docstatus = 1
 		and c_form_applicable = 'Yes' and ifnull(c_form_no, '') = '' %s
 		and %s like %s order by name limit %s, %s""" %
 		(conditions, searchfield, "%s", "%s", "%s"),

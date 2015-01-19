@@ -34,7 +34,7 @@ class StockLedgerEntry(Document):
 	def actual_amt_check(self):
 		if self.batch_no:
 			batch_bal_after_transaction = flt(frappe.db.sql("""select sum(actual_qty)
-				from `tabStock Ledger Entry`
+				from tabStock_Ledger_Entry
 				where warehouse=%s and item_code=%s and batch_no=%s""",
 				(self.warehouse, self.item_code, self.batch_no))[0][0])
 
@@ -91,8 +91,8 @@ class StockLedgerEntry(Document):
 			self.posting_time = '00:00'
 
 def on_doctype_update():
-	if not frappe.db.sql("""show index from `tabStock Ledger Entry`
+	if not frappe.db.sql("""show index from tabStock_Ledger_Entry
 		where Key_name="posting_sort_index" """):
 		frappe.db.commit()
-		frappe.db.sql("""alter table `tabStock Ledger Entry`
+		frappe.db.sql("""alter table tabStock_Ledger_Entry
 			add index posting_sort_index(posting_date, posting_time, name)""")

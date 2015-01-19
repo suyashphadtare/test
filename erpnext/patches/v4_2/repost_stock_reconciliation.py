@@ -11,7 +11,7 @@ def execute():
 
 	head_row = ["Item Code", "Warehouse", "Quantity", "Valuation Rate"]
 	stock_reco_to_be_reposted = []
-	for d in frappe.db.sql("""select name, reconciliation_json from `tabStock Reconciliation`
+	for d in frappe.db.sql("""select name, reconciliation_json from tabStock_Reconciliation
 		where docstatus=1 and creation > '2014-03-01'""", as_dict=1):
 			data = json.loads(d.reconciliation_json)
 			for row in data[data.index(head_row)+1:]:

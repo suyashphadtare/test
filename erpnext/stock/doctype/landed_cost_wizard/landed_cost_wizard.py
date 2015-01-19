@@ -70,7 +70,7 @@ class LandedCostWizard(Document):
 				d.db_update()
 
 	def get_total_pr_amt(self, purchase_receipts):
-		return frappe.db.sql("""SELECT SUM(net_total) FROM `tabPurchase Receipt`
+		return frappe.db.sql("""SELECT SUM(net_total) FROM tabPurchase_Receipt
 			WHERE name in (%s)""" % ', '.join(['%s']*len(purchase_receipts)),
 			tuple(purchase_receipts))[0][0]
 
@@ -80,9 +80,9 @@ class LandedCostWizard(Document):
 
 			pr_doc.run_method("update_ordered_qty")
 
-			frappe.db.sql("""delete from `tabStock Ledger Entry`
+			frappe.db.sql("""delete from tabStock_Ledger_Entry
 				where voucher_type='Purchase Receipt' and voucher_no=%s""", pr)
-			frappe.db.sql("""delete from `tabGL Entry` where voucher_type='Purchase Receipt'
+			frappe.db.sql("""delete from tabGL_Entry where voucher_type='Purchase Receipt'
 				and voucher_no=%s""", pr)
 
 	def submit_pr(self, purchase_receipts):

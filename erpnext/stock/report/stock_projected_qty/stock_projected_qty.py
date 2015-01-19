@@ -13,12 +13,12 @@ def execute(filters=None):
 			actual_qty, planned_qty, indented_qty, ordered_qty, reserved_qty, 
 			projected_qty, item.re_order_level, item.re_order_qty, 
 			(item.re_order_level - projected_qty) as shortage_qty
-		from `tabBin` bin, 
+		from tabBin bin, 
 			(select name, company from tabWarehouse 
 				{warehouse_conditions}) wh,
 			(select name, item_name, description, stock_uom, item_group, 
 				brand, re_order_level, re_order_qty 
-				from `tabItem` {item_conditions}) item
+				from tabItem {item_conditions}) item
 		where item_code = item.name and warehouse = wh.name
 		order by item.name, wh.name"""\
 		.format(item_conditions=get_item_conditions(filters),

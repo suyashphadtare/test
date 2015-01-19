@@ -29,7 +29,7 @@ erpnext.patches.v4_0.fields_to_be_renamed
 erpnext.patches.v4_0.rename_sitemap_to_route
 erpnext.patches.v4_0.fix_contact_address
 erpnext.patches.v4_0.customer_discount_to_pricing_rule
-execute:frappe.db.sql("""delete from `tabWebsite Item Group` where ifnull(item_group, '')=''""")
+execute:frappe.db.sql("""delete from tabWebsite_Item_Group where ifnull(item_group, '')=''""")
 erpnext.patches.v4_0.remove_module_home_pages
 erpnext.patches.v4_0.split_email_settings
 erpnext.patches.v4_0.import_country_codes
@@ -37,9 +37,9 @@ erpnext.patches.v4_0.countrywise_coa
 execute:frappe.delete_doc("DocType", "MIS Control")
 execute:frappe.delete_doc("Page", "Financial Statements")
 execute:frappe.delete_doc("DocType", "Stock Ledger")
-execute:frappe.db.sql("update `tabJournal Voucher` set voucher_type='Journal Entry' where ifnull(voucher_type, '')=''")
+execute:frappe.db.sql("update tabJournal_Voucher set voucher_type='Journal Entry' where ifnull(voucher_type, '')=''")
 execute:frappe.delete_doc("DocType", "Grade")
-execute:frappe.db.sql("delete from `tabWebsite Item Group` where ifnull(item_group, '')=''")
+execute:frappe.db.sql("delete from tabWebsite_Item_Group where ifnull(item_group, '')=''")
 execute:frappe.delete_doc("Print Format", "SalesInvoice")
 execute:import frappe.defaults;frappe.defaults.clear_default("price_list_currency")
 erpnext.patches.v4_0.update_account_root_type
@@ -60,7 +60,7 @@ erpnext.patches.v4_0.save_default_letterhead
 erpnext.patches.v4_0.update_custom_print_formats_for_renamed_fields
 erpnext.patches.v4_0.update_other_charges_in_custom_purchase_print_formats
 erpnext.patches.v4_0.create_price_list_if_missing
-execute:frappe.db.sql("update `tabItem` set end_of_life=null where end_of_life='0000-00-00'") #2014-06-16
+execute:frappe.db.sql("update tabItem set end_of_life=null where end_of_life='0000-00-00'") #2014-06-16
 erpnext.patches.v4_0.update_users_report_view_settings
 erpnext.patches.v4_0.set_pricing_rule_for_buying_or_selling
 erpnext.patches.v4_0.set_naming_series_property_setter
@@ -68,7 +68,7 @@ erpnext.patches.v4_1.set_outgoing_email_footer
 erpnext.patches.v4_1.fix_jv_remarks
 erpnext.patches.v4_1.fix_sales_order_delivered_status
 erpnext.patches.v4_1.fix_delivery_and_billing_status
-execute:frappe.db.sql("update `tabAccount` set root_type='Liability' where root_type='Income' and report_type='Balance Sheet'")
+execute:frappe.db.sql("update tabAccount set root_type='Liability' where root_type='Income' and report_type='Balance Sheet'")
 execute:frappe.delete_doc("DocType", "Payment to Invoice Matching Tool") # 29-07-2014
 execute:frappe.delete_doc("DocType", "Payment to Invoice Matching Tool Detail") # 29-07-2014
 execute:frappe.delete_doc("Page", "trial-balance") #2014-07-22

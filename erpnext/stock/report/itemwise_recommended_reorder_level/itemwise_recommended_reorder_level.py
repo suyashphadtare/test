@@ -50,7 +50,7 @@ def get_consumed_items(condition):
 
 	cn_items = frappe.db.sql("""select se_item.item_code,
 				sum(se_item.actual_qty) as 'consume_qty'
-		from `tabStock Entry` se, `tabStock Entry Detail` se_item
+		from tabStock_Entry se, tabStock_Entry_Detail se_item
 		where se.name = se_item.parent and se.docstatus = 1
 		and ifnull(se_item.t_warehouse, '') = '' %s
 		group by se_item.item_code""" % (condition), as_dict=1)
@@ -64,12 +64,12 @@ def get_consumed_items(condition):
 def get_delivered_items(condition):
 
 	dn_items = frappe.db.sql("""select dn_item.item_code, sum(dn_item.qty) as dn_qty
-		from `tabDelivery Note` dn, `tabDelivery Note Item` dn_item
+		from tabDelivery_Note dn, tabDelivery_Note_Item dn_item
 		where dn.name = dn_item.parent and dn.docstatus = 1 %s
 		group by dn_item.item_code""" % (condition), as_dict=1)
 
 	si_items = frappe.db.sql("""select si_item.item_name, sum(si_item.qty) as si_qty
-		from `tabSales Invoice` si, `tabSales Invoice Item` si_item
+		from tabSales_Invoice si, tabSales_Invoice_Item si_item
 		where si.name = si_item.parent and si.docstatus = 1 and
 		ifnull(si.update_stock, 0) = 1 and ifnull(si.is_pos, 0) = 1 %s
 		group by si_item.item_name""" % (condition), as_dict=1)

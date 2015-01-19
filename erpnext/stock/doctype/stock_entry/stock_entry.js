@@ -359,7 +359,7 @@ cur_frm.fields_dict['production_order'].get_query = function(doc) {
 	return {
 		filters: [
 			['Production Order', 'docstatus', '=', 1],
-			['Production Order', 'qty', '>','`tabProduction Order`.produced_qty']
+			['Production Order', 'qty', '>','tabProduction_Order.produced_qty']
 		]
 	}
 }

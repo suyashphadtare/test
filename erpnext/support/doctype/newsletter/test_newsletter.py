@@ -8,7 +8,7 @@ class TestNewsletter(unittest.TestCase):
 		w = frappe.get_doc(test_records[0])
 		w.insert()
 		self.assertTrue("test_lead@example.com" in w.get_recipients())
-		frappe.db.sql("""delete from `tabBulk Email`""")
+		frappe.db.sql("""delete from tabBulk_Email""")
 		w.send_emails()
 		self.assertTrue(frappe.db.get_value("Bulk Email", {"recipient": "test_lead@example.com"}))
 

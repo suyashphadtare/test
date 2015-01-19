@@ -160,7 +160,7 @@ def add_total_row(out, balance_must_be, period_list):
 
 def get_accounts(company, root_type):
 	# root lft, rgt
-	root_account = frappe.db.sql("""select lft, rgt from `tabAccount`
+	root_account = frappe.db.sql("""select lft, rgt from tabAccount
 		where company=%s and root_type=%s order by lft limit 1""",
 		(company, root_type), as_dict=True)
 
@@ -169,7 +169,7 @@ def get_accounts(company, root_type):
 
 	lft, rgt = root_account[0].lft, root_account[0].rgt
 
-	accounts = frappe.db.sql("""select * from `tabAccount`
+	accounts = frappe.db.sql("""select * from tabAccount
 		where company=%(company)s and lft >= %(lft)s and rgt <= %(rgt)s order by lft""",
 		{ "company": company, "lft": lft, "rgt": rgt }, as_dict=True)
 
@@ -212,11 +212,11 @@ def get_gl_entries(company, from_date, to_date, root_lft, root_rgt, ignore_closi
 	if from_date:
 		additional_conditions.append("and posting_date >= %(from_date)s")
 
-	gl_entries = frappe.db.sql("""select * from `tabGL Entry`
+	gl_entries = frappe.db.sql("""select * from tabGL_Entry
 		where company=%(company)s
 		{additional_conditions}
 		and posting_date <= %(to_date)s
-		and account in (select name from `tabAccount`
+		and account in (select name from tabAccount
 			where lft >= %(lft)s and rgt <= %(rgt)s)
 		order by account, posting_date""".format(additional_conditions="\n".join(additional_conditions)),
 		{

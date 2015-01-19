@@ -91,13 +91,13 @@ def get_docs_to_rename():
 def get_gl_entries_to_fix():
 	bad_gl_entries = {}
 
-	for dt in frappe.db.sql_list("""select distinct voucher_type from `tabGL Entry`
+	for dt in frappe.db.sql_list("""select distinct voucher_type from tabGL_Entry
 		where ifnull(voucher_type, '')!=''"""):
 
 		if dt not in doctype_series_map:
 			continue
 
-		out = frappe.db.sql("""select gl.name, gl.voucher_no from `tabGL Entry` gl
+		out = frappe.db.sql("""select gl.name, gl.voucher_no from tabGL_Entry gl
 			where ifnull(voucher_type, '')=%s and voucher_no like %s and
 			not exists (select name from `tab{voucher_type}` vt where vt.name=gl.voucher_no)""".format(voucher_type=dt),
 			(dt, doctype_series_map[dt] + "%%"), as_dict=True)
@@ -106,12 +106,12 @@ def get_gl_entries_to_fix():
 			bad_gl_entries.setdefault(dt, []).extend(out)
 
 	for dt in frappe.db.sql_list("""select distinct against_voucher_type
-		from `tabGL Entry` where ifnull(against_voucher_type, '')!=''"""):
+		from tabGL_Entry where ifnull(against_voucher_type, '')!=''"""):
 
 		if dt not in doctype_series_map:
 			continue
 
-		out = frappe.db.sql("""select gl.name, gl.against_voucher from `tabGL Entry` gl
+		out = frappe.db.sql("""select gl.name, gl.against_voucher from tabGL_Entry gl
 			where ifnull(against_voucher_type, '')=%s and against_voucher like %s and
 			not exists (select name from `tab{against_voucher_type}` vt
 				where vt.name=gl.against_voucher)""".format(against_voucher_type=dt),
@@ -125,13 +125,13 @@ def get_gl_entries_to_fix():
 def get_sl_entries_to_fix():
 	bad_sl_entries = {}
 
-	for dt in frappe.db.sql_list("""select distinct voucher_type from `tabStock Ledger Entry`
+	for dt in frappe.db.sql_list("""select distinct voucher_type from tabStock_Ledger_Entry
 		where ifnull(voucher_type, '')!=''"""):
 
 		if dt not in doctype_series_map:
 			continue
 
-		out = frappe.db.sql("""select sl.name, sl.voucher_no from `tabStock Ledger Entry` sl
+		out = frappe.db.sql("""select sl.name, sl.voucher_no from tabStock_Ledger_Entry sl
 			where voucher_type=%s and voucher_no like %s and
 			not exists (select name from `tab{voucher_type}` vt where vt.name=sl.voucher_no)""".format(voucher_type=dt),
 			(dt, doctype_series_map[dt] + "%%"), as_dict=True)
@@ -205,7 +205,7 @@ def rename_docs():
 
 def fix_comments():
 	renamed_docs_comments = frappe.db.sql("""select name, comment, comment_doctype, comment_docname
-		from `tabComment` where comment like 'Renamed from **%** to %'
+		from tabComment where comment like 'Renamed from **%** to %'
 		order by comment_doctype, comment_docname""", as_dict=True)
 
 	# { "comment_doctype": [("old_comment_docname", "new_comment_docname", ['comment1', 'comment2', ...])] }
@@ -214,7 +214,7 @@ def fix_comments():
 	for comment in renamed_docs_comments:
 		old_comment_docname, new_comment_docname = re.findall("""Renamed from \*\*([^\*]*)\*\* to (.*)""", comment.comment)[0]
 		if not frappe.db.exists(comment.comment_doctype, old_comment_docname):
-			orphaned_comments = frappe.db.sql_list("""select comment from `tabComment`
+			orphaned_comments = frappe.db.sql_list("""select comment from tabComment
 				where comment_doctype=%s and comment_docname=%s""", (comment.comment_doctype, old_comment_docname))
 			if orphaned_comments:
 				to_rename = (old_comment_docname, new_comment_docname, orphaned_comments)
@@ -241,7 +241,7 @@ def fix_comments():
 	frappe.db.commit()
 
 def fix_comment(comment_doctype, old_comment_docname, new_comment_docname):
-	frappe.db.sql("""update `tabComment` set comment_docname=%s
+	frappe.db.sql("""update tabComment set comment_docname=%s
 		where comment_doctype=%s and comment_docname=%s""",
 		(new_comment_docname, comment_doctype, old_comment_docname))
 

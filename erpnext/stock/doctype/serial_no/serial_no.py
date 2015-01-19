@@ -149,7 +149,7 @@ class SerialNo(StockController):
 
 	def get_stock_ledger_entries(self):
 		sle_dict = {}
-		for sle in frappe.db.sql("""select * from `tabStock Ledger Entry`
+		for sle in frappe.db.sql("""select * from tabStock_Ledger_Entry
 			where serial_no like %s and item_code=%s and ifnull(is_cancelled, 'No')='No'
 			order by posting_date desc, posting_time desc, name desc""",
 			("%%%s%%" % self.name, self.item_code), as_dict=1):
@@ -296,7 +296,7 @@ def make_serial_no(serial_no, sle):
 
 def update_serial_nos_after_submit(controller, parentfield):
 	stock_ledger_entries = frappe.db.sql("""select voucher_detail_no, serial_no, actual_qty, warehouse
-		from `tabStock Ledger Entry` where voucher_type=%s and voucher_no=%s""",
+		from tabStock_Ledger_Entry where voucher_type=%s and voucher_no=%s""",
 		(controller.doctype, controller.name), as_dict=True)
 
 	if not stock_ledger_entries: return

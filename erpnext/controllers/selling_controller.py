@@ -310,12 +310,12 @@ class SellingController(StockController):
 		if customer_account:
 			invoice_outstanding = frappe.db.sql("""select
 				sum(ifnull(debit, 0)) - sum(ifnull(credit, 0))
-				from `tabGL Entry` where account = %s""", customer_account)
+				from tabGL_Entry where account = %s""", customer_account)
 			invoice_outstanding = flt(invoice_outstanding[0][0]) if invoice_outstanding else 0
 
 			ordered_amount_to_be_billed = frappe.db.sql("""
 				select sum(grand_total*(100 - ifnull(per_billed, 0))/100)
-				from `tabSales Order`
+				from tabSales_Order
 				where customer=%s and docstatus = 1
 				and ifnull(per_billed, 0) < 100 and status != 'Stopped'""", self.customer)
 
@@ -393,18 +393,18 @@ class SellingController(StockController):
 		return il
 
 	def has_sales_bom(self, item_code):
-		return frappe.db.sql("""select name from `tabSales BOM`
+		return frappe.db.sql("""select name from tabSales_BOM
 			where new_item_code=%s and docstatus != 2""", item_code)
 
 	def get_already_delivered_qty(self, dn, so, so_detail):
-		qty = frappe.db.sql("""select sum(qty) from `tabDelivery Note Item`
+		qty = frappe.db.sql("""select sum(qty) from tabDelivery_Note_Item
 			where prevdoc_detail_docname = %s and docstatus = 1
 			and against_sales_order = %s
 			and parent != %s""", (so_detail, so, dn))
 		return qty and flt(qty[0][0]) or 0.0
 
 	def get_so_qty_and_warehouse(self, so_detail):
-		so_item = frappe.db.sql("""select qty, warehouse from `tabSales Order Item`
+		so_item = frappe.db.sql("""select qty, warehouse from tabSales_Order_Item
 			where name = %s and docstatus = 1""", so_detail, as_dict=1)
 		so_qty = so_item and flt(so_item[0]["qty"]) or 0.0
 		so_warehouse = so_item and so_item[0]["warehouse"] or ""

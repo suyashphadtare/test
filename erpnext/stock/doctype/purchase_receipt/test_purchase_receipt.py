@@ -85,9 +85,9 @@ class TestPurchaseReceipt(unittest.TestCase):
 		set_perpetual_inventory(0)
 
 	def _clear_stock_account_balance(self):
-		frappe.db.sql("delete from `tabStock Ledger Entry`")
-		frappe.db.sql("""delete from `tabBin`""")
-		frappe.db.sql("""delete from `tabGL Entry`""")
+		frappe.db.sql("delete from tabStock_Ledger_Entry")
+		frappe.db.sql("""delete from tabBin""")
+		frappe.db.sql("""delete from tabGL_Entry""")
 
 	def test_subcontracting(self):
 		pr = frappe.copy_doc(test_records[1])
@@ -142,7 +142,7 @@ class TestPurchaseReceipt(unittest.TestCase):
 
 def get_gl_entries(voucher_type, voucher_no):
 	return frappe.db.sql("""select account, debit, credit
-		from `tabGL Entry` where voucher_type=%s and voucher_no=%s
+		from tabGL_Entry where voucher_type=%s and voucher_no=%s
 		order by account desc""", (voucher_type, voucher_no), as_dict=1)
 
 def set_perpetual_inventory(enable=1):

@@ -57,10 +57,10 @@ def get_product_list_for_group(product_group=None, start=0, limit=10):
 	query = """select name, item_name, page_name, website_image, item_group,
 			web_long_description as website_description,
 			concat(parent_website_route, "/", page_name) as route
-		from `tabItem`
+		from tabItem
 		where show_in_website = 1
 			and (item_group in (%s)
-			or name in (select parent from `tabWebsite Item Group` where item_group in (%s)))
+			or name in (select parent from tabWebsite_Item_Group where item_group in (%s)))
 			""" % (child_groups, child_groups)
 
 	query += """order by weightage desc, modified desc limit %s, %s""" % (start, limit)
@@ -72,7 +72,7 @@ def get_product_list_for_group(product_group=None, start=0, limit=10):
 def get_child_groups(item_group_name):
 	item_group = frappe.get_doc("Item Group", item_group_name)
 	return frappe.db.sql("""select name
-		from `tabItem Group` where lft>=%(lft)s and rgt<=%(rgt)s
+		from tabItem_Group where lft>=%(lft)s and rgt<=%(rgt)s
 			and show_in_website = 1""", {"lft": item_group.lft, "rgt": item_group.rgt})
 
 def get_item_for_list_in_html(context):
@@ -84,16 +84,16 @@ def get_item_for_list_in_html(context):
 
 def get_group_item_count(item_group):
 	child_groups = ", ".join(['"' + i[0] + '"' for i in get_child_groups(item_group)])
-	return frappe.db.sql("""select count(*) from `tabItem`
+	return frappe.db.sql("""select count(*) from tabItem
 		where docstatus = 0 and show_in_website = 1
 		and (item_group in (%s)
-			or name in (select parent from `tabWebsite Item Group`
+			or name in (select parent from tabWebsite_Item_Group
 				where item_group in (%s))) """ % (child_groups, child_groups))[0][0]
 
 
 def get_parent_item_groups(item_group_name):
 	item_group = frappe.get_doc("Item Group", item_group_name)
-	return frappe.db.sql("""select name, page_name from `tabItem Group`
+	return frappe.db.sql("""select name, page_name from tabItem_Group
 		where lft <= %s and rgt >= %s
 		and ifnull(show_in_website,0)=1
 		order by lft asc""", (item_group.lft, item_group.rgt), as_dict=True)

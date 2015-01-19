@@ -17,7 +17,7 @@ class ProductionPlanningTool(Document):
 	def get_so_details(self, so):
 		"""Pull other details from so"""
 		so = frappe.db.sql("""select transaction_date, customer, grand_total
-			from `tabSales Order` where name = %s""", so, as_dict = 1)
+			from tabSales_Order where name = %s""", so, as_dict = 1)
 		ret = {
 			'sales_order_date': so and so[0]['transaction_date'] or '',
 			'customer' : so[0]['customer'] or '',
@@ -29,7 +29,7 @@ class ProductionPlanningTool(Document):
 		""" Pull other item details from item master"""
 
 		item = frappe.db.sql("""select description, stock_uom, default_bom
-			from `tabItem` where name = %s""", item_code, as_dict =1)
+			from tabItem where name = %s""", item_code, as_dict =1)
 		ret = {
 			'description'	: item and item[0]['description'],
 			'stock_uom'		: item and item[0]['stock_uom'],
@@ -62,17 +62,17 @@ class ProductionPlanningTool(Document):
 
 		open_so = frappe.db.sql("""
 			select distinct so.name, so.transaction_date, so.customer, so.grand_total
-			from `tabSales Order` so, `tabSales Order Item` so_item
+			from tabSales_Order so, tabSales_Order_Item so_item
 			where so_item.parent = so.name
 				and so.docstatus = 1 and so.status != "Stopped"
 				and so.company = %s
 				and ifnull(so_item.qty, 0) > ifnull(so_item.delivered_qty, 0) %s
-				and (exists (select name from `tabItem` item where item.name=so_item.item_code
+				and (exists (select name from tabItem item where item.name=so_item.item_code
 					and (ifnull(item.is_pro_applicable, 'No') = 'Yes'
 						or ifnull(item.is_sub_contracted_item, 'No') = 'Yes') %s)
-					or exists (select name from `tabPacked Item` pi
+					or exists (select name from tabPacked_Item pi
 						where pi.parent = so.name and pi.parent_item = so_item.item_code
-							and exists (select name from `tabItem` item where item.name=pi.item_code
+							and exists (select name from tabItem item where item.name=pi.item_code
 								and (ifnull(item.is_pro_applicable, 'No') = 'Yes'
 									or ifnull(item.is_sub_contracted_item, 'No') = 'Yes') %s)))
 			""" % ('%s', so_filter, item_filter, item_filter), self.company, as_dict=1)
@@ -112,9 +112,9 @@ class ProductionPlanningTool(Document):
 
 		items = frappe.db.sql("""select distinct parent, item_code, warehouse,
 			(qty - ifnull(delivered_qty, 0)) as pending_qty
-			from `tabSales Order Item` so_item
+			from tabSales_Order_Item so_item
 			where parent in (%s) and docstatus = 1 and ifnull(qty, 0) > ifnull(delivered_qty, 0)
-			and exists (select * from `tabItem` item where item.name=so_item.item_code
+			and exists (select * from tabItem item where item.name=so_item.item_code
 				and (ifnull(item.is_pro_applicable, 'No') = 'Yes'
 					or ifnull(item.is_sub_contracted_item, 'No') = 'Yes')) %s""" % \
 			(", ".join(["%s"] * len(so_list)), item_condition), tuple(so_list), as_dict=1)
@@ -125,11 +125,11 @@ class ProductionPlanningTool(Document):
 		packed_items = frappe.db.sql("""select distinct pi.parent, pi.item_code, pi.warehouse as warehouse,
 			(((so_item.qty - ifnull(so_item.delivered_qty, 0)) * pi.qty) / so_item.qty)
 				as pending_qty
-			from `tabSales Order Item` so_item, `tabPacked Item` pi
+			from tabSales_Order_Item so_item, tabPacked_Item pi
 			where so_item.parent = pi.parent and so_item.docstatus = 1
 			and pi.parent_item = so_item.item_code
 			and so_item.parent in (%s) and ifnull(so_item.qty, 0) > ifnull(so_item.delivered_qty, 0)
-			and exists (select * from `tabItem` item where item.name=pi.item_code
+			and exists (select * from tabItem item where item.name=pi.item_code
 				and (ifnull(item.is_pro_applicable, 'No') = 'Yes'
 					or ifnull(item.is_sub_contracted_item, 'No') = 'Yes')) %s""" % \
 			(", ".join(["%s"] * len(so_list)), item_condition), tuple(so_list), as_dict=1)
@@ -164,7 +164,7 @@ class ProductionPlanningTool(Document):
 		if not d.bom_no:
 			frappe.throw(_("Please enter BOM for Item {0} at row {1}").format(d.item_code, d.idx))
 		else:
-			bom = frappe.db.sql("""select name from `tabBOM` where name = %s and item = %s
+			bom = frappe.db.sql("""select name from tabBOM where name = %s and item = %s
 				and docstatus = 1 and is_active = 1""",
 				(d.bom_no, d.item_code), as_dict = 1)
 			if not bom:
@@ -253,7 +253,7 @@ class ProductionPlanningTool(Document):
 				for d in frappe.db.sql("""select fb.item_code,
 					ifnull(sum(ifnull(fb.qty, 0)/ifnull(bom.quantity, 1)), 0) as qty,
 					fb.description, fb.stock_uom, it.min_order_qty
-					from `tabBOM Explosion Item` fb, `tabBOM` bom, `tabItem` it
+					from tabBOM_Explosion_Item fb, tabBOM bom, tabItem it
 					where bom.name = fb.parent and it.name = fb.item_code and ifnull(it.is_pro_applicable, 'No') = 'No'
 					and ifnull(it.is_sub_contracted_item, 'No') = 'No'
 					and fb.docstatus<2 and bom.name=%s
@@ -265,7 +265,7 @@ class ProductionPlanningTool(Document):
 				for d in frappe.db.sql("""select bom_item.item_code,
 					ifnull(sum(ifnull(bom_item.qty, 0)/ifnull(bom.quantity, 1)), 0) as qty,
 					bom_item.description, bom_item.stock_uom, item.min_order_qty
-					from `tabBOM Item` bom_item, `tabBOM` bom, tabItem item
+					from tabBOM_Item bom_item, tabBOM bom, tabItem item
 					where bom.name = bom_item.parent and bom.name = %s and bom_item.docstatus < 2
 					and bom_item.item_code = item.name
 					group by item_code""", bom, as_dict=1):
@@ -289,7 +289,7 @@ class ProductionPlanningTool(Document):
 			total_qty = sum([flt(d[0]) for d in self.item_dict[item]])
 			item_list.append([item, self.item_dict[item][0][1], self.item_dict[item][0][2], total_qty])
 			item_qty = frappe.db.sql("""select warehouse, indented_qty, ordered_qty, actual_qty
-				from `tabBin` where item_code = %s""", item, as_dict=1)
+				from tabBin where item_code = %s""", item, as_dict=1)
 			i_qty, o_qty, a_qty = 0, 0, 0
 			for w in item_qty:
 				i_qty, o_qty, a_qty = i_qty + flt(w.indented_qty), o_qty + flt(w.ordered_qty), a_qty + flt(w.actual_qty)
@@ -353,7 +353,7 @@ class ProductionPlanningTool(Document):
 	def get_projected_qty(self):
 		items = self.item_dict.keys()
 		item_projected_qty = frappe.db.sql("""select item_code, sum(projected_qty)
-			from `tabBin` where item_code in (%s) and warehouse=%s group by item_code""" %
+			from tabBin where item_code in (%s) and warehouse=%s group by item_code""" %
 			(", ".join(["%s"]*len(items)), '%s'), tuple(items + [self.purchase_request_for_warehouse]))
 
 		return dict(item_projected_qty)

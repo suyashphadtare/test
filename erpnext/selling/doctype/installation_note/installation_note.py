@@ -58,7 +58,7 @@ class InstallationNote(TransactionBase):
 
 	def is_serial_no_installed(self,cur_s_no,item_code):
 		for x in cur_s_no:
-			status = frappe.db.sql("select status from `tabSerial No` where name = %s", x)
+			status = frappe.db.sql("select status from tabSerial_No where name = %s", x)
 			status = status and status[0][0] or ''
 
 			if status == 'Installed':

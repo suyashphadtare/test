@@ -196,7 +196,7 @@ def get_pricing_rules(args):
 	item_group_condition = _get_tree_conditions("Item Group", False)
 	if item_group_condition: item_group_condition = " or " + item_group_condition
 
-	return frappe.db.sql("""select * from `tabPricing Rule`
+	return frappe.db.sql("""select * from tabPricing_Rule
 		where (item_code=%(item_code)s {item_group_condition} or brand=%(brand)s)
 			and docstatus < 2 and ifnull(disable, 0) = 0
 			and ifnull({transaction_type}, 0) = 1 {conditions}

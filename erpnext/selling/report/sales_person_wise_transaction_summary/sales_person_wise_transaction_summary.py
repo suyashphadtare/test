@@ -38,7 +38,7 @@ def get_entries(filters):
 	entries = frappe.db.sql("""select dt.name, dt.customer, dt.territory, dt.%s as posting_date,
 		dt_item.item_code, dt_item.qty, dt_item.base_amount, st.sales_person,
 		st.allocated_percentage, dt_item.base_amount*st.allocated_percentage/100 as contribution_amt
-		from `tab%s` dt, `tab%s Item` dt_item, `tabSales Team` st
+		from `tab%s` dt, `tab%s Item` dt_item, tabSales_Team st
 		where st.parent = dt.name and dt.name = dt_item.parent and st.parenttype = %s
 		and dt.docstatus = 1 %s order by st.sales_person, dt.name desc""" %
 		(date_field, filters["doc_type"], filters["doc_type"], '%s', conditions),
@@ -82,7 +82,7 @@ def get_items(filters):
 
 def get_item_details():
 	item_details = {}
-	for d in frappe.db.sql("""select name, item_group, brand from `tabItem`""", as_dict=1):
+	for d in frappe.db.sql("""select name, item_group, brand from tabItem""", as_dict=1):
 		item_details.setdefault(d.name, d)
 
 	return item_details

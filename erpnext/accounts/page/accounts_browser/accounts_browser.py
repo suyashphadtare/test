@@ -38,7 +38,7 @@ def get_children():
 				args['parent'], as_dict=1)
 				
 	if ctype == 'Account':
-		currency = frappe.db.sql("select default_currency from `tabCompany` where name = %s", company)[0][0]
+		currency = frappe.db.sql("select default_currency from tabCompany where name = %s", company)[0][0]
 		for each in acc:
 			bal = get_balance_on(each.get("value"))
 			each["currency"] = currency

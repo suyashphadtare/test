@@ -52,7 +52,7 @@ class Item(WebsiteGenerator):
 
 		if not self.get("__islocal"):
 			self.old_item_group = frappe.db.get_value(self.doctype, self.name, "item_group")
-			self.old_website_item_groups = frappe.db.sql_list("""select item_group from `tabWebsite Item Group`
+			self.old_website_item_groups = frappe.db.sql_list("""select item_group from tabWebsite_Item_Group
 				where parentfield='website_item_groups' and parenttype='Item' and parent=%s""", self.name)
 
 	def on_update(self):
@@ -141,7 +141,7 @@ class Item(WebsiteGenerator):
 	def check_for_active_boms(self):
 		if self.is_purchase_item != "Yes":
 			bom_mat = frappe.db.sql("""select distinct t1.parent
-				from `tabBOM Item` t1, `tabBOM` t2 where t2.name = t1.parent
+				from tabBOM_Item t1, tabBOM t2 where t2.name = t1.parent
 				and t1.item_code =%s and ifnull(t1.bom_no, '') = '' and t2.is_active = 1
 				and t2.docstatus = 1 and t1.docstatus =1 """, self.name)
 
@@ -149,7 +149,7 @@ class Item(WebsiteGenerator):
 				frappe.throw(_("Item must be a purchase item, as it is present in one or many Active BOMs"))
 
 		if self.is_manufactured_item != "Yes":
-			bom = frappe.db.sql("""select name from `tabBOM` where item = %s
+			bom = frappe.db.sql("""select name from tabBOM where item = %s
 				and is_active = 1""", (self.name,))
 			if bom and bom[0][0]:
 				frappe.throw(_("""Allow Bill of Materials should be 'Yes'. Because one or many active BOMs present for this item"""))
@@ -201,7 +201,7 @@ class Item(WebsiteGenerator):
 				frappe.throw(_("""To set reorder level, item must be Purchase Item"""))
 
 	def check_if_sle_exists(self):
-		sle = frappe.db.sql("""select name from `tabStock Ledger Entry`
+		sle = frappe.db.sql("""select name from tabStock_Ledger_Entry
 			where item_code = %s""", self.name)
 		return sle and 'exists' or 'not exists'
 
@@ -211,7 +211,7 @@ class Item(WebsiteGenerator):
 			frappe.throw(_("An Item Group exists with same name, please change the item name or rename the item group"))
 
 	def update_item_price(self):
-		frappe.db.sql("""update `tabItem Price` set item_name=%s,
+		frappe.db.sql("""update tabItem_Price set item_name=%s,
 			item_description=%s, modified=NOW() where item_code=%s""",
 			(self.item_name, self.description, self.name))
 
@@ -242,7 +242,7 @@ class Item(WebsiteGenerator):
 				frappe.throw(_("To merge, following properties must be same for both items")
 					+ ": \n" + ", ".join([self.meta.get_label(fld) for fld in field_list]))
 
-			frappe.db.sql("delete from `tabBin` where item_code=%s", olddn)
+			frappe.db.sql("delete from tabBin where item_code=%s", olddn)
 
 	def after_rename(self, olddn, newdn, merge):
 		super(Item, self).after_rename(olddn, newdn, merge)
@@ -264,7 +264,7 @@ class Item(WebsiteGenerator):
 		frappe.db.auto_commit_on_many_writes = 1
 		frappe.db.set_default("allow_negative_stock", 1)
 
-		for warehouse in frappe.db.sql("select name from `tabWarehouse`"):
+		for warehouse in frappe.db.sql("select name from tabWarehouse"):
 			repost_stock(newdn, warehouse[0])
 
 		frappe.db.set_default("allow_negative_stock",
@@ -319,7 +319,7 @@ def get_last_purchase_details(item_code, doc_name=None, conversion_rate=1.0):
 		select po.name, po.transaction_date, po.conversion_rate,
 			po_item.conversion_factor, po_item.base_price_list_rate,
 			po_item.discount_percentage, po_item.base_rate
-		from `tabPurchase Order` po, `tabPurchase Order Item` po_item
+		from tabPurchase_Order po, tabPurchase_Order_Item po_item
 		where po.docstatus = 1 and po_item.item_code = %s and po.name != %s and
 			po.name = po_item.parent
 		order by po.transaction_date desc, po.name desc
@@ -330,7 +330,7 @@ def get_last_purchase_details(item_code, doc_name=None, conversion_rate=1.0):
 		select pr.name, pr.posting_date, pr.posting_time, pr.conversion_rate,
 			pr_item.conversion_factor, pr_item.base_price_list_rate, pr_item.discount_percentage,
 			pr_item.base_rate
-		from `tabPurchase Receipt` pr, `tabPurchase Receipt Item` pr_item
+		from tabPurchase_Receipt pr, tabPurchase_Receipt_Item pr_item
 		where pr.docstatus = 1 and pr_item.item_code = %s and pr.name != %s and
 			pr.name = pr_item.parent
 		order by pr.posting_date desc, pr.posting_time desc, pr.name desc

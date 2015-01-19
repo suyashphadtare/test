@@ -16,7 +16,7 @@ def get_sle(**args):
 		condition += "`{0}`=%s".format(key)
 		values.append(value)
 
-	return frappe.db.sql("""select * from `tabStock Ledger Entry` %s
+	return frappe.db.sql("""select * from tabStock_Ledger_Entry %s
 		order by timestamp(posting_date, posting_time) desc, name desc limit 1"""% condition,
 		values, as_dict=1)
 
@@ -68,8 +68,8 @@ class TestStockEntry(unittest.TestCase):
 		frappe.db.set_default("allow_negative_stock", 0)
 
 	def test_auto_material_request(self):
-		frappe.db.sql("""delete from `tabMaterial Request Item`""")
-		frappe.db.sql("""delete from `tabMaterial Request`""")
+		frappe.db.sql("""delete from tabMaterial_Request_Item""")
+		frappe.db.sql("""delete from tabMaterial_Request""")
 		self._clear_stock_account_balance()
 
 		frappe.db.set_value("Stock Settings", None, "auto_indent", 1)
@@ -84,7 +84,7 @@ class TestStockEntry(unittest.TestCase):
 		from erpnext.stock.utils import reorder_item
 		reorder_item()
 
-		mr_name = frappe.db.sql("""select parent from `tabMaterial Request Item`
+		mr_name = frappe.db.sql("""select parent from tabMaterial_Request_Item
 			where item_code='_Test Item'""")
 
 		self.assertTrue(mr_name)
@@ -112,10 +112,10 @@ class TestStockEntry(unittest.TestCase):
 
 		mr.cancel()
 
-		self.assertFalse(frappe.db.sql("""select * from `tabStock Ledger Entry`
+		self.assertFalse(frappe.db.sql("""select * from tabStock_Ledger_Entry
 			where voucher_type='Stock Entry' and voucher_no=%s""", mr.name))
 
-		self.assertFalse(frappe.db.sql("""select * from `tabGL Entry`
+		self.assertFalse(frappe.db.sql("""select * from tabGL_Entry
 			where voucher_type='Stock Entry' and voucher_no=%s""", mr.name))
 
 
@@ -143,10 +143,10 @@ class TestStockEntry(unittest.TestCase):
 		)
 
 		mi.cancel()
-		self.assertFalse(frappe.db.sql("""select * from `tabStock Ledger Entry`
+		self.assertFalse(frappe.db.sql("""select * from tabStock_Ledger_Entry
 			where voucher_type='Stock Entry' and voucher_no=%s""", mi.name))
 
-		self.assertFalse(frappe.db.sql("""select * from `tabGL Entry`
+		self.assertFalse(frappe.db.sql("""select * from tabGL_Entry
 			where voucher_type='Stock Entry' and voucher_no=%s""", mi.name))
 
 		self.assertEquals(frappe.db.get_value("Bin", {"warehouse": mi.get("mtn_details")[0].s_warehouse,
@@ -184,10 +184,10 @@ class TestStockEntry(unittest.TestCase):
 
 
 		mtn.cancel()
-		self.assertFalse(frappe.db.sql("""select * from `tabStock Ledger Entry`
+		self.assertFalse(frappe.db.sql("""select * from tabStock_Ledger_Entry
 			where voucher_type='Stock Entry' and voucher_no=%s""", mtn.name))
 
-		self.assertFalse(frappe.db.sql("""select * from `tabGL Entry`
+		self.assertFalse(frappe.db.sql("""select * from tabGL_Entry
 			where voucher_type='Stock Entry' and voucher_no=%s""", mtn.name))
 
 
@@ -206,7 +206,7 @@ class TestStockEntry(unittest.TestCase):
 				["_Test Item Home Desktop 100", "_Test Warehouse - _TC", 1]])
 
 		gl_entries = frappe.db.sql("""select account, debit, credit
-			from `tabGL Entry` where voucher_type='Stock Entry' and voucher_no=%s
+			from tabGL_Entry where voucher_type='Stock Entry' and voucher_no=%s
 			order by account desc""", repack.name, as_dict=1)
 		self.assertFalse(gl_entries)
 
@@ -239,7 +239,7 @@ class TestStockEntry(unittest.TestCase):
 
 		# check stock ledger entries
 		sle = frappe.db.sql("""select item_code, warehouse, actual_qty
-			from `tabStock Ledger Entry` where voucher_type = %s
+			from tabStock_Ledger_Entry where voucher_type = %s
 			and voucher_no = %s order by item_code, warehouse, actual_qty""",
 			(voucher_type, voucher_no), as_list=1)
 		self.assertTrue(sle)
@@ -254,7 +254,7 @@ class TestStockEntry(unittest.TestCase):
 		expected_gl_entries.sort(key=lambda x: x[0])
 
 		gl_entries = frappe.db.sql("""select account, debit, credit
-			from `tabGL Entry` where voucher_type=%s and voucher_no=%s
+			from tabGL_Entry where voucher_type=%s and voucher_no=%s
 			order by account asc, debit asc""", (voucher_type, voucher_no), as_list=1)
 		self.assertTrue(gl_entries)
 		gl_entries.sort(key=lambda x: x[0])
@@ -656,9 +656,9 @@ class TestStockEntry(unittest.TestCase):
 		return se, pr.name
 
 	def _clear_stock_account_balance(self):
-		frappe.db.sql("delete from `tabStock Ledger Entry`")
-		frappe.db.sql("""delete from `tabBin`""")
-		frappe.db.sql("""delete from `tabGL Entry`""")
+		frappe.db.sql("delete from tabStock_Ledger_Entry")
+		frappe.db.sql("""delete from tabBin""")
+		frappe.db.sql("""delete from tabGL_Entry""")
 
 		self.old_default_company = frappe.db.get_default("company")
 		frappe.db.set_default("company", "_Test Company")
@@ -713,7 +713,7 @@ class TestStockEntry(unittest.TestCase):
 
 	def test_serial_no_not_exists(self):
 		self._clear_stock_account_balance()
-		frappe.db.sql("delete from `tabSerial No` where name in ('ABCD', 'EFGH')")
+		frappe.db.sql("delete from tabSerial_No where name in ('ABCD', 'EFGH')")
 		make_serialized_item(target_warehouse="_Test Warehouse 1 - _TC")
 		se = frappe.copy_doc(test_records[0])
 		se.purpose = "Material Issue"

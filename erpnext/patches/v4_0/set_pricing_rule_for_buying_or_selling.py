@@ -6,8 +6,8 @@ import frappe
 
 def execute():
 	frappe.reload_doc("accounts", "doctype", "pricing_rule")
-	frappe.db.sql("""update `tabPricing Rule` set selling=1 where ifnull(applicable_for, '') in
+	frappe.db.sql("""update tabPricing_Rule set selling=1 where ifnull(applicable_for, '') in
 		('', 'Customer', 'Customer Group', 'Territory', 'Sales Partner', 'Campaign')""")
 
-	frappe.db.sql("""update `tabPricing Rule` set buying=1 where ifnull(applicable_for, '') in
+	frappe.db.sql("""update tabPricing_Rule set buying=1 where ifnull(applicable_for, '') in
 		('', 'Supplier', 'Supplier Type')""")

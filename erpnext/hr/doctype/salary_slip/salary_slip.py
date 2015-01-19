@@ -25,7 +25,7 @@ class SalarySlip(TransactionBase):
 				self.pull_sal_struct(struct)
 
 	def check_sal_struct(self):
-		struct = frappe.db.sql("""select name from `tabSalary Structure`
+		struct = frappe.db.sql("""select name from tabSalary_Structure
 			where employee=%s and is_active = 'Yes'""", self.employee)
 		if not struct:
 			msgprint(_("Please create Salary Structure for employee {0}").format(self.employee))
@@ -68,7 +68,7 @@ class SalarySlip(TransactionBase):
 
 	def get_payment_days(self, m):
 		payment_days = m['month_days']
-		emp = frappe.db.sql("select date_of_joining, relieving_date from `tabEmployee` \
+		emp = frappe.db.sql("select date_of_joining, relieving_date from tabEmployee \
 			where name = %s", self.employee, as_dict=1)[0]
 
 		if emp['relieving_date']:
@@ -89,13 +89,13 @@ class SalarySlip(TransactionBase):
 
 	def get_holidays_for_employee(self, m):
 		holidays = frappe.db.sql("""select t1.holiday_date
-			from `tabHoliday` t1, tabEmployee t2
+			from tabHoliday t1, tabEmployee t2
 			where t1.parent = t2.holiday_list and t2.name = %s
 			and t1.holiday_date between %s and %s""",
 			(self.employee, m['month_start_date'], m['month_end_date']))
 		if not holidays:
 			holidays = frappe.db.sql("""select t1.holiday_date
-				from `tabHoliday` t1, `tabHoliday List` t2
+				from tabHoliday t1, tabHoliday_List t2
 				where t1.parent = t2.name and ifnull(t2.is_default, 0) = 1
 				and t2.fiscal_year = %s
 				and t1.holiday_date between %s and %s""", (self.fiscal_year,
@@ -110,7 +110,7 @@ class SalarySlip(TransactionBase):
 			if dt not in holidays:
 				leave = frappe.db.sql("""
 					select t1.name, t1.half_day
-					from `tabLeave Application` t1, `tabLeave Type` t2
+					from tabLeave_Application t1, tabLeave_Type t2
 					where t2.name = t1.leave_type
 					and ifnull(t2.is_lwp, 0) = 1
 					and t1.docstatus = 1
@@ -122,7 +122,7 @@ class SalarySlip(TransactionBase):
 		return lwp
 
 	def check_existing(self):
-		ret_exist = frappe.db.sql("""select name from `tabSalary Slip`
+		ret_exist = frappe.db.sql("""select name from tabSalary_Slip
 			where month = %s and fiscal_year = %s and docstatus != 2
 			and employee = %s and name != %s""",
 			(self.month, self.fiscal_year, self.employee, self.name))

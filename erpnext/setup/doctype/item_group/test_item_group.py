@@ -12,7 +12,7 @@ test_records = frappe.get_test_records('Item Group')
 class TestItem(unittest.TestCase):
 	def test_basic_tree(self, records=None):
 		min_lft = 1
-		max_rgt = frappe.db.sql("select max(rgt) from `tabItem Group`")[0][0]
+		max_rgt = frappe.db.sql("select max(rgt) from tabItem_Group")[0][0]
 
 		if not records:
 			records = test_records[2:]
@@ -48,7 +48,7 @@ class TestItem(unittest.TestCase):
 		def get_no_of_children(item_groups, no_of_children):
 			children = []
 			for ig in item_groups:
-				children += frappe.db.sql_list("""select name from `tabItem Group`
+				children += frappe.db.sql_list("""select name from tabItem_Group
 				where ifnull(parent_item_group, '')=%s""", ig or '')
 
 			if len(children):
@@ -112,7 +112,7 @@ class TestItem(unittest.TestCase):
 
 	def print_tree(self):
 		import json
-		print json.dumps(frappe.db.sql("select name, lft, rgt from `tabItem Group` order by lft"), indent=1)
+		print json.dumps(frappe.db.sql("select name, lft, rgt from tabItem_Group order by lft"), indent=1)
 
 	def test_move_leaf_into_another_group(self):
 		# before move
@@ -146,7 +146,7 @@ class TestItem(unittest.TestCase):
 		rgt = frappe.db.get_value("Item Group", parent_item_group, "rgt")
 
 		ancestors = get_ancestors_of("Item Group", "_Test Item Group B - 3")
-		ancestors = frappe.db.sql("""select name, rgt from `tabItem Group`
+		ancestors = frappe.db.sql("""select name, rgt from tabItem_Group
 			where name in ({})""".format(", ".join(["%s"]*len(ancestors))), tuple(ancestors), as_dict=True)
 
 		frappe.delete_doc("Item Group", "_Test Item Group B - 3")
@@ -179,7 +179,7 @@ class TestItem(unittest.TestCase):
 		self.test_basic_tree()
 
 		# move its children back
-		for name in frappe.db.sql_list("""select name from `tabItem Group`
+		for name in frappe.db.sql_list("""select name from tabItem_Group
 			where parent_item_group='_Test Item Group C'"""):
 
 			doc = frappe.get_doc("Item Group", name)

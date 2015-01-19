@@ -142,7 +142,7 @@ class PurchaseOrder(BuyingController):
 				update_bin(args)
 
 	def check_modified_date(self):
-		mod_db = frappe.db.sql("select modified from `tabPurchase Order` where name = %s",
+		mod_db = frappe.db.sql("select modified from tabPurchase_Order where name = %s",
 			self.name)
 		date_diff = frappe.db.sql("select TIMEDIFF('%s', '%s')" % ( mod_db[0][0],cstr(self.modified)))
 
@@ -185,7 +185,7 @@ class PurchaseOrder(BuyingController):
 
 		# Check if Purchase Invoice has been submitted against current Purchase Order
 		submitted = frappe.db.sql_list("""select t1.name
-			from `tabPurchase Invoice` t1,`tabPurchase Invoice Item` t2
+			from tabPurchase_Invoice t1,tabPurchase_Invoice_Item t2
 			where t1.name = t2.parent and t2.purchase_order = %s and t1.docstatus = 1""",
 			self.name)
 		if submitted:

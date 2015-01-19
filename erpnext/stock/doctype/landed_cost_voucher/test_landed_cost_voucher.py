@@ -53,7 +53,7 @@ class TestLandedCostVoucher(unittest.TestCase):
 
 	def test_landed_cost_voucher_for_serialized_item(self):
 		set_perpetual_inventory(1)
-		frappe.db.sql("delete from `tabSerial No` where name in ('SN001', 'SN002', 'SN003', 'SN004', 'SN005')")
+		frappe.db.sql("delete from tabSerial_No where name in ('SN001', 'SN002', 'SN003', 'SN004', 'SN005')")
 
 		pr = frappe.copy_doc(pr_test_records[0])
 		pr.purchase_receipt_details[0].item_code = "_Test Serialized Item"

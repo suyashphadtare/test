@@ -8,7 +8,7 @@ import frappe.website.render
 page_title = "Partners"
 
 def get_context(context):
-	partners = frappe.db.sql("""select * from `tabSales Partner`
+	partners = frappe.db.sql("""select * from tabSales_Partner
 			where show_in_website=1 order by name asc""", as_dict=True)
 
 	for p in partners:

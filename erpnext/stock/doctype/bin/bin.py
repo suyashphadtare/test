@@ -47,7 +47,7 @@ class Bin(Document):
 				self.actual_qty = args.get("qty_after_transaction")
 			else:
 				qty_after_transaction = frappe.db.get_value("""select qty_after_transaction
-					from `tabStock Ledger Entry`
+					from tabStock_Ledger_Entry
 					where item_code=%s and warehouse=%s
 					and not (voucher_type='Stock Reconciliation' and voucher_no=%s)
 					order by posting_date desc limit 1""",
@@ -69,7 +69,7 @@ class Bin(Document):
 
 	def get_first_sle(self):
 		sle = frappe.db.sql("""
-			select * from `tabStock Ledger Entry`
+			select * from tabStock_Ledger_Entry
 			where item_code = %s
 			and warehouse = %s
 			order by timestamp(posting_date, posting_time) asc, name asc

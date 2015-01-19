@@ -11,7 +11,7 @@ from erpnext.hr.utils import set_employee_name
 
 class Attendance(Document):
 	def validate_duplicate_record(self):
-		res = frappe.db.sql("""select name from `tabAttendance` where employee = %s and att_date = %s
+		res = frappe.db.sql("""select name from tabAttendance where employee = %s and att_date = %s
 			and name != %s and docstatus = 1""",
 			(self.employee, self.att_date, self.name))
 		if res:
@@ -21,7 +21,7 @@ class Attendance(Document):
 
 	def check_leave_record(self):
 		if self.status == 'Present':
-			leave = frappe.db.sql("""select name from `tabLeave Application`
+			leave = frappe.db.sql("""select name from tabLeave_Application
 				where employee = %s and %s between from_date and to_date and status = 'Approved'
 				and docstatus = 1""", (self.employee, self.att_date))
 
@@ -38,7 +38,7 @@ class Attendance(Document):
 			frappe.throw(_("Attendance can not be marked for future dates"))
 
 	def validate_employee(self):
-		emp = frappe.db.sql("select name from `tabEmployee` where name = %s and status = 'Active'",
+		emp = frappe.db.sql("select name from tabEmployee where name = %s and status = 'Active'",
 		 	self.employee)
 		if not emp:
 			frappe.throw(_("Employee {0} is not active or does not exist").format(self.employee))

@@ -34,7 +34,7 @@ class SalesOrder(SellingController):
 			frappe.throw(_("Expected Delivery Date cannot be before Purchase Order Date"))
 
 		if self.po_no and self.customer:
-			so = frappe.db.sql("select name from `tabSales Order` \
+			so = frappe.db.sql("select name from tabSales_Order \
 				where ifnull(po_no, '') = %s and name != %s and docstatus < 2\
 				and customer = %s", (self.po_no, self.name, self.customer))
 			if so and so[0][0]:
@@ -64,14 +64,14 @@ class SalesOrder(SellingController):
 			# used for production plan
 			d.transaction_date = self.transaction_date
 
-			tot_avail_qty = frappe.db.sql("select projected_qty from `tabBin` \
+			tot_avail_qty = frappe.db.sql("select projected_qty from tabBin \
 				where item_code = %s and warehouse = %s", (d.item_code,d.warehouse))
 			d.projected_qty = tot_avail_qty and flt(tot_avail_qty[0][0]) or 0
 
 	def validate_sales_mntc_quotation(self):
 		for d in self.get('sales_order_details'):
 			if d.prevdoc_docname:
-				res = frappe.db.sql("select name from `tabQuotation` where name=%s and order_type = %s", (d.prevdoc_docname, self.order_type))
+				res = frappe.db.sql("select name from tabQuotation where name=%s and order_type = %s", (d.prevdoc_docname, self.order_type))
 				if not res:
 					frappe.msgprint(_("Quotation {0} not of type {1}").format(d.prevdoc_docname, self.order_type))
 
@@ -86,7 +86,7 @@ class SalesOrder(SellingController):
 
 	def validate_proj_cust(self):
 		if self.project_name and self.customer_name:
-			res = frappe.db.sql("""select name from `tabProject` where name = %s
+			res = frappe.db.sql("""select name from tabProject where name = %s
 				and (customer = %s or ifnull(customer,'')='')""",
 					(self.project_name, self.customer))
 			if not res:
@@ -138,9 +138,9 @@ class SalesOrder(SellingController):
 
 
 	def update_enquiry_status(self, prevdoc, flag):
-		enq = frappe.db.sql("select t2.prevdoc_docname from `tabQuotation` t1, `tabQuotation Item` t2 where t2.parent = t1.name and t1.name=%s", prevdoc)
+		enq = frappe.db.sql("select t2.prevdoc_docname from tabQuotation t1, tabQuotation_Item t2 where t2.parent = t1.name and t1.name=%s", prevdoc)
 		if enq:
-			frappe.db.sql("update `tabOpportunity` set status = %s where name=%s",(flag,enq[0][0]))
+			frappe.db.sql("update tabOpportunity set status = %s where name=%s",(flag,enq[0][0]))
 
 	def update_prevdoc_status(self, flag):
 		for quotation in list(set([d.prevdoc_docname for d in self.get(self.fname)])):
@@ -177,34 +177,34 @@ class SalesOrder(SellingController):
 
 	def check_nextdoc_docstatus(self):
 		# Checks Delivery Note
-		submit_dn = frappe.db.sql_list("""select t1.name from `tabDelivery Note` t1,`tabDelivery Note Item` t2
+		submit_dn = frappe.db.sql_list("""select t1.name from tabDelivery_Note t1,tabDelivery_Note_Item t2
 			where t1.name = t2.parent and t2.against_sales_order = %s and t1.docstatus = 1""", self.name)
 		if submit_dn:
 			frappe.throw(_("Delivery Notes {0} must be cancelled before cancelling this Sales Order").format(comma_and(submit_dn)))
 
 		# Checks Sales Invoice
 		submit_rv = frappe.db.sql_list("""select t1.name
-			from `tabSales Invoice` t1,`tabSales Invoice Item` t2
+			from tabSales_Invoice t1,tabSales_Invoice_Item t2
 			where t1.name = t2.parent and t2.sales_order = %s and t1.docstatus = 1""",
 			self.name)
 		if submit_rv:
 			frappe.throw(_("Sales Invoice {0} must be cancelled before cancelling this Sales Order").format(comma_and(submit_rv)))
 
 		#check maintenance schedule
-		submit_ms = frappe.db.sql_list("""select t1.name from `tabMaintenance Schedule` t1,
-			`tabMaintenance Schedule Item` t2
+		submit_ms = frappe.db.sql_list("""select t1.name from tabMaintenance_Schedule t1,
+			tabMaintenance_Schedule_Item t2
 			where t2.parent=t1.name and t2.prevdoc_docname = %s and t1.docstatus = 1""", self.name)
 		if submit_ms:
 			frappe.throw(_("Maintenance Schedule {0} must be cancelled before cancelling this Sales Order").format(comma_and(submit_ms)))
 
 		# check maintenance visit
-		submit_mv = frappe.db.sql_list("""select t1.name from `tabMaintenance Visit` t1, `tabMaintenance Visit Purpose` t2
+		submit_mv = frappe.db.sql_list("""select t1.name from tabMaintenance_Visit t1, tabMaintenance_Visit_Purpose t2
 			where t2.parent=t1.name and t2.prevdoc_docname = %s and t1.docstatus = 1""",self.name)
 		if submit_mv:
 			frappe.throw(_("Maintenance Visit {0} must be cancelled before cancelling this Sales Order").format(comma_and(submit_mv)))
 
 		# check production order
-		pro_order = frappe.db.sql_list("""select name from `tabProduction Order`
+		pro_order = frappe.db.sql_list("""select name from tabProduction_Order
 			where sales_order = %s and docstatus = 1""", self.name)
 		if pro_order:
 			frappe.throw(_("Production Order {0} must be cancelled before cancelling this Sales Order").format(comma_and(pro_order)))
@@ -460,7 +460,7 @@ def make_sales_invoice(source_name, target_doc=None):
 				t1.name as voucher_no, t1.posting_date, t1.remark, t2.account,
 				t2.name as voucher_detail_no, {amount_query} as payment_amount, t2.is_advance
 			from
-				`tabJournal Voucher` t1, `tabJournal Voucher Detail` t2
+				tabJournal_Voucher t1, tabJournal_Voucher_Detail t2
 			""")
 
 	return doclist
@@ -468,7 +468,7 @@ def make_sales_invoice(source_name, target_doc=None):
 @frappe.whitelist()
 def make_maintenance_schedule(source_name, target_doc=None):
 	maint_schedule = frappe.db.sql("""select t1.name
-		from `tabMaintenance Schedule` t1, `tabMaintenance Schedule Item` t2
+		from tabMaintenance_Schedule t1, tabMaintenance_Schedule_Item t2
 		where t2.parent=t1.name and t2.prevdoc_docname=%s and t1.docstatus=1""", source_name)
 
 	if not maint_schedule:
@@ -496,7 +496,7 @@ def make_maintenance_schedule(source_name, target_doc=None):
 @frappe.whitelist()
 def make_maintenance_visit(source_name, target_doc=None):
 	visit = frappe.db.sql("""select t1.name
-		from `tabMaintenance Visit` t1, `tabMaintenance Visit Purpose` t2
+		from tabMaintenance_Visit t1, tabMaintenance_Visit_Purpose t2
 		where t2.parent=t1.name and t2.prevdoc_docname=%s
 		and t1.docstatus=1 and t1.completion_status='Fully Completed'""", source_name)
 

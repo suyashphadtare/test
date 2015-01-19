@@ -41,7 +41,7 @@ class TestCustomer(unittest.TestCase):
 
 	def test_rename(self):
 		for name in ("_Test Customer 1", "_Test Customer 1 Renamed"):
-			frappe.db.sql("""delete from `tabComment` where comment_doctype=%s and comment_docname=%s""",
+			frappe.db.sql("""delete from tabComment where comment_doctype=%s and comment_docname=%s""",
 				("Customer", name))
 
 		comment = frappe.new_doc("Comment")

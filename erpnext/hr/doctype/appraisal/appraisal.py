@@ -30,7 +30,7 @@ class Appraisal(Document):
 			frappe.throw(_("End Date can not be less than Start Date"))
 
 	def validate_existing_appraisal(self):
-		chk = frappe.db.sql("""select name from `tabAppraisal` where employee=%s
+		chk = frappe.db.sql("""select name from tabAppraisal where employee=%s
 			and (status='Submitted' or status='Completed')
 			and ((start_date>=%s and start_date<=%s)
 			or (end_date>=%s and end_date<=%s))""",

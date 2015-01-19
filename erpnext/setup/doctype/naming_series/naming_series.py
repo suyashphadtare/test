@@ -15,8 +15,8 @@ class NamingSeries(Document):
 		return {
 			"transactions": "\n".join([''] + sorted(list(set(
 				frappe.db.sql_list("""select parent
-					from `tabDocField` where fieldname='naming_series'""")
-				+ frappe.db.sql_list("""select dt from `tabCustom Field`
+					from tabDocField where fieldname='naming_series'""")
+				+ frappe.db.sql_list("""select dt from tabCustom_Field
 					where fieldname='naming_series'""")
 				)))),
 			"prefixes": "\n".join([''] + [i[0] for i in
@@ -56,7 +56,7 @@ class NamingSeries(Document):
 		# update in property setter
 		prop_dict = {'options': "\n".join(options), 'default': default}
 		for prop in prop_dict:
-			ps_exists = frappe.db.sql("""SELECT name FROM `tabProperty Setter`
+			ps_exists = frappe.db.sql("""SELECT name FROM tabProperty_Setter
 					WHERE doc_type = %s AND field_name = 'naming_series'
 					AND property = %s""", (doctype, prop))
 			if ps_exists:
@@ -83,11 +83,11 @@ class NamingSeries(Document):
 	def check_duplicate(self):
 		parent = list(set(
 			frappe.db.sql_list("""select dt.name
-				from `tabDocField` df, `tabDocType` dt
+				from tabDocField df, tabDocType dt
 				where dt.name = df.parent and df.fieldname='naming_series' and dt.name != %s""",
 				self.select_doc_for_series)
 			+ frappe.db.sql_list("""select dt.name
-				from `tabCustom Field` df, `tabDocType` dt
+				from tabCustom_Field df, tabDocType dt
 				where dt.name = df.dt and df.fieldname='naming_series' and dt.name != %s""",
 				self.select_doc_for_series)
 			))
@@ -127,7 +127,7 @@ class NamingSeries(Document):
 		if self.prefix:
 			prefix = self.prefix.split('.')[0]
 			self.insert_series(prefix)
-			frappe.db.sql("update `tabSeries` set current = %s where name = %s",
+			frappe.db.sql("update tabSeries set current = %s where name = %s",
 				(self.current_value, prefix))
 			msgprint(_("Series Updated Successfully"))
 		else:

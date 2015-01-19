@@ -42,14 +42,14 @@ class Quotation(SellingController):
 
 		if self.order_type in ['Maintenance', 'Service']:
 			for d in self.get('quotation_details'):
-				is_service_item = frappe.db.sql("select is_service_item from `tabItem` where name=%s", d.item_code)
+				is_service_item = frappe.db.sql("select is_service_item from tabItem where name=%s", d.item_code)
 				is_service_item = is_service_item and is_service_item[0][0] or 'No'
 
 				if is_service_item == 'No':
 					frappe.throw(_("Item {0} must be Service Item").format(d.item_code))
 		else:
 			for d in self.get('quotation_details'):
-				is_sales_item = frappe.db.sql("select is_sales_item from `tabItem` where name=%s", d.item_code)
+				is_sales_item = frappe.db.sql("select is_sales_item from tabItem where name=%s", d.item_code)
 				is_sales_item = is_sales_item and is_sales_item[0][0] or 'No'
 
 				if is_sales_item == 'No':

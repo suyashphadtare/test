@@ -29,7 +29,7 @@ def get_filters_cond(doctype, filters, conditions):
 
  # searches for active employees
 def employee_query(doctype, txt, searchfield, start, page_len, filters):
-	return frappe.db.sql("""select name, employee_name from `tabEmployee`
+	return frappe.db.sql("""select name, employee_name from tabEmployee
 		where status = 'Active'
 			and docstatus < 2
 			and ({key} like %(txt)s
@@ -51,7 +51,7 @@ def employee_query(doctype, txt, searchfield, start, page_len, filters):
 
  # searches for leads which are not converted
 def lead_query(doctype, txt, searchfield, start, page_len, filters):
-	return frappe.db.sql("""select name, lead_name, company_name from `tabLead`
+	return frappe.db.sql("""select name, lead_name, company_name from tabLead
 		where docstatus < 2
 			and ifnull(status, '') != 'Converted'
 			and ({key} like %(txt)s
@@ -84,7 +84,7 @@ def customer_query(doctype, txt, searchfield, start, page_len, filters):
 
 	fields = ", ".join(fields)
 
-	return frappe.db.sql("""select {fields} from `tabCustomer`
+	return frappe.db.sql("""select {fields} from tabCustomer
 		where docstatus < 2
 			and ({key} like %(txt)s
 				or customer_name like %(txt)s)
@@ -113,7 +113,7 @@ def supplier_query(doctype, txt, searchfield, start, page_len, filters):
 		fields = ["name", "supplier_name", "supplier_type"]
 	fields = ", ".join(fields)
 
-	return frappe.db.sql("""select {field} from `tabSupplier`
+	return frappe.db.sql("""select {field} from tabSupplier
 		where docstatus < 2
 			and ({key} like %(txt)s
 				or supplier_name like %(txt)s)
@@ -201,26 +201,26 @@ def bom(doctype, txt, searchfield, start, page_len, filters):
 def get_project_name(doctype, txt, searchfield, start, page_len, filters):
 	cond = ''
 	if filters.get('customer'):
-		cond = '(`tabProject`.customer = "' + filters['customer'] + '" or ifnull(`tabProject`.customer,"")="") and'
+		cond = '(tabProject.customer = "' + filters['customer'] + '" or ifnull(tabProject.customer,"")="") and'
 
-	return frappe.db.sql("""select `tabProject`.name from `tabProject`
-		where `tabProject`.status not in ("Completed", "Cancelled")
-			and %(cond)s `tabProject`.name like "%(txt)s" %(mcond)s
-		order by `tabProject`.name asc
+	return frappe.db.sql("""select tabProject.name from tabProject
+		where tabProject.status not in ("Completed", "Cancelled")
+			and %(cond)s tabProject.name like "%(txt)s" %(mcond)s
+		order by tabProject.name asc
 		limit %(start)s, %(page_len)s """ % {'cond': cond,'txt': "%%%s%%" % txt,
 		'mcond':get_match_cond(doctype),'start': start, 'page_len': page_len})
 
 def get_delivery_notes_to_be_billed(doctype, txt, searchfield, start, page_len, filters):
-	return frappe.db.sql("""select `tabDelivery Note`.name, `tabDelivery Note`.customer_name
-		from `tabDelivery Note`
-		where `tabDelivery Note`.`%(key)s` like %(txt)s and
-			`tabDelivery Note`.docstatus = 1 %(fcond)s and
-			(ifnull((select sum(qty) from `tabDelivery Note Item` where
-					`tabDelivery Note Item`.parent=`tabDelivery Note`.name), 0) >
-				ifnull((select sum(qty) from `tabSales Invoice Item` where
-					`tabSales Invoice Item`.docstatus = 1 and
-					`tabSales Invoice Item`.delivery_note=`tabDelivery Note`.name), 0))
-			%(mcond)s order by `tabDelivery Note`.`%(key)s` asc
+	return frappe.db.sql("""select tabDelivery_Note.name, tabDelivery_Note.customer_name
+		from tabDelivery_Note
+		where tabDelivery_Note.`%(key)s` like %(txt)s and
+			tabDelivery_Note.docstatus = 1 %(fcond)s and
+			(ifnull((select sum(qty) from tabDelivery_Note_Item where
+					tabDelivery_Note_Item.parent=tabDelivery_Note.name), 0) >
+				ifnull((select sum(qty) from tabSales_Invoice_Item where
+					tabSales_Invoice_Item.docstatus = 1 and
+					tabSales_Invoice_Item.delivery_note=tabDelivery_Note.name), 0))
+			%(mcond)s order by tabDelivery_Note.`%(key)s` asc
 			limit %(start)s, %(page_len)s""" % {
 				"key": searchfield,
 				"fcond": get_filters_cond(doctype, filters, []),
@@ -232,11 +232,11 @@ def get_batch_no(doctype, txt, searchfield, start, page_len, filters):
 	from erpnext.controllers.queries import get_match_cond
 
 	if filters.has_key('warehouse'):
-		return frappe.db.sql("""select batch_no from `tabStock Ledger Entry` sle
+		return frappe.db.sql("""select batch_no from tabStock_Ledger_Entry sle
 				where item_code = '%(item_code)s'
 					and warehouse = '%(warehouse)s'
 					and batch_no like '%(txt)s'
-					and exists(select * from `tabBatch`
+					and exists(select * from tabBatch
 							where name = sle.batch_no
 								and (ifnull(expiry_date, '')='' or expiry_date >= '%(posting_date)s')
 								and docstatus != 2)

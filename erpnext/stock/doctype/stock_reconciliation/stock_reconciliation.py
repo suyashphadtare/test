@@ -182,11 +182,11 @@ class StockReconciliation(StockController):
 			and repost future Stock Ledger Entries"""
 
 		existing_entries = frappe.db.sql("""select distinct item_code, warehouse
-			from `tabStock Ledger Entry` where voucher_type=%s and voucher_no=%s""",
+			from tabStock_Ledger_Entry where voucher_type=%s and voucher_no=%s""",
 			(self.doctype, self.name), as_dict=1)
 
 		# delete entries
-		frappe.db.sql("""delete from `tabStock Ledger Entry`
+		frappe.db.sql("""delete from tabStock_Ledger_Entry
 			where voucher_type=%s and voucher_no=%s""", (self.doctype, self.name))
 
 		# repost future entries for selected item_code, warehouse
@@ -211,7 +211,7 @@ class StockReconciliation(StockController):
 
 		if not self.expense_account:
 			msgprint(_("Please enter Expense Account"), raise_exception=1)
-		elif not frappe.db.sql("""select name from `tabStock Ledger Entry` limit 1"""):
+		elif not frappe.db.sql("""select name from tabStock_Ledger_Entry limit 1"""):
 			if frappe.db.get_value("Account", self.expense_account, "report_type") == "Profit and Loss":
 				frappe.throw(_("Difference Account must be a 'Liability' type account, since this Stock Reconciliation is an Opening Entry"))
 

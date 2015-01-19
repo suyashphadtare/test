@@ -25,8 +25,8 @@ def get_so_price_list(args, item_doc, out): #Rohit_sw
 				if '-' in range_list[s]:
 					val=range_list[s].split('-')
 					if cint(out.qty) in range(cint(val[0]),cint(val[1])+1):
-						p_rate=frappe.db.sql("""select a.rate from `tabPrice List Quantity` as a
-							,`tabItem Price` as b where a.parent=b.name 
+						p_rate=frappe.db.sql("""select a.rate from tabPrice_List_Quantity as a
+							,tabItem_Price as b where a.parent=b.name 
 							and b.price_list='%s' and b.item_code='%s' 
 							and a.customer_code ='%s' and quantity='%s' and a.range_qty='%s'"""
 							%(args.price_list,args.item_code,args.customer,out.qty,range_list[s]),as_list=1)
@@ -35,8 +35,8 @@ def get_so_price_list(args, item_doc, out): #Rohit_sw
 				else:
 					value=range_list[s].split('>')
 					if cint(out.qty) >= cint(value[1]):
-						p_rate=frappe.db.sql("""select a.rate from `tabPrice List Quantity` as a
-							,`tabItem Price` as b where a.parent=b.name and b.price_list='%s' 
+						p_rate=frappe.db.sql("""select a.rate from tabPrice_List_Quantity as a
+							,tabItem_Price as b where a.parent=b.name and b.price_list='%s' 
 							and b.item_code='%s' and a.customer_code ='%s' and a.range_qty='%s'"""
 							%(args.price_list,args.item_code,args.customer,range_list[s]),as_list=1)
 						if p_rate:

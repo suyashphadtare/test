@@ -61,7 +61,7 @@ class MultipleQty(Document):
 		label1_dict={}
 		labels=''
 		i=0
-		args=frappe.db.sql("select field,value from `tabSingles` where doctype='Range Master' and field in('qty1','qty2','qty3','qty4','qty5')",as_list=1)
+		args=frappe.db.sql("select field,value from tabSingles where doctype='Range Master' and field in('qty1','qty2','qty3','qty4','qty5')",as_list=1)
 		for s in range(0,len(args)):
 			if args[s][1]:
 				label_dict.setdefault(args[s][0],args[s][1])
@@ -110,11 +110,11 @@ class MultipleQty(Document):
 				self.create_price_list(multiple_qty[qty],rate[qty],data.item_code)
 
 	def create_price_list(self,qty,rate,item_code):
-		check=frappe.db.sql("""select b.name from `tabItem Price` as a,`tabSingular Price List` as b 
+		check=frappe.db.sql("""select b.name from tabItem_Price as a,tabSingular_Price_List as b 
 			where b.parent=a.name and a.price_list='%s' and a.item_code='%s' 
 			and b.customer_code='%s' and b.quantity='%s'"""%(self.selling_price_list,item_code,self.customer,qty),as_list=1)
 		if check:
-			frappe.db.sql("update `tabSingular Price List` set rate='%s',parentfield='singular_price_list',parenttype='Item Price' where quantity='%s' and name='%s'"%(rate,qty,check[0][0]))
+			frappe.db.sql("update tabSingular_Price_List set rate='%s',parentfield='singular_price_list',parenttype='Item Price' where quantity='%s' and name='%s'"%(rate,qty,check[0][0]))
 		else:
 			parent=frappe.db.get_value('Item Price',{'item_code':item_code,'price_list':self.selling_price_list},'name')
 			if not parent:

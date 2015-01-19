@@ -90,7 +90,7 @@ def validate_balance_type(account, adv_adj=False):
 		balance_must_be = frappe.db.get_value("Account", account, "balance_must_be")
 		if balance_must_be:
 			balance = frappe.db.sql("""select sum(ifnull(debit, 0)) - sum(ifnull(credit, 0))
-				from `tabGL Entry` where account = %s""", account)[0][0]
+				from tabGL_Entry where account = %s""", account)[0][0]
 
 			if (balance_must_be=="Debit" and flt(balance) < 0) or \
 				(balance_must_be=="Credit" and flt(balance) > 0):
@@ -112,7 +112,7 @@ def check_freezing_date(posting_date, adv_adj=False):
 def update_outstanding_amt(account, against_voucher_type, against_voucher, on_cancel=False):
 	# get final outstanding amt
 	bal = flt(frappe.db.sql("""select sum(ifnull(debit, 0)) - sum(ifnull(credit, 0))
-		from `tabGL Entry`
+		from tabGL_Entry
 		where against_voucher_type=%s and against_voucher=%s and account = %s""",
 		(against_voucher_type, against_voucher, account))[0][0] or 0.0)
 
@@ -121,7 +121,7 @@ def update_outstanding_amt(account, against_voucher_type, against_voucher, on_ca
 	elif against_voucher_type == "Journal Voucher":
 		against_voucher_amount = flt(frappe.db.sql("""
 			select sum(ifnull(debit, 0)) - sum(ifnull(credit, 0))
-			from `tabGL Entry` where voucher_type = 'Journal Voucher' and voucher_no = %s
+			from tabGL_Entry where voucher_type = 'Journal Voucher' and voucher_no = %s
 			and account = %s and ifnull(against_voucher, '') = ''""",
 			(against_voucher, account))[0][0])
 		if not against_voucher_amount:

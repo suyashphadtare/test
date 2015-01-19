@@ -29,7 +29,7 @@ class PaymentReconciliation(Document):
 				t1.name as voucher_no, t1.posting_date, t1.remark, t2.account,
 				t2.name as voucher_detail_no, {dr_or_cr} as payment_amount, t2.is_advance
 			from
-				`tabJournal Voucher` t1, `tabJournal Voucher Detail` t2
+				tabJournal_Voucher t1, tabJournal_Voucher_Detail t2
 			where
 				t1.name = t2.parent and t1.docstatus = 1 and t2.docstatus = 1
 				and t2.account = %(party_account)s and {dr_or_cr} > 0
@@ -73,7 +73,7 @@ class PaymentReconciliation(Document):
 				voucher_no, voucher_type, posting_date,
 				ifnull(sum({dr_or_cr}), 0) as invoice_amount
 			from
-				`tabGL Entry`
+				tabGL_Entry
 			where
 				account = %s and {dr_or_cr} > 0 {cond}
 			group by voucher_type, voucher_no
@@ -87,7 +87,7 @@ class PaymentReconciliation(Document):
 				select
 					ifnull(sum(ifnull({0}, 0)), 0)
 				from
-					`tabGL Entry`
+					tabGL_Entry
 				where
 					account = %s and {0} > 0
 					and against_voucher_type = %s and ifnull(against_voucher, '') = %s

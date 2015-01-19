@@ -25,7 +25,7 @@ class RawMaterialCostSheet(Document):
 		return "done"
 
 	def update_new_rfq(self,idx):
-		rfq_name=frappe.db.sql("select name from `tabMaterial RFQ` where docstatus=0 order by creation desc limit 1",as_list=1)
+		rfq_name=frappe.db.sql("select name from tabMaterial_RFQ where docstatus=0 order by creation desc limit 1",as_list=1)
 		if rfq_name:
 			for item in self.get('raw_material_costing_details'):
 				if item.idx==idx:

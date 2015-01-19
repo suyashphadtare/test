@@ -100,7 +100,7 @@ class JournalVoucher(AccountsController):
 				if d.against_jv == self.name:
 					frappe.throw(_("You can not enter current voucher in 'Against Journal Voucher' column"))
 
-				against_entries = frappe.db.sql("""select * from `tabJournal Voucher Detail`
+				against_entries = frappe.db.sql("""select * from tabJournal_Voucher_Detail
 					where account = %s and docstatus = 1 and parent = %s
 					and ifnull(against_jv, '') = '' and ifnull(against_invoice, '') = ''
 					and ifnull(against_voucher, '') = ''""", (d.account, d.against_jv), as_dict=True)
@@ -251,7 +251,7 @@ class JournalVoucher(AccountsController):
 
 			if d.against_voucher and d.debit:
 				bill_no = frappe.db.sql("""select bill_no, bill_date, currency
-					from `tabPurchase Invoice` where name=%s""", d.against_voucher)
+					from tabPurchase_Invoice where name=%s""", d.against_voucher)
 				if bill_no and bill_no[0][0] and bill_no[0][0].lower().strip() \
 						not in ['na', 'not applicable', 'none']:
 					r.append(_('{0} {1} against Bill {2} dated {3}').format(bill_no[0][2],
@@ -444,11 +444,11 @@ class JournalVoucher(AccountsController):
 
 		if self.write_off_based_on == 'Accounts Receivable':
 			return frappe.db.sql("""select name, debit_to as account, outstanding_amount
-				from `tabSales Invoice` where docstatus = 1 and company = %s
+				from tabSales_Invoice where docstatus = 1 and company = %s
 				and outstanding_amount > 0 %s""" % ('%s', cond), self.company, as_dict=True)
 		elif self.write_off_based_on == 'Accounts Payable':
 			return frappe.db.sql("""select name, credit_to as account, outstanding_amount
-				from `tabPurchase Invoice` where docstatus = 1 and company = %s
+				from tabPurchase_Invoice where docstatus = 1 and company = %s
 				and outstanding_amount > 0 %s""" % ('%s', cond), self.company, as_dict=True)
 
 @frappe.whitelist()
@@ -527,21 +527,21 @@ def get_opening_accounts(company):
 
 def get_against_purchase_invoice(doctype, txt, searchfield, start, page_len, filters):
 	return frappe.db.sql("""select name, credit_to, outstanding_amount, bill_no, bill_date
-		from `tabPurchase Invoice` where credit_to = %s and docstatus = 1
+		from tabPurchase_Invoice where credit_to = %s and docstatus = 1
 		and outstanding_amount > 0 and %s like %s order by name desc limit %s, %s""" %
 		("%s", searchfield, "%s", "%s", "%s"),
 		(filters["account"], "%%%s%%" % txt, start, page_len))
 
 def get_against_sales_invoice(doctype, txt, searchfield, start, page_len, filters):
 	return frappe.db.sql("""select name, debit_to, outstanding_amount
-		from `tabSales Invoice` where debit_to = %s and docstatus = 1
+		from tabSales_Invoice where debit_to = %s and docstatus = 1
 		and outstanding_amount > 0 and `%s` like %s order by name desc limit %s, %s""" %
 		("%s", searchfield, "%s", "%s", "%s"),
 		(filters["account"], "%%%s%%" % txt, start, page_len))
 
 def get_against_jv(doctype, txt, searchfield, start, page_len, filters):
 	return frappe.db.sql("""select distinct jv.name, jv.posting_date, jv.user_remark
-		from `tabJournal Voucher` jv, `tabJournal Voucher Detail` jvd
+		from tabJournal_Voucher jv, tabJournal_Voucher_Detail jvd
 		where jvd.parent = jv.name and jvd.account = %s and jv.docstatus = 1
 		and (ifnull(jvd.against_invoice, '') = '' and ifnull(jvd.against_voucher, '') = '' and ifnull(jvd.against_jv, '') = '' )
 		and jv.%s like %s order by jv.name desc limit %s, %s""" %
@@ -554,7 +554,7 @@ def get_outstanding(args):
 	if args.get("doctype") == "Journal Voucher" and args.get("account"):
 		against_jv_amount = frappe.db.sql("""
 			select sum(ifnull(debit, 0)) - sum(ifnull(credit, 0))
-			from `tabJournal Voucher Detail` where parent=%s and account=%s
+			from tabJournal_Voucher_Detail where parent=%s and account=%s
 			and ifnull(against_invoice, '')='' and ifnull(against_voucher, '')=''
 			and ifnull(against_jv, '')=''""", (args['docname'], args['account']))
 

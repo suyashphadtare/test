@@ -17,23 +17,23 @@ def execute(filters=None):
 	if not employees:
 		frappe.throw(_("No employee found!"))
 
-	leave_types = frappe.db.sql_list("select name from `tabLeave Type`")
+	leave_types = frappe.db.sql_list("select name from tabLeave_Type")
 
 	if filters.get("fiscal_year"):
 		fiscal_years = [filters["fiscal_year"]]
 	else:
-		fiscal_years = frappe.db.sql_list("select name from `tabFiscal Year` order by name desc")
+		fiscal_years = frappe.db.sql_list("select name from tabFiscal_Year order by name desc")
 
 	employee_names = [d.name for d in employees]
 
 	allocations = frappe.db.sql("""select employee, fiscal_year, leave_type, total_leaves_allocated
-	 	from `tabLeave Allocation`
+	 	from tabLeave_Allocation
 		where docstatus=1 and employee in (%s)""" %
 		','.join(['%s']*len(employee_names)), employee_names, as_dict=True)
 
 	applications = frappe.db.sql("""select employee, fiscal_year, leave_type,
 			SUM(total_leave_days) as leaves
-		from `tabLeave Application`
+		from tabLeave_Application
 		where status="Approved" and docstatus = 1 and employee in (%s)
 		group by employee, fiscal_year, leave_type""" %
 			','.join(['%s']*len(employee_names)), employee_names, as_dict=True)

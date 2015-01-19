@@ -111,7 +111,7 @@ class AccountsReceivableReport(object):
 		if not hasattr(self, "account_map"):
 			self.account_map = dict(((r.name, r) for r in frappe.db.sql("""select 
 				acc.name, cust.name as customer, cust.customer_name, cust.territory
-				from `tabAccount` acc left join `tabCustomer` cust 
+				from tabAccount acc left join tabCustomer cust 
 				on cust.name=acc.master_name where acc.master_type="Customer" """, as_dict=True)))
 				
 		return self.account_map
@@ -120,7 +120,7 @@ class AccountsReceivableReport(object):
 		if not hasattr(self, "invoice_due_date_map"):
 			# TODO can be restricted to posting date
 			self.invoice_due_date_map = dict(frappe.db.sql("""select name, due_date
-				from `tabSales Invoice` where docstatus=1"""))
+				from tabSales_Invoice where docstatus=1"""))
 				
 		return gle.voucher_type == "Sales Invoice" \
 			and self.invoice_due_date_map.get(gle.voucher_no) or ""
@@ -128,7 +128,7 @@ class AccountsReceivableReport(object):
 	def get_gl_entries(self):
 		if not hasattr(self, "gl_entries"):
 			conditions, values = self.prepare_conditions()
-			self.gl_entries = frappe.db.sql("""select * from `tabGL Entry`
+			self.gl_entries = frappe.db.sql("""select * from tabGL_Entry
 				where docstatus < 2 {0} order by posting_date, account""".format(conditions),
 				values, as_dict=True)
 		return self.gl_entries

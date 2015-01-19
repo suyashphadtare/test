@@ -16,19 +16,19 @@ def execute():
 		accounts = [d[0] for d in warehouse_account]
 
 		stock_vouchers = frappe.db.sql("""select distinct sle.voucher_type, sle.voucher_no
-			from `tabStock Ledger Entry` sle
+			from tabStock_Ledger_Entry sle
 			where sle.warehouse in (%s)
 			order by sle.posting_date""" %
 			', '.join(['%s']*len(warehouses)), tuple(warehouses))
 
 		rejected = []
 		for voucher_type, voucher_no in stock_vouchers:
-			stock_bal = frappe.db.sql("""select sum(stock_value_difference) from `tabStock Ledger Entry`
+			stock_bal = frappe.db.sql("""select sum(stock_value_difference) from tabStock_Ledger_Entry
 				where voucher_type=%s and voucher_no =%s and warehouse in (%s)""" %
 				('%s', '%s', ', '.join(['%s']*len(warehouses))), tuple([voucher_type, voucher_no] + warehouses))
 
 			account_bal = frappe.db.sql("""select ifnull(sum(ifnull(debit, 0) - ifnull(credit, 0)), 0)
-				from `tabGL Entry`
+				from tabGL_Entry
 				where voucher_type=%s and voucher_no =%s and account in (%s)
 				group by voucher_type, voucher_no""" %
 				('%s', '%s', ', '.join(['%s']*len(accounts))), tuple([voucher_type, voucher_no] + accounts))
@@ -37,7 +37,7 @@ def execute():
 				try:
 					print voucher_type, voucher_no, stock_bal[0][0], account_bal[0][0]
 
-					frappe.db.sql("""delete from `tabGL Entry`
+					frappe.db.sql("""delete from tabGL_Entry
 						where voucher_type=%s and voucher_no=%s""", (voucher_type, voucher_no))
 
 					voucher = frappe.get_doc(voucher_type, voucher_no)

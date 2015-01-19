@@ -25,10 +25,10 @@ class HRSettings(Document):
 
 		# reset birthday reminders
 		if cint(self.stop_birthday_reminders) != original_stop_birthday_reminders:
-			frappe.db.sql("""delete from `tabEvent` where repeat_on='Every Year' and ref_type='Employee'""")
+			frappe.db.sql("""delete from tabEvent where repeat_on='Every Year' and ref_type='Employee'""")
 		
 			if not self.stop_birthday_reminders:
-				for employee in frappe.db.sql_list("""select name from `tabEmployee` where status='Active' and 
+				for employee in frappe.db.sql_list("""select name from tabEmployee where status='Active' and 
 					ifnull(date_of_birth, '')!=''"""):
 					frappe.get_doc("Employee", employee).update_dob_event()
 					

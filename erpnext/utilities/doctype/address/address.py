@@ -32,7 +32,7 @@ class Address(Document):
 		elif self.is_shipping_address != 1:
 			for fieldname in ["customer", "supplier", "sales_partner", "lead"]:
 				if self.get(fieldname):
-					if not frappe.db.sql("""select name from `tabAddress` where is_primary_address=1
+					if not frappe.db.sql("""select name from tabAddress where is_primary_address=1
 						and `%s`=%s and name!=%s""" % (fieldname, "%s", "%s"),
 						(self.get(fieldname), self.name)):
 							self.is_primary_address = 1
@@ -46,7 +46,7 @@ class Address(Document):
 	def _unset_other(self, is_address_type):
 		for fieldname in ["customer", "supplier", "sales_partner", "lead"]:
 			if self.get(fieldname):
-				frappe.db.sql("""update `tabAddress` set `%s`=0 where `%s`=%s and name!=%s""" %
+				frappe.db.sql("""update tabAddress set `%s`=0 where `%s`=%s and name!=%s""" %
 					(is_address_type, fieldname, "%s", "%s"), (self.get(fieldname), self.name))
 				break
 

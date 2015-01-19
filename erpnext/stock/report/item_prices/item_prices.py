@@ -58,7 +58,7 @@ def get_price_list():
 
 	price_list = frappe.db.sql("""select ip.item_code, ip.buying, ip.selling,
 		concat(ip.price_list, " - ", ip.currency, " ", ip.price_list_rate) as price
-		from `tabItem Price` ip, `tabPrice List` pl
+		from tabItem_Price ip, tabPrice_List pl
 		where ip.price_list=pl.name and pl.enabled=1""", as_dict=1)
 
 	for j in price_list:
@@ -88,7 +88,7 @@ def get_last_purchase_rate():
 							po_item.base_price_list_rate,
 							po_item.discount_percentage,
 							po_item.base_rate
-						from `tabPurchase Order` po, `tabPurchase Order Item` po_item
+						from tabPurchase_Order po, tabPurchase_Order_Item po_item
 						where po.name = po_item.parent and po.docstatus = 1)
 						union
 						(select
@@ -98,7 +98,7 @@ def get_last_purchase_rate():
 							pr_item.base_price_list_rate,
 							pr_item.discount_percentage,
 							pr_item.base_rate
-						from `tabPurchase Receipt` pr, `tabPurchase Receipt Item` pr_item
+						from tabPurchase_Receipt pr, tabPurchase_Receipt_Item pr_item
 						where pr.name = pr_item.parent and pr.docstatus = 1)
 				) result
 				order by result.item_code asc, result.posting_date desc) result_wrapper
@@ -115,7 +115,7 @@ def get_item_bom_rate():
 	item_bom_map = {}
 
 	for b in frappe.db.sql("""select item, (total_variable_cost/quantity) as bom_rate
-		from `tabBOM` where is_active=1 and is_default=1""", as_dict=1):
+		from tabBOM where is_active=1 and is_default=1""", as_dict=1):
 			item_bom_map.setdefault(b.item, flt(b.bom_rate))
 
 	return item_bom_map

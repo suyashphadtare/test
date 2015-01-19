@@ -6,7 +6,7 @@ import frappe
 import frappe.permissions
 
 def execute():
-	for warehouse, user in frappe.db.sql("""select parent, user from `tabWarehouse User`"""):
+	for warehouse, user in frappe.db.sql("""select parent, user from tabWarehouse_User"""):
 		frappe.permissions.add_user_permission("Warehouse", warehouse, user)
 
 	frappe.delete_doc_if_exists("DocType", "Warehouse User")

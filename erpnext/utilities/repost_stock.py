@@ -21,7 +21,7 @@ def repost(only_actual=False, allow_negative_stock=False, allow_zero_rate=False)
 	for d in frappe.db.sql("""select distinct item_code, warehouse from
 		(select item_code, warehouse from tabBin
 		union
-		select item_code, warehouse from `tabStock Ledger Entry`) a"""):
+		select item_code, warehouse from tabStock_Ledger_Entry) a"""):
 			try:
 				repost_stock(d[0], d[1], allow_zero_rate, only_actual)
 				frappe.db.commit()
@@ -59,30 +59,30 @@ def get_reserved_qty(item_code, warehouse):
 				(select
 					qty as dnpi_qty,
 					(
-						select qty from `tabSales Order Item`
+						select qty from tabSales_Order_Item
 						where name = dnpi.parent_detail_docname
 					) as so_item_qty,
 					(
-						select ifnull(delivered_qty, 0) from `tabSales Order Item`
+						select ifnull(delivered_qty, 0) from tabSales_Order_Item
 						where name = dnpi.parent_detail_docname
 					) as so_item_delivered_qty,
 					parent, name
 				from
 				(
 					select qty, parent_detail_docname, parent, name
-					from `tabPacked Item` dnpi_in
+					from tabPacked_Item dnpi_in
 					where item_code = %s and warehouse = %s
 					and parenttype="Sales Order"
 					and item_code != parent_item
-					and exists (select * from `tabSales Order` so
+					and exists (select * from tabSales_Order so
 					where name = dnpi_in.parent and docstatus = 1 and status != 'Stopped')
 				) dnpi)
 			union
 				(select qty as dnpi_qty, qty as so_item_qty,
 					ifnull(delivered_qty, 0) as so_item_delivered_qty, parent, name
-				from `tabSales Order Item` so_item
+				from tabSales_Order_Item so_item
 				where item_code = %s and warehouse = %s
-				and exists(select * from `tabSales Order` so
+				and exists(select * from tabSales_Order so
 					where so.name = so_item.parent and so.docstatus = 1
 					and so.status != 'Stopped'))
 			) tab
@@ -94,7 +94,7 @@ def get_reserved_qty(item_code, warehouse):
 
 def get_indented_qty(item_code, warehouse):
 	indented_qty = frappe.db.sql("""select sum(pr_item.qty - ifnull(pr_item.ordered_qty, 0))
-		from `tabMaterial Request Item` pr_item, `tabMaterial Request` pr
+		from tabMaterial_Request_Item pr_item, tabMaterial_Request pr
 		where pr_item.item_code=%s and pr_item.warehouse=%s
 		and pr_item.qty > ifnull(pr_item.ordered_qty, 0) and pr_item.parent=pr.name
 		and pr.status!='Stopped' and pr.docstatus=1""", (item_code, warehouse))
@@ -104,7 +104,7 @@ def get_indented_qty(item_code, warehouse):
 def get_ordered_qty(item_code, warehouse):
 	ordered_qty = frappe.db.sql("""
 		select sum((po_item.qty - ifnull(po_item.received_qty, 0))*po_item.conversion_factor)
-		from `tabPurchase Order Item` po_item, `tabPurchase Order` po
+		from tabPurchase_Order_Item po_item, tabPurchase_Order po
 		where po_item.item_code=%s and po_item.warehouse=%s
 		and po_item.qty > ifnull(po_item.received_qty, 0) and po_item.parent=po.name
 		and po.status!='Stopped' and po.docstatus=1""", (item_code, warehouse))
@@ -113,7 +113,7 @@ def get_ordered_qty(item_code, warehouse):
 
 def get_planned_qty(item_code, warehouse):
 	planned_qty = frappe.db.sql("""
-		select sum(ifnull(qty, 0) - ifnull(produced_qty, 0)) from `tabProduction Order`
+		select sum(ifnull(qty, 0) - ifnull(produced_qty, 0)) from tabProduction_Order
 		where production_item = %s and fg_warehouse = %s and status != "Stopped"
 		and docstatus=1 and ifnull(qty, 0) > ifnull(produced_qty, 0)""", (item_code, warehouse))
 
@@ -144,17 +144,17 @@ def set_stock_balance_as_per_serial_no(item_code=None, posting_date=None, postin
 	condition = " and item.name='%s'" % item_code.replace("'", "\'") if item_code else ""
 
 	bin = frappe.db.sql("""select bin.item_code, bin.warehouse, bin.actual_qty, item.stock_uom
-		from `tabBin` bin, tabItem item
+		from tabBin bin, tabItem item
 		where bin.item_code = item.name and item.has_serial_no = 'Yes' %s""" % condition)
 
 	for d in bin:
-		serial_nos = frappe.db.sql("""select count(name) from `tabSerial No`
+		serial_nos = frappe.db.sql("""select count(name) from tabSerial_No
 			where item_code=%s and warehouse=%s and status = 'Available' and docstatus < 2""", (d[0], d[1]))
 
 		if serial_nos and flt(serial_nos[0][0]) != flt(d[2]):
 			print d[0], d[1], d[2], serial_nos[0][0]
 
-		sle = frappe.db.sql("""select valuation_rate, company from `tabStock Ledger Entry`
+		sle = frappe.db.sql("""select valuation_rate, company from tabStock_Ledger_Entry
 			where item_code = %s and warehouse = %s and ifnull(is_cancelled, 'No') = 'No'
 			order by posting_date desc limit 1""", (d[0], d[1]))
 
@@ -197,7 +197,7 @@ def set_stock_balance_as_per_serial_no(item_code=None, posting_date=None, postin
 
 def reset_serial_no_status_and_warehouse(serial_nos=None):
 	if not serial_nos:
-		serial_nos = frappe.db.sql_list("""select name from `tabSerial No` where status != 'Not in Use'
+		serial_nos = frappe.db.sql_list("""select name from tabSerial_No where status != 'Not in Use'
 			and docstatus = 0""")
 		for serial_no in serial_nos:
 			try:
@@ -211,14 +211,14 @@ def reset_serial_no_status_and_warehouse(serial_nos=None):
 			except:
 				pass
 
-		frappe.db.sql("""update `tabSerial No` set warehouse='' where status in ('Delivered', 'Purchase Returned')""")
+		frappe.db.sql("""update tabSerial_No set warehouse='' where status in ('Delivered', 'Purchase Returned')""")
 
 def repost_all_stock_vouchers():
 	warehouses_with_account = frappe.db.sql_list("""select master_name from tabAccount
 		where ifnull(account_type, '') = 'Warehouse'""")
 
 	vouchers = frappe.db.sql("""select distinct voucher_type, voucher_no
-		from `tabStock Ledger Entry` sle
+		from tabStock_Ledger_Entry sle
 		where voucher_type != "Serial No" and sle.warehouse in (%s)
 		order by posting_date, posting_time, name""" %
 		', '.join(['%s']*len(warehouses_with_account)), tuple(warehouses_with_account))

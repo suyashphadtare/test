@@ -48,14 +48,14 @@ class TestLeaveApplication(unittest.TestCase):
 		frappe.set_user("Administrator")
 
 		# so that this test doesn't affect other tests
-		frappe.db.sql("""delete from `tabEmployee Leave Approver`""")
+		frappe.db.sql("""delete from tabEmployee_Leave_Approver""")
 
 	def _clear_roles(self):
-		frappe.db.sql("""delete from `tabUserRole` where parent in
+		frappe.db.sql("""delete from tabUserRole where parent in
 			("test@example.com", "test1@example.com", "test2@example.com")""")
 
 	def _clear_applications(self):
-		frappe.db.sql("""delete from `tabLeave Application`""")
+		frappe.db.sql("""delete from tabLeave_Application""")
 
 	def _add_employee_leave_approver(self, employee, leave_approver):
 		temp_session_user = frappe.session.user
@@ -105,7 +105,7 @@ class TestLeaveApplication(unittest.TestCase):
 		frappe.set_user("test1@example.com")
 
 		# clear other applications
-		frappe.db.sql("delete from `tabLeave Application`")
+		frappe.db.sql("delete from tabLeave_Application")
 
 		application = self.get_application(_test_records[0])
 		self.assertTrue(application.insert())
@@ -201,7 +201,7 @@ class TestLeaveApplication(unittest.TestCase):
 		application.leave_approver = "test1@example.com"
 		self.assertRaises(InvalidLeaveApproverError, application.insert)
 
-		frappe.db.sql("""delete from `tabEmployee Leave Approver` where parent=%s""",
+		frappe.db.sql("""delete from tabEmployee_Leave_Approver where parent=%s""",
 			"_T-Employee-0001")
 
 	def _test_leave_approval_invalid_leave_approver_submit(self):
@@ -220,7 +220,7 @@ class TestLeaveApplication(unittest.TestCase):
 		from erpnext.hr.doctype.leave_application.leave_application import LeaveApproverIdentityError
 		self.assertRaises(LeaveApproverIdentityError, application.submit)
 
-		frappe.db.sql("""delete from `tabEmployee Leave Approver` where parent=%s""",
+		frappe.db.sql("""delete from tabEmployee_Leave_Approver where parent=%s""",
 			"_T-Employee-0001")
 
 	def _test_leave_approval_valid_leave_approver_insert(self):
@@ -242,7 +242,7 @@ class TestLeaveApplication(unittest.TestCase):
 		self.assertEqual(frappe.db.get_value("Leave Application", application.name,
 			"docstatus"), 1)
 
-		frappe.db.sql("""delete from `tabEmployee Leave Approver` where parent=%s""",
+		frappe.db.sql("""delete from tabEmployee_Leave_Approver where parent=%s""",
 			"_T-Employee-0001")
 
 		frappe.db.set_value("Employee", "_T-Employee-0001", "department", original_department)

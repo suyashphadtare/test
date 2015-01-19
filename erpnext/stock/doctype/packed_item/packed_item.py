@@ -15,15 +15,15 @@ class PackedItem(Document):
 
 def get_sales_bom_items(item_code):
 	return frappe.db.sql("""select t1.item_code, t1.qty, t1.uom
-		from `tabSales BOM Item` t1, `tabSales BOM` t2
+		from tabSales_BOM_Item t1, tabSales_BOM t2
 		where t2.new_item_code=%s and t1.parent = t2.name""", item_code, as_dict=1)
 
 def get_packing_item_details(item):
-	return frappe.db.sql("""select item_name, description, stock_uom from `tabItem`
+	return frappe.db.sql("""select item_name, description, stock_uom from tabItem
 		where name = %s""", item, as_dict = 1)[0]
 
 def get_bin_qty(item, warehouse):
-	det = frappe.db.sql("""select actual_qty, projected_qty from `tabBin`
+	det = frappe.db.sql("""select actual_qty, projected_qty from tabBin
 		where item_code = %s and warehouse = %s""", (item, warehouse), as_dict = 1)
 	return det and det[0] or ''
 

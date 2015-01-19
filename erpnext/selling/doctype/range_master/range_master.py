@@ -58,18 +58,18 @@ class RangeMaster(Document):
 		i=0
 		for d in self.get('range'):
 			if not d.to_quantity:
-				frappe.db.sql("update `tabDocField` set label='%s' where parent='Multiple Quantity Item' and fieldname='%s'"%('Qty >'+cstr(d.from_quantity),label[i]),debug=1)
+				frappe.db.sql("update tabDocField set label='%s' where parent='Multiple Quantity Item' and fieldname='%s'"%('Qty >'+cstr(d.from_quantity),label[i]),debug=1)
 			else:	
-				frappe.db.sql("update `tabDocField` set label='%s' where parent='Multiple Quantity Item' and fieldname='%s'"%('Qty '+cstr(d.from_quantity)+'-'+cstr(d.to_quantity),label[i]),debug=1)
+				frappe.db.sql("update tabDocField set label='%s' where parent='Multiple Quantity Item' and fieldname='%s'"%('Qty '+cstr(d.from_quantity)+'-'+cstr(d.to_quantity),label[i]),debug=1)
 			i=i+1
 		frappe.db.commit()
 		self.change_label_for_singular()
 
 	def change_label_for_singular(self):
-		values=frappe.db.sql("select value,field from `tabSingles` where field in ('qty1','qty2','qty3','qty4','qty5') order by field",as_list=1)
+		values=frappe.db.sql("select value,field from tabSingles where field in ('qty1','qty2','qty3','qty4','qty5') order by field",as_list=1)
 		if len(values)==5:
 			for qty in values:
-				frappe.db.sql("update `tabDocField` set label='%s' where parent='Multiple Qty Item' and fieldname='%s'"%('QTY '+qty[0],qty[1]))
+				frappe.db.sql("update tabDocField set label='%s' where parent='Multiple Qty Item' and fieldname='%s'"%('QTY '+qty[0],qty[1]))
 
 	def check_duplicate(self):
 		quantity=[self.qty1,self.qty2,self.qty3,self.qty4,self.qty5]

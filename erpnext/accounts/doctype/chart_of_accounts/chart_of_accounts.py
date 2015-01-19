@@ -58,5 +58,5 @@ class ChartofAccounts(Document):
 			
 @frappe.whitelist()
 def get_charts_for_country(country):
-	return frappe.db.sql_list("""select chart_name from `tabChart of Accounts` 
+	return frappe.db.sql_list("""select chart_name from tabChart_of_Accounts 
 		where country=%s""", country)

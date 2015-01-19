@@ -108,7 +108,7 @@ class Account(Document):
 		return frappe.db.get_value("GL Entry", {"account": self.name})
 
 	def check_if_child_exists(self):
-		return frappe.db.sql("""select name from `tabAccount` where parent_account = %s
+		return frappe.db.sql("""select name from tabAccount where parent_account = %s
 			and docstatus != 2""", self.name)
 
 	def validate_mandatory(self):
@@ -155,7 +155,7 @@ class Account(Document):
 		# Get credit limit
 		credit_limit_from = 'Customer'
 
-		cr_limit = frappe.db.sql("""select t1.credit_limit from tabCustomer t1, `tabAccount` t2
+		cr_limit = frappe.db.sql("""select t1.credit_limit from tabCustomer t1, tabAccount t2
 			where t2.name=%s and t1.name = t2.master_name""", self.name)
 		credit_limit = cr_limit and flt(cr_limit[0][0]) or 0
 		if not credit_limit:

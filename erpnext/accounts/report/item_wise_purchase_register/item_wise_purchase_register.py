@@ -62,7 +62,7 @@ def get_items(filters):
 		pi.supplier, pi.remarks, pi_item.item_code, pi_item.item_name, pi_item.item_group, 
 		pi_item.project_name, pi_item.purchase_order, pi_item.purchase_receipt, 
 		pi_item.expense_account, pi_item.qty, pi_item.base_rate, pi_item.base_amount, pi.supplier_name
-		from `tabPurchase Invoice` pi, `tabPurchase Invoice Item` pi_item 
+		from tabPurchase_Invoice pi, tabPurchase_Invoice_Item pi_item 
 		where pi.name = pi_item.parent and pi.docstatus = 1 %s %s
 		order by pi.posting_date desc, pi_item.item_code desc""" % (conditions, match_conditions), filters, as_dict=1)
 		
@@ -75,7 +75,7 @@ def get_tax_accounts(item_list, columns):
 	tax_accounts = []
 	
 	tax_details = frappe.db.sql("""select parent, account_head, item_wise_tax_detail
-		from `tabPurchase Taxes and Charges` where parenttype = 'Purchase Invoice' 
+		from tabPurchase_Taxes_and_Charges where parenttype = 'Purchase Invoice' 
 		and docstatus = 1 and ifnull(account_head, '') != '' and category in ('Total', 'Valuation and Total') 
 		and parent in (%s)""" % ', '.join(['%s']*len(item_list)), tuple([item.parent for item in item_list]))
 		

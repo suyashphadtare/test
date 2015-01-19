@@ -40,11 +40,11 @@ class TestJournalVoucher(unittest.TestCase):
 		test_voucher.submit()
 
 		if test_voucher.doctype == "Journal Voucher":
-			self.assertTrue(frappe.db.sql("""select name from `tabJournal Voucher Detail`
+			self.assertTrue(frappe.db.sql("""select name from tabJournal_Voucher_Detail
 				where account = %s and docstatus = 1 and parent = %s""",
 				("_Test Customer - _TC", test_voucher.name)))
 
-		self.assertTrue(not frappe.db.sql("""select name from `tabJournal Voucher Detail`
+		self.assertTrue(not frappe.db.sql("""select name from tabJournal_Voucher_Detail
 			where %s=%s""" % (field_dict.get(test_voucher.doctype), '%s'), (test_voucher.name)))
 
 		base_jv.get("entries")[0].is_advance = "Yes" if (test_voucher.doctype in ["Sales Order", "Purchase Order"]) else "No"
@@ -54,10 +54,10 @@ class TestJournalVoucher(unittest.TestCase):
 
 		submitted_voucher = frappe.get_doc(test_voucher.doctype, test_voucher.name)
 
-		self.assertTrue(frappe.db.sql("""select name from `tabJournal Voucher Detail`
+		self.assertTrue(frappe.db.sql("""select name from tabJournal_Voucher_Detail
 			where %s=%s""" % (field_dict.get(test_voucher.doctype), '%s'), (submitted_voucher.name)))
 
-		self.assertTrue(frappe.db.sql("""select name from `tabJournal Voucher Detail`
+		self.assertTrue(frappe.db.sql("""select name from tabJournal_Voucher_Detail
 			where %s=%s and %s=400""" % (field_dict.get(submitted_voucher.doctype), '%s', dr_or_cr), (submitted_voucher.name)))
 
 		if base_jv.get("entries")[0].is_advance == "Yes":
@@ -76,7 +76,7 @@ class TestJournalVoucher(unittest.TestCase):
 		if test_voucher.doctype == "Journal Voucher":
 			# if test_voucher is a Journal Voucher, test cancellation of test_voucher 
 			test_voucher.cancel()
-			self.assertTrue(not frappe.db.sql("""select name from `tabJournal Voucher Detail`
+			self.assertTrue(not frappe.db.sql("""select name from tabJournal_Voucher_Detail
 				where against_jv=%s""", test_voucher.name))
 
 		elif test_voucher.doctype in ["Sales Order", "Purchase Order"]:
@@ -176,7 +176,7 @@ class TestJournalVoucher(unittest.TestCase):
 		frappe.db.set_value("Company", "_Test Company", "monthly_bgt_flag", "Ignore")
 
 	def clear_account_balance(self):
-		frappe.db.sql("""delete from `tabGL Entry`""")
+		frappe.db.sql("""delete from tabGL_Entry""")
 
 
 test_records = frappe.get_test_records('Journal Voucher')

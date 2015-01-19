@@ -13,7 +13,7 @@ from erpnext.stock.utils import get_valid_serial_nos
 class MaintenanceSchedule(TransactionBase):
 
 	def get_item_details(self, item_code):
-		item = frappe.db.sql("""select item_name, description from `tabItem`
+		item = frappe.db.sql("""select item_name, description from tabItem
 			where name=%s""", (item_code), as_dict=1)
 		ret = {
 			'item_name': item and item[0]['item_name'] or '',
@@ -23,7 +23,7 @@ class MaintenanceSchedule(TransactionBase):
 
 	def generate_schedule(self):
 		self.set('maintenance_schedule_detail', [])
-		frappe.db.sql("""delete from `tabMaintenance Schedule Detail`
+		frappe.db.sql("""delete from tabMaintenance_Schedule_Detail
 			where parent=%s""", (self.name))
 		count = 1
 		for d in self.get('item_maintenance_detail'):
@@ -61,7 +61,7 @@ class MaintenanceSchedule(TransactionBase):
 				email_map[d.sales_person] = sp.get_email_id()
 
 			scheduled_date = frappe.db.sql("""select scheduled_date from
-				`tabMaintenance Schedule Detail` where sales_person=%s and item_code=%s and
+				tabMaintenance_Schedule_Detail where sales_person=%s and item_code=%s and
 				parent=%s""", (d.sales_person, d.item_code, self.name), as_dict=1)
 
 			for key in scheduled_date:
@@ -111,8 +111,8 @@ class MaintenanceSchedule(TransactionBase):
 
 		if fy_details and fy_details[0]:
 			# check holiday list in employee master
-			holiday_list = frappe.db.sql_list("""select h.holiday_date from `tabEmployee` emp,
-				`tabSales Person` sp, `tabHoliday` h, `tabHoliday List` hl
+			holiday_list = frappe.db.sql_list("""select h.holiday_date from tabEmployee emp,
+				tabSales_Person sp, tabHoliday h, tabHoliday_List hl
 				where sp.name=%s and emp.name=sp.employee
 				and hl.name=emp.holiday_list and
 				h.parent=hl.name and
@@ -120,7 +120,7 @@ class MaintenanceSchedule(TransactionBase):
 			if not holiday_list:
 				# check global holiday list
 				holiday_list = frappe.db.sql("""select h.holiday_date from
-					`tabHoliday` h, `tabHoliday List` hl
+					tabHoliday h, tabHoliday_List hl
 					where h.parent=hl.name and ifnull(hl.is_default, 0) = 1
 					and hl.fiscal_year=%s""", fy_details[0])
 
@@ -169,8 +169,8 @@ class MaintenanceSchedule(TransactionBase):
 	def validate_sales_order(self):
 		for d in self.get('item_maintenance_detail'):
 			if d.prevdoc_docname:
-				chk = frappe.db.sql("""select ms.name from `tabMaintenance Schedule` ms,
-					`tabMaintenance Schedule Item` msi where msi.parent=ms.name and
+				chk = frappe.db.sql("""select ms.name from tabMaintenance_Schedule ms,
+					tabMaintenance_Schedule_Item msi where msi.parent=ms.name and
 					msi.prevdoc_docname=%s and ms.docstatus=1""", d.prevdoc_docname)
 				if chk:
 					throw(_("Maintenance Schedule {0} exists against {0}").format(chk[0][0], d.prevdoc_docname))

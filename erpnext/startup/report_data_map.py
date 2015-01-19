@@ -112,7 +112,7 @@ data_map = {
 	"Material Request Item": {
 		"columns": ["item.name as name", "item_code", "warehouse",
 			"(ifnull(qty, 0) - ifnull(ordered_qty, 0)) as qty"],
-		"from": "`tabMaterial Request Item` item, `tabMaterial Request` main",
+		"from": "tabMaterial_Request_Item item, tabMaterial_Request main",
 		"conditions": ["item.parent = main.name", "main.docstatus=1", "main.status != 'Stopped'",
 			"ifnull(warehouse, '')!=''", "ifnull(qty, 0) > ifnull(ordered_qty, 0)"],
 		"links": {
@@ -123,7 +123,7 @@ data_map = {
 	"Purchase Order Item": {
 		"columns": ["item.name as name", "item_code", "warehouse",
 			"(ifnull(qty, 0) - ifnull(received_qty, 0)) as qty"],
-		"from": "`tabPurchase Order Item` item, `tabPurchase Order` main",
+		"from": "tabPurchase_Order_Item item, tabPurchase_Order main",
 		"conditions": ["item.parent = main.name", "main.docstatus=1", "main.status != 'Stopped'",
 			"ifnull(warehouse, '')!=''", "ifnull(qty, 0) > ifnull(received_qty, 0)"],
 		"links": {
@@ -134,7 +134,7 @@ data_map = {
 
 	"Sales Order Item": {
 		"columns": ["item.name as name", "item_code", "(ifnull(qty, 0) - ifnull(delivered_qty, 0)) as qty", "warehouse"],
-		"from": "`tabSales Order Item` item, `tabSales Order` main",
+		"from": "tabSales_Order_Item item, tabSales_Order main",
 		"conditions": ["item.parent = main.name", "main.docstatus=1", "main.status != 'Stopped'",
 			"ifnull(warehouse, '')!=''", "ifnull(qty, 0) > ifnull(delivered_qty, 0)"],
 		"links": {

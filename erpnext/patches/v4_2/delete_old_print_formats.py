@@ -14,7 +14,7 @@ def execute():
 
 	for fmt in old_formats:
 		# update property setter
-		for ps in frappe.db.sql_list("""select name from `tabProperty Setter`
+		for ps in frappe.db.sql_list("""select name from tabProperty_Setter
 			where property='default_print_format' and value=%s""", fmt):
 			ps = frappe.get_doc("Property Setter", ps)
 			ps.value = "Standard"

@@ -17,7 +17,7 @@ def get_stock_balance_on(warehouse, posting_date=None):
 		SELECT
 			item_code, stock_value
 		FROM
-			`tabStock Ledger Entry`
+			tabStock_Ledger_Entry
 		WHERE
 			warehouse=%s AND posting_date <= %s
 		ORDER BY timestamp(posting_date, posting_time) DESC, name DESC
@@ -85,7 +85,7 @@ def get_avg_purchase_rate(serial_nos):
 	"""get average value of serial numbers"""
 
 	serial_nos = get_valid_serial_nos(serial_nos)
-	return flt(frappe.db.sql("""select avg(ifnull(purchase_rate, 0)) from `tabSerial No`
+	return flt(frappe.db.sql("""select avg(ifnull(purchase_rate, 0)) from tabSerial_No
 		where name in (%s)""" % ", ".join(["%s"] * len(serial_nos)),
 		tuple(serial_nos))[0][0])
 
@@ -176,7 +176,7 @@ def get_buying_amount(voucher_type, voucher_no, item_row, stock_ledger_entries):
 def reorder_item():
 	""" Reorder item if stock reaches reorder level"""
 	# if initial setup not completed, return
-	if not frappe.db.sql("select name from `tabFiscal Year` limit 1"):
+	if not frappe.db.sql("select name from tabFiscal_Year limit 1"):
 		return
 
 	if getattr(frappe.local, "auto_indent", None) is None:
@@ -190,7 +190,7 @@ def _reorder_item():
 	material_requests = {"Purchase": {}, "Transfer": {}}
 
 	item_warehouse_projected_qty = get_item_warehouse_projected_qty()
-	warehouse_company = frappe._dict(frappe.db.sql("""select name, company from `tabWarehouse`"""))
+	warehouse_company = frappe._dict(frappe.db.sql("""select name, company from tabWarehouse"""))
 	default_company = (frappe.defaults.get_defaults().get("company") or
 		frappe.db.sql("""select name from tabCompany limit 1""")[0][0])
 
@@ -235,12 +235,12 @@ def get_item_warehouse_projected_qty():
 
 	for item_code, warehouse, projected_qty in frappe.db.sql("""select item_code, warehouse, projected_qty
 		from tabBin where ifnull(item_code, '') != '' and ifnull(warehouse, '') != ''
-		and exists (select name from `tabItem`
-			where `tabItem`.name = `tabBin`.item_code and
+		and exists (select name from tabItem
+			where tabItem.name = tabBin.item_code and
 			is_stock_item='Yes' and (is_purchase_item='Yes' or is_sub_contracted_item='Yes') and
 			(ifnull(end_of_life, '0000-00-00')='0000-00-00' or end_of_life > %s))
-		and exists (select name from `tabWarehouse`
-			where `tabWarehouse`.name = `tabBin`.warehouse
+		and exists (select name from tabWarehouse
+			where tabWarehouse.name = tabBin.warehouse
 			and ifnull(disabled, 0)=0)""", nowdate()):
 
 		item_warehouse_projected_qty.setdefault(item_code, {})[warehouse] = flt(projected_qty)

@@ -16,7 +16,7 @@ class PeriodClosingVoucher(AccountsController):
 		self.make_gl_entries()
 
 	def on_cancel(self):
-		frappe.db.sql("""delete from `tabGL Entry`
+		frappe.db.sql("""delete from tabGL_Entry
 			where voucher_type = 'Period Closing Voucher' and voucher_no=%s""", self.name)
 
 	def validate_account_head(self):
@@ -28,7 +28,7 @@ class PeriodClosingVoucher(AccountsController):
 		from erpnext.accounts.utils import get_fiscal_year
 		self.year_start_date = get_fiscal_year(self.posting_date, self.fiscal_year)[1]
 
-		pce = frappe.db.sql("""select name from `tabPeriod Closing Voucher`
+		pce = frappe.db.sql("""select name from tabPeriod_Closing_Voucher
 			where posting_date > %s and fiscal_year = %s and docstatus = 1""",
 			(self.posting_date, self.fiscal_year))
 		if pce and pce[0][0]:
@@ -38,7 +38,7 @@ class PeriodClosingVoucher(AccountsController):
 		"""Get balance for pl accounts"""
 		return frappe.db.sql("""
 			select t1.account, sum(ifnull(t1.debit,0))-sum(ifnull(t1.credit,0)) as balance
-			from `tabGL Entry` t1, `tabAccount` t2
+			from tabGL_Entry t1, tabAccount t2
 			where t1.account = t2.name and ifnull(t2.report_type, '') = 'Profit and Loss'
 			and t2.docstatus < 2 and t2.company = %s
 			and t1.posting_date between %s and %s

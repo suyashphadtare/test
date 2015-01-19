@@ -23,7 +23,7 @@ def execute():
 	# language
 	if not system_settings.get("language"):
 		# find most common language
-		lang = frappe.db.sql_list("""select language from `tabUser`
+		lang = frappe.db.sql_list("""select language from tabUser
 			where ifnull(language, '')!='' and language not like "Loading%%" and name not in ({standard_users})""".format(
 			standard_users=", ".join(["%s"]*len(STANDARD_USERS))), tuple(STANDARD_USERS))
 		lang = Counter(lang).most_common(1)

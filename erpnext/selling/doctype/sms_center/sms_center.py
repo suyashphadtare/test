@@ -26,11 +26,11 @@ class SMSCenter(Document):
 
 		if self.send_to in ['All Contact', 'All Customer Contact', 'All Supplier Contact', 'All Sales Partner Contact']:
 			rec = frappe.db.sql("""select CONCAT(ifnull(first_name,''), ' ', ifnull(last_name,'')),
-				mobile_no from `tabContact` where ifnull(mobile_no,'')!='' and
+				mobile_no from tabContact where ifnull(mobile_no,'')!='' and
 				docstatus != 2 %s""" % where_clause)
 
 		elif self.send_to == 'All Lead (Open)':
-			rec = frappe.db.sql("""select lead_name, mobile_no from `tabLead` where
+			rec = frappe.db.sql("""select lead_name, mobile_no from tabLead where
 				ifnull(mobile_no,'')!='' and docstatus != 2 and status='Open'""")
 
 		elif self.send_to == 'All Employee (Active)':
@@ -40,12 +40,12 @@ class SMSCenter(Document):
 				self.branch.replace("'", "\'") or ""
 
 			rec = frappe.db.sql("""select employee_name, cell_number from
-				`tabEmployee` where status = 'Active' and docstatus < 2 and
+				tabEmployee where status = 'Active' and docstatus < 2 and
 				ifnull(cell_number,'')!='' %s""" % where_clause)
 
 		elif self.send_to == 'All Sales Person':
 			rec = frappe.db.sql("""select sales_person_name, mobile_no from
-				`tabSales Person` where docstatus!=2 and ifnull(mobile_no,'')!=''""")
+				tabSales_Person where docstatus!=2 and ifnull(mobile_no,'')!=''""")
 
 		rec_list = ''
 

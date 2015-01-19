@@ -40,7 +40,7 @@ class PriceList(Document):
 				frappe.set_value("Buying Settings", "Buying Settings", "buying_price_list", self.name)
 
 	def update_item_price(self):
-		frappe.db.sql("""update `tabItem Price` set currency=%s,
+		frappe.db.sql("""update tabItem_Price set currency=%s,
 			buying=%s, selling=%s, modified=NOW() where price_list=%s""",
 			(self.currency, cint(self.buying), cint(self.selling), self.name))
 

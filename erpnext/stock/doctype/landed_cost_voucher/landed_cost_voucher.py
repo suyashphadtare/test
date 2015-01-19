@@ -16,7 +16,7 @@ class LandedCostVoucher(Document):
 		for pr in self.get("landed_cost_purchase_receipts"):
 			pr_items = frappe.db.sql("""select pr_item.item_code, pr_item.description,
 				pr_item.qty, pr_item.base_rate, pr_item.base_amount, pr_item.name
-				from `tabPurchase Receipt Item` pr_item where parent = %s
+				from tabPurchase_Receipt_Item pr_item where parent = %s
 				and exists(select name from tabItem where name = pr_item.item_code and is_stock_item = 'Yes')""",
 				pr.purchase_receipt, as_dict=True)
 

@@ -20,10 +20,10 @@ def execute():
 			where account_type=%s""", (new, old))
 
 	try:
-		frappe.db.sql("""update `tabAccount` set report_type =
+		frappe.db.sql("""update tabAccount set report_type =
 			if(is_pl_account='Yes', 'Profit and Loss', 'Balance Sheet')""")
 
-		frappe.db.sql("""update `tabAccount` set balance_must_be=debit_or_credit
+		frappe.db.sql("""update tabAccount set balance_must_be=debit_or_credit
 			where ifnull(allow_negative_balance, 0) = 0""")
 	except:
 		pass

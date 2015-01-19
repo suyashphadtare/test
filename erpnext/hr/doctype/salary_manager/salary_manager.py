@@ -21,7 +21,7 @@ class SalaryManager(Document):
 
 		emp_list = frappe.db.sql("""
 			select t1.name
-			from `tabEmployee` t1, `tabSalary Structure` t2
+			from tabEmployee t1, tabSalary_Structure t2
 			where t1.docstatus!=2 and t2.docstatus != 2
 			and t1.name = t2.employee
 		%s """% cond)
@@ -81,7 +81,7 @@ class SalaryManager(Document):
 		emp_list = self.get_emp_list()
 		ss_list = []
 		for emp in emp_list:
-			if not frappe.db.sql("""select name from `tabSalary Slip`
+			if not frappe.db.sql("""select name from tabSalary_Slip
 					where docstatus!= 2 and employee = %s and month = %s and fiscal_year = %s and company = %s
 					""", (emp[0], self.month, self.fiscal_year, self.company)):
 				ss = frappe.get_doc({
@@ -113,7 +113,7 @@ class SalaryManager(Document):
 		"""
 		cond = self.get_filter_condition()
 		ss_list = frappe.db.sql("""
-			select t1.name from `tabSalary Slip` t1
+			select t1.name from tabSalary_Slip t1
 			where t1.docstatus = 0 and month = %s and fiscal_year = %s %s
 		""" % ('%s', '%s', cond), (self.month, self.fiscal_year))
 		return ss_list
@@ -172,7 +172,7 @@ class SalaryManager(Document):
 		"""
 		cond = self.get_filter_condition()
 		tot = frappe.db.sql("""
-			select sum(rounded_total) from `tabSalary Slip` t1
+			select sum(rounded_total) from tabSalary_Slip t1
 			where t1.docstatus = 1 and month = %s and fiscal_year = %s %s
 		""" % ('%s', '%s', cond), (self.month, self.fiscal_year))
 

@@ -19,7 +19,7 @@ def execute(filters=None):
 
 def get_account_map():
 	accounts = frappe.db.sql("""select name, company, master_name 
-		from `tabAccount` where master_type = 'Customer' 
+		from tabAccount where master_type = 'Customer' 
 		and ifnull(master_name, '') != '' and docstatus < 2""", as_dict=1)
 
 	account_map = {}

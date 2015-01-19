@@ -24,11 +24,11 @@ class Supplier(TransactionBase):
 			self.name = make_autoname(self.naming_series + '.#####')
 
 	def update_address(self):
-		frappe.db.sql("""update `tabAddress` set supplier_name=%s, modified=NOW()
+		frappe.db.sql("""update tabAddress set supplier_name=%s, modified=NOW()
 			where supplier=%s""", (self.supplier_name, self.name))
 
 	def update_contact(self):
-		frappe.db.sql("""update `tabContact` set supplier_name=%s, modified=NOW()
+		frappe.db.sql("""update tabContact set supplier_name=%s, modified=NOW()
 			where supplier=%s""", (self.supplier_name, self.name))
 
 	def update_credit_days_limit(self):
@@ -59,24 +59,24 @@ class Supplier(TransactionBase):
 
 	def get_contacts(self,nm):
 		if nm:
-			contact_details =frappe.db.convert_to_lists(frappe.db.sql("select name, CONCAT(IFNULL(first_name,''),' ',IFNULL(last_name,'')),contact_no,email_id from `tabContact` where supplier = %s", nm))
+			contact_details =frappe.db.convert_to_lists(frappe.db.sql("select name, CONCAT(IFNULL(first_name,''),' ',IFNULL(last_name,'')),contact_no,email_id from tabContact where supplier = %s", nm))
 
 			return contact_details
 		else:
 			return ''
 
 	def delete_supplier_address(self):
-		for rec in frappe.db.sql("select * from `tabAddress` where supplier=%s", (self.name,), as_dict=1):
-			frappe.db.sql("delete from `tabAddress` where name=%s",(rec['name']))
+		for rec in frappe.db.sql("select * from tabAddress where supplier=%s", (self.name,), as_dict=1):
+			frappe.db.sql("delete from tabAddress where name=%s",(rec['name']))
 
 	def delete_supplier_contact(self):
-		for contact in frappe.db.sql_list("""select name from `tabContact`
+		for contact in frappe.db.sql_list("""select name from tabContact
 			where supplier=%s""", self.name):
 				frappe.delete_doc("Contact", contact)
 
 	def delete_supplier_account(self):
 		"""delete supplier's ledger if exist and check balance before deletion"""
-		acc = frappe.db.sql("select name from `tabAccount` where master_type = 'Supplier' \
+		acc = frappe.db.sql("select name from tabAccount where master_type = 'Supplier' \
 			and master_name = %s and docstatus < 2", self.name)
 		if acc:
 			frappe.delete_doc('Account', acc[0][0])
@@ -99,7 +99,7 @@ class Supplier(TransactionBase):
 		self.update_supplier_address(newdn, set_field)
 
 	def update_supplier_address(self, newdn, set_field):
-		frappe.db.sql("""update `tabAddress` set address_title=%(newdn)s
+		frappe.db.sql("""update tabAddress set address_title=%(newdn)s
 			{set_field} where supplier=%(newdn)s"""\
 			.format(set_field=set_field), ({"newdn": newdn}))
 
@@ -114,7 +114,7 @@ def get_dashboard_info(supplier):
 			{"supplier": supplier, "docstatus": ["!=", 2] }, "count(*)")
 
 	billing = frappe.db.sql("""select sum(grand_total), sum(outstanding_amount)
-		from `tabPurchase Invoice`
+		from tabPurchase_Invoice
 		where supplier=%s
 			and docstatus = 1
 			and fiscal_year = %s""", (supplier, frappe.db.get_default("fiscal_year")))

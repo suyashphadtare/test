@@ -9,10 +9,10 @@ from frappe.model.document import Document
 
 class Workstation(Document):
 	def update_bom_operation(self):
-		bom_list = frappe.db.sql("""select DISTINCT parent from `tabBOM Operation` 
+		bom_list = frappe.db.sql("""select DISTINCT parent from tabBOM_Operation 
 			where workstation = %s""", self.name)
 		for bom_no in bom_list:
-			frappe.db.sql("""update `tabBOM Operation` set hour_rate = %s 
+			frappe.db.sql("""update tabBOM_Operation set hour_rate = %s 
 				where parent = %s and workstation = %s""", 
 				(self.hour_rate, bom_no[0], self.name))
 	

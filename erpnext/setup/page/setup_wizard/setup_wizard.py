@@ -109,7 +109,7 @@ def update_user_name(args):
 		# Update User
 		if not args.get('last_name') or args.get('last_name')=='None':
 				args['last_name'] = None
-		frappe.db.sql("""update `tabUser` SET first_name=%(first_name)s,
+		frappe.db.sql("""update tabUser SET first_name=%(first_name)s,
 			last_name=%(last_name)s WHERE name=%(name)s""", args)
 
 	if args.get("attach_user"):
@@ -237,7 +237,7 @@ def create_email_digest():
 	if not system_managers:
 		return
 
-	companies = frappe.db.sql_list("select name FROM `tabCompany`")
+	companies = frappe.db.sql_list("select name FROM tabCompany")
 	for company in companies:
 		if not frappe.db.exists("Email Digest", "Default Weekly Digest - " + company):
 			edigest = frappe.get_doc({

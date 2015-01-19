@@ -84,31 +84,31 @@ class StockEntry(StockController):
 		list_of_manufactured_items=''
 		percent_of_items=0
 		count_of_items=0
-		manufactured_items=frappe.db.sql("""select distinct production_item,sales_order from `tabProduction Order` where qty=produced_qty and sales_order in(select sales_order from `tabProduction Order` where name in(select production_order from `tabStock Entry` where name='%s'))"""%(self.name),as_list=1)
+		manufactured_items=frappe.db.sql("""select distinct production_item,sales_order from tabProduction_Order where qty=produced_qty and sales_order in(select sales_order from tabProduction_Order where name in(select production_order from tabStock_Entry where name='%s'))"""%(self.name),as_list=1)
 		if manufactured_items:
 			for d in manufactured_items:
 				item_name=frappe.db.get_value("Item",d[0],"item_name")
 				count_of_items=count_of_items + 1
 				list_of_manufactured_items+=cstr(item_name)+","
-			total_items_in_sales_order=frappe.db.sql("""select count(*) from `tabSales Order Item` where parent='%s'"""%(manufactured_items[0][1]),debug=1,as_list=1)
+			total_items_in_sales_order=frappe.db.sql("""select count(*) from tabSales_Order_Item where parent='%s'"""%(manufactured_items[0][1]),debug=1,as_list=1)
 			if(total_items_in_sales_order[0][0]!=0):
 				list_of_manufactured_items+=" ("+cstr(count_of_items)+"/"+cstr(total_items_in_sales_order[0][0])+")"
 				percent_of_items=cint(flt(count_of_items)/flt(total_items_in_sales_order[0][0])*100)
 				self.updateDB(list_of_manufactured_items,manufactured_items[0][1],percent_of_items)
 	#anand
 	def update_manufactured_on_cancel(self):
-		sales_order=frappe.db.sql("""select sales_order from `tabProduction Order` where name=(select production_order from `tabStock Entry` where name='%s')"""%(self.name),as_list=1)
-		manufactured_items=frappe.db.sql("""select distinct production_item,sales_order from `tabProduction Order` where qty=produced_qty and sales_order in(select sales_order from `tabProduction Order` where name in(select production_order from `tabStock Entry` where name='%s'))"""%(self.name),as_list=1)
+		sales_order=frappe.db.sql("""select sales_order from tabProduction_Order where name=(select production_order from tabStock_Entry where name='%s')"""%(self.name),as_list=1)
+		manufactured_items=frappe.db.sql("""select distinct production_item,sales_order from tabProduction_Order where qty=produced_qty and sales_order in(select sales_order from tabProduction_Order where name in(select production_order from tabStock_Entry where name='%s'))"""%(self.name),as_list=1)
 		if manufactured_items:
 			self.update_manufactured_sales_order()
 		else:
 			self.updateDB_canceled_stock_vs_sales_order(sales_order[0][0])
     #anand	
 	def updateDB_canceled_stock_vs_sales_order(self,sales_order):
-		frappe.db.sql("""update `tabSales Order` set item_list=(select customer_name from tabCustomer where 1=2),percent_completed=(select customer_name from tabCustomer where 1=2) where name='%s'"""%(sales_order))
+		frappe.db.sql("""update tabSales_Order set item_list=(select customer_name from tabCustomer where 1=2),percent_completed=(select customer_name from tabCustomer where 1=2) where name='%s'"""%(sales_order))
     #anand
 	def updateDB(self,list_of_manufactured_items,sales_order,percent_of_items):
-		frappe.db.sql("""update `tabSales Order` set item_list='%s',percent_completed=%s where name='%s'"""%(list_of_manufactured_items,percent_of_items,sales_order))
+		frappe.db.sql("""update tabSales_Order set item_list='%s',percent_completed=%s where name='%s'"""%(list_of_manufactured_items,percent_of_items,sales_order))
 	
 
 	def validate_fiscal_year(self):
@@ -223,7 +223,7 @@ class StockEntry(StockController):
 				self.production_order, ["production_item", "qty"])
 			args = other_ste + [production_item]
 			fg_qty_already_entered = frappe.db.sql("""select sum(transfer_qty)
-				from `tabStock Entry Detail`
+				from tabStock_Entry_Detail
 				where parent in (%s)
 					and item_code = %s
 					and ifnull(s_warehouse,'')='' """ % (", ".join(["%s" * len(other_ste)]), "%s"), args)[0][0]
@@ -315,7 +315,7 @@ class StockEntry(StockController):
 		incoming_rate = 0.0
 		if (self.delivery_note_no or self.sales_invoice_no) and args.get("item_code"):
 			incoming_rate = frappe.db.sql("""select abs(ifnull(stock_value_difference, 0) / actual_qty)
-				from `tabStock Ledger Entry`
+				from tabStock_Ledger_Entry
 				where voucher_type = %s and voucher_no = %s and item_code = %s limit 1""",
 				((self.delivery_note_no and "Delivery Note" or "Sales Invoice"),
 				self.delivery_note_no or self.sales_invoice_no, args.item_code))
@@ -330,7 +330,7 @@ class StockEntry(StockController):
 
 	def validate_bom(self):
 		for d in self.get('mtn_details'):
-			if d.bom_no and not frappe.db.sql("""select name from `tabBOM`
+			if d.bom_no and not frappe.db.sql("""select name from tabBOM
 					where item = %s and name = %s and docstatus = 1 and is_active = 1""",
 					(d.item_code, d.bom_no)):
 				frappe.throw(_("BOM {0} is not submitted or inactive BOM for Item {1}").format(d.bom_no, d.item_code))
@@ -387,8 +387,8 @@ class StockEntry(StockController):
 
 	def get_already_returned_item_qty(self, ref_fieldname):
 		return dict(frappe.db.sql("""select item_code, sum(transfer_qty) as qty
-			from `tabStock Entry Detail` where parent in (
-				select name from `tabStock Entry` where `%s`=%s and docstatus=1)
+			from tabStock_Entry_Detail where parent in (
+				select name from tabStock_Entry where `%s`=%s and docstatus=1)
 			group by item_code""" % (ref_fieldname, "%s"), (self.get(ref_fieldname),)))
 
 	def update_stock_ledger(self):
@@ -448,11 +448,11 @@ class StockEntry(StockController):
 
 
 	def update_po_percent(self):
-		frappe.db.sql("update `tabProduction Order` set completed=(produced_qty/qty)*100 where name='%s'"%(self.production_order))
+		frappe.db.sql("update tabProduction_Order set completed=(produced_qty/qty)*100 where name='%s'"%(self.production_order))
 
 	def get_item_details(self, args):
 		item = frappe.db.sql("""select stock_uom, description, item_name,
-			expense_account, buying_cost_center from `tabItem`
+			expense_account, buying_cost_center from tabItem
 			where name = %s and (ifnull(end_of_life,'')='' or end_of_life > now())""",
 			(args.get('item_code')), as_dict = 1)
 		if not item:
@@ -560,7 +560,7 @@ class StockEntry(StockController):
 					self.from_warehouse = ""
 
 				item = frappe.db.sql("""select name, item_name, description,
-					stock_uom, expense_account, buying_cost_center from `tabItem`
+					stock_uom, expense_account, buying_cost_center from tabItem
 					where name=(select item from tabBOM where name=%s)""",
 					self.bom_no, as_dict=1)
 				self.add_to_stock_entry_detail({
@@ -626,7 +626,7 @@ class StockEntry(StockController):
 	def get_issued_qty(self):
 		issued_item_qty = {}
 		result = frappe.db.sql("""select t1.item_code, sum(t1.qty)
-			from `tabStock Entry Detail` t1, `tabStock Entry` t2
+			from tabStock_Entry_Detail t1, tabStock_Entry t2
 			where t1.parent = t2.name and t2.production_order = %s and t2.docstatus = 1
 			and t2.purpose = 'Material Transfer'
 			group by t1.item_code""", self.production_order)
@@ -683,7 +683,7 @@ def get_party_details(ref_dt, ref_dn):
 def get_production_order_details(production_order):
 	result = frappe.db.sql("""select bom_no,
 		ifnull(qty, 0) - ifnull(produced_qty, 0) as fg_completed_qty, use_multi_level_bom,
-		wip_warehouse from `tabProduction Order` where name = %s""", production_order, as_dict=1)
+		wip_warehouse from tabProduction_Order where name = %s""", production_order, as_dict=1)
 	return result and result[0] or {}
 
 def query_sales_return_doc(doctype, txt, searchfield, start, page_len, filters):
@@ -752,11 +752,11 @@ def get_batch_no(doctype, txt, searchfield, start, page_len, filters):
 
 	if filters.get("s_warehouse"):
 		batch_nos = frappe.db.sql("""select batch_no
-			from `tabStock Ledger Entry` sle
+			from tabStock_Ledger_Entry sle
 			where item_code = '%(item_code)s'
 				and warehouse = '%(s_warehouse)s'
 				and batch_no like '%(txt)s'
-				and exists(select * from `tabBatch`
+				and exists(select * from tabBatch
 					where name = sle.batch_no
 					and (ifnull(expiry_date, '2099-12-31') >= %(posting_date)s
 						or expiry_date = '')
@@ -770,7 +770,7 @@ def get_batch_no(doctype, txt, searchfield, start, page_len, filters):
 	if batch_nos:
 		return batch_nos
 	else:
-		return frappe.db.sql("""select name from `tabBatch`
+		return frappe.db.sql("""select name from tabBatch
 			where item = '%(item_code)s'
 			and docstatus < 2
 			and (ifnull(expiry_date, '2099-12-31') >= %(posting_date)s
@@ -787,7 +787,7 @@ def get_stock_items_for_return(ref_doc, parentfields):
 
 	all_items = list(set([d.item_code for d in
 		ref_doc.get_all_children() if d.get("item_code")]))
-	stock_items = frappe.db.sql_list("""select name from `tabItem`
+	stock_items = frappe.db.sql_list("""select name from tabItem
 		where is_stock_item='Yes' and name in (%s)""" % (", ".join(["%s"] * len(all_items))),
 		tuple(all_items))
 

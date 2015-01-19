@@ -28,7 +28,7 @@ class ItemPrice(Document):
 			throw(_("Price List {0} is disabled").format(self.price_list))
 
 	def check_duplicate_item(self):
-		if frappe.db.sql("""select name from `tabItem Price`
+		if frappe.db.sql("""select name from tabItem_Price
 			where item_code=%s and price_list=%s and name!=%s""", (self.item_code, self.price_list, self.name)):
 
 			frappe.throw(_("Item {0} appears multiple times in Price List {1}").format(self.item_code, self.price_list),

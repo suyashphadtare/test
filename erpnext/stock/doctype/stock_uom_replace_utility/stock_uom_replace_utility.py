@@ -38,7 +38,7 @@ class StockUOMReplaceUtility(Document):
 	def update_bin(self):
 		# update bin
 		if flt(self.conversion_factor) != flt(1):
-			frappe.db.sql("""update `tabBin`
+			frappe.db.sql("""update tabBin
 				set stock_uom = %s,
 					indented_qty = ifnull(indented_qty,0) * %s,
 					ordered_qty = ifnull(ordered_qty,0) * %s,
@@ -50,7 +50,7 @@ class StockUOMReplaceUtility(Document):
 					self.conversion_factor, self.conversion_factor,
 					self.conversion_factor, self.item_code))
 		else:
-			frappe.db.sql("update `tabBin` set stock_uom = %s where item_code = %s",
+			frappe.db.sql("update tabBin set stock_uom = %s where item_code = %s",
 				 (self.new_stock_uom, self.item_code) )
 
 		# acknowledge user
@@ -61,12 +61,12 @@ class StockUOMReplaceUtility(Document):
 		from erpnext.stock.stock_ledger import update_entries_after
 
 		if flt(self.conversion_factor) != flt(1):
-			frappe.db.sql("""update `tabStock Ledger Entry`
+			frappe.db.sql("""update tabStock_Ledger_Entry
 				set stock_uom = %s, actual_qty = ifnull(actual_qty,0) * %s
 				where item_code = %s""",
 				(self.new_stock_uom, self.conversion_factor, self.item_code))
 		else:
-			frappe.db.sql("""update `tabStock Ledger Entry` set stock_uom=%s
+			frappe.db.sql("""update tabStock_Ledger_Entry set stock_uom=%s
 				where item_code=%s""", (self.new_stock_uom, self.item_code))
 
 		# acknowledge user
@@ -74,7 +74,7 @@ class StockUOMReplaceUtility(Document):
 
 		# update item valuation
 		if flt(self.conversion_factor) != flt(1):
-			wh = frappe.db.sql("select name from `tabWarehouse`")
+			wh = frappe.db.sql("select name from tabWarehouse")
 			for w in wh:
 				update_entries_after({"item_code": self.item_code, "warehouse": w[0]})
 

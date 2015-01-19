@@ -14,10 +14,10 @@ def execute():
 	if "shopping_cart" in frappe.get_installed_apps():
 		frappe.reload_doc("shopping_cart", "doctype", "shopping_cart_settings")
 
-	if not frappe.db.sql("select name from `tabPrice List` where buying=1"):
+	if not frappe.db.sql("select name from tabPrice_List where buying=1"):
 		create_price_list(_("Standard Buying"), buying=1)
 
-	if not frappe.db.sql("select name from `tabPrice List` where selling=1"):
+	if not frappe.db.sql("select name from tabPrice_List where selling=1"):
 		create_price_list(_("Standard Selling"), selling=1)
 
 def create_price_list(pl_name, buying=0, selling=0):

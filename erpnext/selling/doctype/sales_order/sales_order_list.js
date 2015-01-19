@@ -1,6 +1,6 @@
 frappe.listview_settings['Sales Order'] = {
-	add_fields: ["`tabSales Order`.`grand_total`", "`tabSales Order`.`company`", "`tabSales Order`.`currency`",
-		"`tabSales Order`.`customer`", "`tabSales Order`.`customer_name`", "`tabSales Order`.`per_billed`",
-		"`tabSales Order`.`per_delivered`", "`tabSales Order`.`delivery_date`"],
+	add_fields: ["tabSales_Order.`grand_total`", "tabSales_Order.`company`", "tabSales_Order.`currency`",
+		"tabSales_Order.`customer`", "tabSales_Order.`customer_name`", "tabSales_Order.`per_billed`",
+		"tabSales_Order.`per_delivered`", "tabSales_Order.`delivery_date`"],
 	filters: [["per_delivered", "<", 100]]
 };

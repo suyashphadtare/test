@@ -13,4 +13,4 @@ def execute():
 	for d in ['Purchase Invoice', 'Purchase Order', 'Supplier Quotation', 'Purchase Receipt']:
 		frappe.db.sql("""update `tab%s` set taxes_and_charges=purchase_other_charges""" % d)
 	
-	frappe.db.sql("""update `tabPurchase Taxes and Charges` set parentfield='other_charges'""")
+	frappe.db.sql("""update tabPurchase_Taxes_and_Charges set parentfield='other_charges'""")

@@ -11,7 +11,7 @@ class QualityInspection(Document):
 
 	def get_item_specification_details(self):
 		self.set('qa_specification_details', [])
-		specification = frappe.db.sql("select specification, value from `tabItem Quality Inspection Parameter` \
+		specification = frappe.db.sql("select specification, value from tabItem_Quality_Inspection_Parameter \
 			where parent = '%s' order by idx" % (self.item_code))
 		for d in specification:
 			child = self.append('qa_specification_details', {})
@@ -21,7 +21,7 @@ class QualityInspection(Document):
 
 	def on_submit(self):
 		if self.purchase_receipt_no:
-			frappe.db.sql("""update `tabPurchase Receipt Item` t1, `tabPurchase Receipt` t2 
+			frappe.db.sql("""update tabPurchase_Receipt_Item t1, tabPurchase_Receipt t2 
 				set t1.qa_no = %s, t2.modified = %s 
 				where t1.parent = %s and t1.item_code = %s and t1.parent = t2.name""",  
 				(self.name, self.modified, self.purchase_receipt_no, 
@@ -30,7 +30,7 @@ class QualityInspection(Document):
 
 	def on_cancel(self):
 		if self.purchase_receipt_no:
-			frappe.db.sql("""update `tabPurchase Receipt Item` t1, `tabPurchase Receipt` t2 
+			frappe.db.sql("""update tabPurchase_Receipt_Item t1, tabPurchase_Receipt t2 
 				set t1.qa_no = '', t2.modified = %s
 				where t1.parent = %s and t1.item_code = %s and t1.parent = t2.name""", 
 				(self.modified, self.purchase_receipt_no, self.item_code))

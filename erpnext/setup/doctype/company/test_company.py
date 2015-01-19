@@ -9,7 +9,7 @@ import unittest
 class TestCompany(unittest.TestCase):
 	def atest_coa(self):
 		for country, chart_name in frappe.db.sql("""select country, chart_name 
-			from `tabChart of Accounts` where name = 'Deutscher Kontenplan SKR03'""", as_list=1):
+			from tabChart_of_Accounts where name = 'Deutscher Kontenplan SKR03'""", as_list=1):
 				print "Country: ", country
 				print "Chart Name: ", chart_name
 				

@@ -40,7 +40,7 @@ class QuotationforMulitpleQuantity(Document):
 		label_dict={}
 		label1_dict={}
 		i=0	
-		qty_data=frappe.db.sql("select from_quantity, to_quantity from `tabQuantity Range` where parent='Range Master' order by idx",as_dict=1)
+		qty_data=frappe.db.sql("select from_quantity, to_quantity from tabQuantity_Range where parent='Range Master' order by idx",as_dict=1)
 		if qty_data:
 			for qty in qty_data:
 				if qty['to_quantity']:
@@ -116,11 +116,11 @@ class QuotationforMulitpleQuantity(Document):
 			self.create_price_list(value[1],multiple_qty[qty],item_code,rate)
 
 	def create_price_list(self,qty,range_qty,item_code,rate):
-		check=frappe.db.sql("""select b.name from `tabItem Price` as a,`tabPrice List Quantity` as b 
+		check=frappe.db.sql("""select b.name from tabItem_Price as a,tabPrice_List_Quantity as b 
 			where b.parent=a.name and a.price_list='%s' and a.item_code='%s' 
 			and b.customer_code='%s' and quantity='%s' and range_qty='%s'"""%(self.selling_price_list,item_code,self.customer,qty,range_qty),as_list=1)
 		if check:
-			frappe.db.sql("update `tabPrice List Quantity` set rate='%s',parentfield='item',parenttype='Item Price' where range_qty='%s' and name='%s'"%(rate,range_qty,check[0][0]))
+			frappe.db.sql("update tabPrice_List_Quantity set rate='%s',parentfield='item',parenttype='Item Price' where range_qty='%s' and name='%s'"%(rate,range_qty,check[0][0]))
 		else:
 			parent=frappe.db.get_value('Item Price',{'item_code':item_code,'price_list':self.selling_price_list},'name')
 			if not parent:

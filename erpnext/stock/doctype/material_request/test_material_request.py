@@ -103,7 +103,7 @@ class TestMaterialRequest(unittest.TestCase):
 		se.submit()
 
 	def test_completed_qty_for_purchase(self):
-		frappe.db.sql("""delete from `tabBin`""")
+		frappe.db.sql("""delete from tabBin""")
 
 		# submit material request of type Purchase
 		mr = frappe.copy_doc(test_records[0])
@@ -161,8 +161,8 @@ class TestMaterialRequest(unittest.TestCase):
 		self._test_requested_qty(54.0, 3.0)
 
 	def test_completed_qty_for_transfer(self):
-		frappe.db.sql("""delete from `tabBin`""")
-		frappe.db.sql("""delete from `tabStock Ledger Entry`""")
+		frappe.db.sql("""delete from tabBin""")
+		frappe.db.sql("""delete from tabStock_Ledger_Entry""")
 
 		# submit material request of type Purchase
 		mr = frappe.copy_doc(test_records[0])
@@ -238,8 +238,8 @@ class TestMaterialRequest(unittest.TestCase):
 		self._test_requested_qty(54.0, 3.0)
 
 	def test_completed_qty_for_over_transfer(self):
-		frappe.db.sql("""delete from `tabBin`""")
-		frappe.db.sql("""delete from `tabStock Ledger Entry`""")
+		frappe.db.sql("""delete from tabBin""")
+		frappe.db.sql("""delete from tabStock_Ledger_Entry""")
 
 		# submit material request of type Purchase
 		mr = frappe.copy_doc(test_records[0])

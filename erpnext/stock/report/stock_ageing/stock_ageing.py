@@ -73,9 +73,9 @@ def get_stock_ledger_entries(filters):
 	return frappe.db.sql("""select
 			item.name, item.item_name, item_group, brand, description, item.stock_uom,
 			actual_qty, posting_date, voucher_type, qty_after_transaction
-		from `tabStock Ledger Entry` sle,
+		from tabStock_Ledger_Entry sle,
 			(select name, item_name, description, stock_uom, brand, item_group
-				from `tabItem` {item_conditions}) item
+				from tabItem {item_conditions}) item
 		where item_code = item.name and
 			company = %(company)s and
 			posting_date <= %(to_date)s

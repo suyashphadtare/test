@@ -21,7 +21,7 @@ def execute(filters=None):
 	task_map = get_task_map()
 
 	conditions = build_conditions(filters)
-	time_logs = frappe.db.sql("""select * from `tabTime Log`
+	time_logs = frappe.db.sql("""select * from tabTime_Log
 		where docstatus < 2 %s order by owner asc""" % (conditions, ), filters, as_dict=1)
 
 	if time_logs:

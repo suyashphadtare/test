@@ -41,7 +41,7 @@ def make_sl_entries(sl_entries, is_amended=None):
 			delete_cancelled_entry(sl_entries[0].get('voucher_type'), sl_entries[0].get('voucher_no'))
 
 def set_as_cancel(voucher_type, voucher_no):
-	frappe.db.sql("""update `tabStock Ledger Entry` set is_cancelled='Yes',
+	frappe.db.sql("""update tabStock_Ledger_Entry set is_cancelled='Yes',
 		modified=%s, modified_by=%s
 		where voucher_no=%s and voucher_type=%s""",
 		(now(), frappe.session.user, voucher_type, voucher_no))
@@ -55,7 +55,7 @@ def make_entry(args):
 	return sle.name
 
 def delete_cancelled_entry(voucher_type, voucher_no):
-	frappe.db.sql("""delete from `tabStock Ledger Entry`
+	frappe.db.sql("""delete from tabStock_Ledger_Entry
 		where voucher_type=%s and voucher_no=%s""", (voucher_type, voucher_no))
 
 def update_entries_after(args, allow_zero_rate=False, verbose=1):
@@ -132,7 +132,7 @@ def update_entries_after(args, allow_zero_rate=False, verbose=1):
 		prev_stock_value = stock_value
 
 		# update current sle
-		frappe.db.sql("""update `tabStock Ledger Entry`
+		frappe.db.sql("""update tabStock_Ledger_Entry
 			set qty_after_transaction=%s, valuation_rate=%s, stock_queue=%s,
 			stock_value=%s, stock_value_difference=%s where name=%s""",
 			(qty_after_transaction, valuation_rate,
@@ -152,7 +152,7 @@ def update_entries_after(args, allow_zero_rate=False, verbose=1):
 		bin_wrapper.ignore_permissions = 1
 		bin_wrapper.insert()
 
-	frappe.db.sql("""update `tabBin` set valuation_rate=%s, actual_qty=%s,
+	frappe.db.sql("""update tabBin set valuation_rate=%s, actual_qty=%s,
 		stock_value=%s,
 		projected_qty = (actual_qty + indented_qty + ordered_qty + planned_qty - reserved_qty)
 		where item_code=%s and warehouse=%s""", (valuation_rate, qty_after_transaction,
@@ -192,7 +192,7 @@ def get_stock_ledger_entries(args, conditions=None, order="desc", limit=None, fo
 	if not args.get("posting_time"):
 		args["posting_time"] = "00:00"
 
-	return frappe.db.sql("""select *, timestamp(posting_date, posting_time) as "timestamp" from `tabStock Ledger Entry`
+	return frappe.db.sql("""select *, timestamp(posting_date, posting_time) as "timestamp" from tabStock_Ledger_Entry
 		where item_code = %%(item_code)s
 		and warehouse = %%(warehouse)s
 		and ifnull(is_cancelled, 'No')='No'
@@ -235,7 +235,7 @@ def get_serialized_values(qty_after_transaction, sle, valuation_rate):
 		# In case of delivery/stock issue, get average purchase rate
 		# of serial nos of current entry
 		incoming_rate = flt(frappe.db.sql("""select avg(ifnull(purchase_rate, 0))
-			from `tabSerial No` where name in (%s)""" % (", ".join(["%s"]*len(serial_no))),
+			from tabSerial_No where name in (%s)""" % (", ".join(["%s"]*len(serial_no))),
 			tuple(serial_no))[0][0])
 
 	if incoming_rate and not valuation_rate:
@@ -351,14 +351,14 @@ def get_previous_sle(args, for_update=False):
 
 def get_valuation_rate(item_code, warehouse, allow_zero_rate=False):
 	last_valuation_rate = frappe.db.sql("""select valuation_rate
-		from `tabStock Ledger Entry`
+		from tabStock_Ledger_Entry
 		where item_code = %s and warehouse = %s
 		and ifnull(valuation_rate, 0) > 0
 		order by posting_date desc, posting_time desc, name desc limit 1""", (item_code, warehouse))
 
 	if not last_valuation_rate:
 		last_valuation_rate = frappe.db.sql("""select valuation_rate
-			from `tabStock Ledger Entry`
+			from tabStock_Ledger_Entry
 			where item_code = %s and ifnull(valuation_rate, 0) > 0
 			order by posting_date desc, posting_time desc, name desc limit 1""", item_code)
 

@@ -27,7 +27,7 @@ class SalesBOM(Document):
 			frappe.throw(_("Parent Item {0} must be not Stock Item and must be a Sales Item").format(self.new_item_code))
 
 	def get_item_details(self, name):
-		det = frappe.db.sql("""select description, stock_uom from `tabItem`
+		det = frappe.db.sql("""select description, stock_uom from tabItem
 			where name = %s""", name)
 		return {
 			'description' : det and det[0][0] or '',
@@ -39,7 +39,7 @@ def get_new_item_code(doctype, txt, searchfield, start, page_len, filters):
 
 	return frappe.db.sql("""select name, item_name, description from tabItem
 		where is_stock_item="No" and is_sales_item="Yes"
-		and name not in (select name from `tabSales BOM`) and %s like %s
+		and name not in (select name from tabSales_BOM) and %s like %s
 		%s limit %s, %s""" % (searchfield, "%s",
 		get_match_cond(doctype),"%s", "%s"),
 		("%%%s%%" % txt, start, page_len))

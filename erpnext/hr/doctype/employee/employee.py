@@ -122,13 +122,13 @@ class Employee(Document):
 	def validate_for_enabled_user_id(self):
 		if not self.status == 'Active':
 			return
-		enabled = frappe.db.sql("""select name from `tabUser` where
+		enabled = frappe.db.sql("""select name from tabUser where
 			name=%s and enabled=1""", self.user_id)
 		if not enabled:
 			throw(_("User {0} is disabled").format(self.user_id), EmployeeUserDisabledError)
 
 	def validate_duplicate_user_id(self):
-		employee = frappe.db.sql_list("""select name from `tabEmployee` where
+		employee = frappe.db.sql_list("""select name from tabEmployee where
 			user_id=%s and status='Active' and name!=%s""", (self.user_id, self.name))
 		if employee:
 			throw(_("User {0} is already assigned to Employee {1}").format(self.user_id, employee[0]))
@@ -144,7 +144,7 @@ class Employee(Document):
 	def update_dob_event(self):
 		if self.status == "Active" and self.date_of_birth \
 			and not cint(frappe.db.get_value("HR Settings", None, "stop_birthday_reminders")):
-			birthday_event = frappe.db.sql("""select name from `tabEvent` where repeat_on='Every Year'
+			birthday_event = frappe.db.sql("""select name from tabEvent where repeat_on='Every Year'
 				and ref_type='Employee' and ref_name=%s""", self.name)
 
 			starts_on = self.date_of_birth + " 00:00:00"
@@ -171,7 +171,7 @@ class Employee(Document):
 					"ref_name": self.name
 				}).insert()
 		else:
-			frappe.db.sql("""delete from `tabEvent` where repeat_on='Every Year' and
+			frappe.db.sql("""delete from tabEvent where repeat_on='Every Year' and
 				ref_type='Employee' and ref_name=%s""", self.name)
 
 @frappe.whitelist()

@@ -30,7 +30,7 @@ def boot_session(bootinfo):
 				tabCompany limit 1""") and 'Yes' or 'No'
 
 		bootinfo.docs += frappe.db.sql("""select name, default_currency, cost_center
-            from `tabCompany`""", as_dict=1, update={"doctype":":Company"})
+            from tabCompany""", as_dict=1, update={"doctype":":Company"})
 
 def load_country_and_currency(bootinfo):
 	country = frappe.db.get_default("country")
@@ -42,7 +42,7 @@ def load_country_and_currency(bootinfo):
 
 def get_letter_heads():
 	import frappe
-	ret = frappe.db.sql("""select name, content from `tabLetter Head`
+	ret = frappe.db.sql("""select name, content from tabLetter_Head
 		where ifnull(disabled,0)=0""")
 	return dict(ret)
 

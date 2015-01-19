@@ -72,7 +72,7 @@ class EmailDigest(Document):
 
 	def send(self):
 		# send email only to enabled users
-		valid_users = [p[0] for p in frappe.db.sql("""select name from `tabUser`
+		valid_users = [p[0] for p in frappe.db.sql("""select name from tabUser
 			where enabled=1""")]
 		recipients = filter(lambda r: r in valid_users,
 			self.recipient_list.split("\n"))
@@ -317,7 +317,7 @@ class EmailDigest(Document):
 
 	def get_todo_list(self, user_id):
 		todo_list = frappe.db.sql("""select *
-			from `tabToDo` where (owner=%s or assigned_by=%s) and status="Open"
+			from tabToDo where (owner=%s or assigned_by=%s) and status="Open"
 			order by field(priority, 'High', 'Medium', 'Low') asc, date asc""",
 			(user_id, user_id), as_dict=True)
 
@@ -382,7 +382,7 @@ class EmailDigest(Document):
 
 		gl_entries = frappe.db.sql("""select `account`,
 			ifnull(credit, 0) as credit, ifnull(debit, 0) as debit, `against`
-			from `tabGL Entry`
+			from tabGL_Entry
 			where company=%s
 			and posting_date <= %s %s""" % ("%s", "%s",
 			from_date and "and posting_date>='%s'" % from_date or ""),
@@ -397,7 +397,7 @@ class EmailDigest(Document):
 	def get_accounts(self):
 		if not hasattr(self, "accounts"):
 			self.accounts = frappe.db.sql("""select name, account_type, account_name, master_type, root_type
-				from `tabAccount` where company=%s and docstatus < 2
+				from tabAccount where company=%s and docstatus < 2
 				and group_or_ledger = "Ledger" order by lft""",
 				(self.company,), as_dict=1)
 		return self.accounts
@@ -459,7 +459,7 @@ class EmailDigest(Document):
 
 	def get_open_tickets(self):
 		open_tickets = frappe.db.sql("""select name, subject, modified, raised_by
-			from `tabSupport Ticket` where status='Open'
+			from tabSupport_Ticket where status='Open'
 			order by modified desc limit 10""", as_dict=True)
 
 		if open_tickets:
@@ -479,7 +479,7 @@ class EmailDigest(Document):
 def send():
 	now_date = now_datetime().date()
 
-	for ed in frappe.db.sql("""select name from `tabEmail Digest`
+	for ed in frappe.db.sql("""select name from tabEmail_Digest
 			where enabled=1 and docstatus<2""", as_list=1):
 		ed_obj = frappe.get_doc('Email Digest', ed[0])
 		if (now_date == ed_obj.get_next_sending()):

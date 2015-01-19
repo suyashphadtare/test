@@ -11,7 +11,7 @@ from frappe.model.document import Document
 class BOM(Document):
 
 	def autoname(self):
-		last_name = frappe.db.sql("""select max(name) from `tabBOM`
+		last_name = frappe.db.sql("""select max(name) from tabBOM
 			where name like "BOM/%s/%%" """ % cstr(self.item).replace('"', '\\"'))
 		if last_name:
 			idx = cint(cstr(last_name[0][0]).split('/')[-1].split('-')[0]) + 1
@@ -55,7 +55,7 @@ class BOM(Document):
 		item = frappe.db.sql("""select name, is_asset_item, is_purchase_item,
 			docstatus, description, is_sub_contracted_item, stock_uom, default_bom,
 			last_purchase_rate, is_manufactured_item
-			from `tabItem` where name=%s""", item_code, as_dict = 1)
+			from tabItem where name=%s""", item_code, as_dict = 1)
 
 		return item
 
@@ -131,7 +131,7 @@ class BOM(Document):
 		self.save()
 
 	def get_bom_unitcost(self, bom_no):
-		bom = frappe.db.sql("""select name, total_variable_cost/quantity as unit_cost from `tabBOM`
+		bom = frappe.db.sql("""select name, total_variable_cost/quantity as unit_cost from tabBOM
 			where is_active = 1 and name = %s""", bom_no, as_dict=1)
 		return bom and bom[0]['unit_cost'] or 0
 
@@ -139,7 +139,7 @@ class BOM(Document):
 		""" Get weighted average of valuation rate from all warehouses """
 
 		total_qty, total_value = 0.0, 0.0
-		for d in frappe.db.sql("""select actual_qty, stock_value from `tabBin`
+		for d in frappe.db.sql("""select actual_qty, stock_value from tabBin
 			where item_code=%s and actual_qty > 0""", args['item_code'], as_dict=1):
 				total_qty += flt(d.actual_qty)
 				total_value += flt(d.stock_value)
@@ -159,7 +159,7 @@ class BOM(Document):
 			if not self.is_active:
 				frappe.db.set(self, "is_default", 0)
 
-			frappe.db.sql("update `tabItem` set default_bom = null where name = %s and default_bom = %s",
+			frappe.db.sql("update tabItem set default_bom = null where name = %s and default_bom = %s",
 				 (self.item, self.name))
 
 	def clear_operations(self):
@@ -216,7 +216,7 @@ class BOM(Document):
 
 	def validate_bom_no(self, item, bom_no, idx):
 		"""Validate BOM No of sub-contracted items"""
-		bom = frappe.db.sql("""select name from `tabBOM` where name = %s and item = %s
+		bom = frappe.db.sql("""select name from tabBOM where name = %s and item = %s
 			and is_active=1 and docstatus=1""",
 			(bom_no, item), as_dict =1)
 		if not bom:
@@ -235,7 +235,7 @@ class BOM(Document):
 		for d in check_list:
 			bom_list, count = [self.name], 0
 			while (len(bom_list) > count ):
-				boms = frappe.db.sql(" select %s from `tabBOM Item` where %s = %s " %
+				boms = frappe.db.sql(" select %s from tabBOM_Item where %s = %s " %
 					(d[0], d[1], '%s'), cstr(bom_list[count]))
 				count = count + 1
 				for b in boms:
@@ -254,7 +254,7 @@ class BOM(Document):
 
 	def traverse_tree(self, bom_list=[]):
 		def _get_children(bom_no):
-			return [cstr(d[0]) for d in frappe.db.sql("""select bom_no from `tabBOM Item`
+			return [cstr(d[0]) for d in frappe.db.sql("""select bom_no from tabBOM_Item
 				where parent = %s and ifnull(bom_no, '') != ''""", bom_no)]
 
 		count = 0
@@ -338,7 +338,7 @@ class BOM(Document):
 		child_fb_items = frappe.db.sql("""select bom_item.item_code, bom_item.description,
 			bom_item.stock_uom, bom_item.qty, bom_item.rate,
 			ifnull(bom_item.qty, 0 ) / ifnull(bom.quantity, 1) as qty_consumed_per_unit
-			from `tabBOM Explosion Item` bom_item, tabBOM bom
+			from tabBOM_Explosion_Item bom_item, tabBOM bom
 			where bom_item.parent = bom.name and bom.name = %s and bom.docstatus = 1""", bom_no, as_dict = 1)
 
 		for d in child_fb_items:
@@ -352,7 +352,7 @@ class BOM(Document):
 
 	def add_exploded_items(self):
 		"Add items to Flat BOM table"
-		frappe.db.sql("""delete from `tabBOM Explosion Item` where parent=%s""", self.name)
+		frappe.db.sql("""delete from tabBOM_Explosion_Item where parent=%s""", self.name)
 		self.set('flat_bom_details', [])
 		for d in self.cur_exploded_items:
 			ch = self.append('flat_bom_details', {})
@@ -365,9 +365,9 @@ class BOM(Document):
 
 	def validate_bom_links(self):
 		if not self.is_active:
-			act_pbom = frappe.db.sql("""select distinct bom_item.parent from `tabBOM Item` bom_item
+			act_pbom = frappe.db.sql("""select distinct bom_item.parent from tabBOM_Item bom_item
 				where bom_item.bom_no = %s and bom_item.docstatus = 1
-				and exists (select * from `tabBOM` where name = bom_item.parent
+				and exists (select * from tabBOM where name = bom_item.parent
 					and docstatus = 1 and is_active = 1)""", self.name)
 
 			if act_pbom and act_pbom[0][0]:
@@ -387,7 +387,7 @@ def get_bom_items_as_dict(bom, qty=1, fetch_exploded=1):
 				item.expense_account as expense_account,
 				item.buying_cost_center as cost_center
 			from
-				`tab%(table)s` bom_item, `tabBOM` bom, `tabItem` item
+				`tab%(table)s` bom_item, tabBOM bom, tabItem item
 			where
 				bom_item.parent = bom.name
 				and bom_item.docstatus < 2

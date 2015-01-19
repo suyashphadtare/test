@@ -389,7 +389,7 @@ class AccountsController(TransactionBase):
 			select
 				t1.name as jv_no, t1.remark, t2.%s as amount, t2.name as jv_detail_no, `against_%s` as against_order
 			from
-				`tabJournal Voucher` t1, `tabJournal Voucher Detail` t2
+				tabJournal_Voucher t1, tabJournal_Voucher_Detail t2
 			where
 				t1.name = t2.parent and t2.account = %s and t2.is_advance = 'Yes' and t1.docstatus = 1
 				and ((
@@ -420,7 +420,7 @@ class AccountsController(TransactionBase):
 			account = self.get("debit_to" if self.doctype=="Sales Invoice" else "credit_to")
 
 			jv_against_order = frappe.db.sql("""select parent, %s as against_order
-				from `tabJournal Voucher Detail`
+				from tabJournal_Voucher_Detail
 				where docstatus=1 and account=%s and ifnull(is_advance, 'No') = 'Yes'
 				and ifnull(against_sales_order, '') in (%s)
 				group by parent, against_sales_order""" %
@@ -478,7 +478,7 @@ class AccountsController(TransactionBase):
 		item_codes = list(set(item.item_code for item in self.get(self.fname)))
 		if item_codes:
 			stock_items = [r[0] for r in frappe.db.sql("""select name
-				from `tabItem` where name in (%s) and is_stock_item='Yes'""" % \
+				from tabItem where name in (%s) and is_stock_item='Yes'""" % \
 				(", ".join((["%s"]*len(item_codes))),), item_codes)]
 
 		return stock_items
@@ -495,7 +495,7 @@ class AccountsController(TransactionBase):
 			select
 				sum(ifnull({dr_or_cr}, 0))
 			from
-				`tabJournal Voucher Detail`
+				tabJournal_Voucher_Detail
 			where
 				{against_field} = %s and docstatus = 1 and is_advance = "Yes" """.format(dr_or_cr=dr_or_cr, \
 					against_field=against_field), self.name)
@@ -519,7 +519,7 @@ class AccountsController(TransactionBase):
 	def check_credit_limit(self, account):
 		total_outstanding = frappe.db.sql("""
 			select sum(ifnull(debit, 0)) - sum(ifnull(credit, 0))
-			from `tabGL Entry` where account = %s""", account)
+			from tabGL_Entry where account = %s""", account)
 
 		total_outstanding = total_outstanding[0][0] if total_outstanding else 0
 		if total_outstanding:

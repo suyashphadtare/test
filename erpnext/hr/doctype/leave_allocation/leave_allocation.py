@@ -33,7 +33,7 @@ class LeaveAllocation(Document):
 
 	def check_existing_leave_allocation(self):
 		"""check whether leave for same type is already allocated or not"""
-		leave_allocation = frappe.db.sql("""select name from `tabLeave Allocation`
+		leave_allocation = frappe.db.sql("""select name from tabLeave_Allocation
 			where employee=%s and leave_type=%s and fiscal_year=%s and docstatus=1""",
 			(self.employee, self.leave_type, self.fiscal_year))
 		if leave_allocation:
@@ -46,21 +46,21 @@ class LeaveAllocation(Document):
 
 	def get_leaves_applied(self, fiscal_year):
 		leaves_applied = frappe.db.sql("""select SUM(ifnull(total_leave_days, 0))
-			from `tabLeave Application` where employee=%s and leave_type=%s
+			from tabLeave_Application where employee=%s and leave_type=%s
 			and fiscal_year=%s and docstatus=1""",
 			(self.employee, self.leave_type, fiscal_year))
 		return leaves_applied and flt(leaves_applied[0][0]) or 0
 
 	def get_leaves_allocated(self, fiscal_year):
 		leaves_allocated = frappe.db.sql("""select SUM(ifnull(total_leaves_allocated, 0))
-			from `tabLeave Allocation` where employee=%s and leave_type=%s
+			from tabLeave_Allocation where employee=%s and leave_type=%s
 			and fiscal_year=%s and docstatus=1 and name!=%s""",
 			(self.employee, self.leave_type, fiscal_year, self.name))
 		return leaves_allocated and flt(leaves_allocated[0][0]) or 0
 
 	def allow_carry_forward(self):
 		"""check whether carry forward is allowed or not for this leave type"""
-		cf = frappe.db.sql("""select is_carry_forward from `tabLeave Type` where name = %s""",
+		cf = frappe.db.sql("""select is_carry_forward from tabLeave_Type where name = %s""",
 			self.leave_type)
 		cf = cf and cint(cf[0][0]) or 0
 		if not cf:
@@ -70,9 +70,9 @@ class LeaveAllocation(Document):
 	def get_carry_forwarded_leaves(self):
 		if self.carry_forward:
 			self.allow_carry_forward()
-		prev_fiscal_year = frappe.db.sql("""select name from `tabFiscal Year`
+		prev_fiscal_year = frappe.db.sql("""select name from tabFiscal_Year
 			where year_start_date = (select date_add(year_start_date, interval -1 year)
-				from `tabFiscal Year` where name=%s)
+				from tabFiscal_Year where name=%s)
 			order by name desc limit 1""", self.fiscal_year)
 		prev_fiscal_year = prev_fiscal_year and prev_fiscal_year[0][0] or ''
 		prev_bal = 0
@@ -90,7 +90,7 @@ class LeaveAllocation(Document):
 		frappe.db.set(self,'total_leaves_allocated',flt(leave_det['total_leaves_allocated']))
 
 	def check_for_leave_application(self):
-		exists = frappe.db.sql("""select name from `tabLeave Application`
+		exists = frappe.db.sql("""select name from tabLeave_Application
 			where employee=%s and leave_type=%s and fiscal_year=%s and docstatus=1""",
 			(self.employee, self.leave_type, self.fiscal_year))
 		if exists:

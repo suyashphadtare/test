@@ -59,7 +59,7 @@ def get_conditions(filters):
 		else:
 			cond += " and master_type = 'Supplier'"
 
-		party_accounts = frappe.db.sql_list("""select name from `tabAccount`
+		party_accounts = frappe.db.sql_list("""select name from tabAccount
 			where ifnull(master_name, '')!='' and docstatus < 2 %s""" % cond)
 
 	if party_accounts:
@@ -77,7 +77,7 @@ def get_entries(filters):
 	entries =  frappe.db.sql("""select jv.name, jvd.account, jv.posting_date,
 		jvd.against_voucher, jvd.against_invoice, jvd.debit, jvd.credit,
 		jv.cheque_no, jv.cheque_date, jv.remark
-		from `tabJournal Voucher Detail` jvd, `tabJournal Voucher` jv
+		from tabJournal_Voucher_Detail jvd, tabJournal_Voucher jv
 		where jvd.parent = jv.name and jv.docstatus=1 %s order by jv.name DESC""" %
 		(conditions), tuple(party_accounts), as_dict=1)
 
@@ -86,10 +86,10 @@ def get_entries(filters):
 def get_invoice_posting_date_map(filters):
 	invoice_posting_date_map = {}
 	if filters.get("payment_type") == "Incoming":
-		for t in frappe.db.sql("""select name, posting_date from `tabSales Invoice`"""):
+		for t in frappe.db.sql("""select name, posting_date from tabSales_Invoice"""):
 			invoice_posting_date_map[t[0]] = t[1]
 	else:
-		for t in frappe.db.sql("""select name, posting_date from `tabPurchase Invoice`"""):
+		for t in frappe.db.sql("""select name, posting_date from tabPurchase_Invoice"""):
 			invoice_posting_date_map[t[0]] = t[1]
 
 	return invoice_posting_date_map

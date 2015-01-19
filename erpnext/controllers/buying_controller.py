@@ -309,7 +309,7 @@ class BuyingController(StockController):
 		bom_items = frappe.db.sql("""select t2.item_code,
 			ifnull(t2.qty, 0) / ifnull(t1.quantity, 1) as qty_consumed_per_unit,
 			t2.rate, t2.stock_uom, t2.name, t2.description
-			from `tabBOM` t1, `tabBOM Item` t2
+			from tabBOM t1, tabBOM_Item t2
 			where t2.parent = t1.name and t1.item = %s and t1.is_default = 1
 			and t1.docstatus = 1 and t1.is_active = 1""", item_code, as_dict=1)
 		if not bom_items:
@@ -325,7 +325,7 @@ class BuyingController(StockController):
 				self.get(self.fname)))
 			if item_codes:
 				self._sub_contracted_items = [r[0] for r in frappe.db.sql("""select name
-					from `tabItem` where name in (%s) and is_sub_contracted_item='Yes'""" % \
+					from tabItem where name in (%s) and is_sub_contracted_item='Yes'""" % \
 					(", ".join((["%s"]*len(item_codes))),), item_codes)]
 
 		return self._sub_contracted_items
@@ -338,7 +338,7 @@ class BuyingController(StockController):
 				self.get(self.fname)))
 			if item_codes:
 				self._purchase_items = [r[0] for r in frappe.db.sql("""select name
-					from `tabItem` where name in (%s) and is_purchase_item='Yes'""" % \
+					from tabItem where name in (%s) and is_purchase_item='Yes'""" % \
 					(", ".join((["%s"]*len(item_codes))),), item_codes)]
 
 		return self._purchase_items

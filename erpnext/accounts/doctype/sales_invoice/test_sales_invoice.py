@@ -197,7 +197,7 @@ class TestSalesInvoice(unittest.TestCase):
 		si.submit()
 
 		gl_entries = frappe.db.sql("""select account, debit, credit
-			from `tabGL Entry` where voucher_type='Sales Invoice' and voucher_no=%s
+			from tabGL_Entry where voucher_type='Sales Invoice' and voucher_no=%s
 			order by account asc""", si.name, as_dict=1)
 
 		self.assertTrue(gl_entries)
@@ -224,7 +224,7 @@ class TestSalesInvoice(unittest.TestCase):
 		# cancel
 		si.cancel()
 
-		gle = frappe.db.sql("""select * from `tabGL Entry`
+		gle = frappe.db.sql("""select * from tabGL_Entry
 			where voucher_type='Sales Invoice' and voucher_no=%s""", si.name)
 
 		self.assertFalse(gle)
@@ -348,7 +348,7 @@ class TestSalesInvoice(unittest.TestCase):
 		self.assertEquals(w.outstanding_amount, w.grand_total)
 
 	def test_payment(self):
-		frappe.db.sql("""delete from `tabGL Entry`""")
+		frappe.db.sql("""delete from tabGL_Entry""")
 		w = self.make()
 
 		from erpnext.accounts.doctype.journal_voucher.test_journal_voucher \
@@ -400,7 +400,7 @@ class TestSalesInvoice(unittest.TestCase):
 		si.submit()
 
 		gl_entries = frappe.db.sql("""select account, debit, credit
-			from `tabGL Entry` where voucher_type='Sales Invoice' and voucher_no=%s
+			from tabGL_Entry where voucher_type='Sales Invoice' and voucher_no=%s
 			order by account asc""", si.name, as_dict=1)
 
 		self.assertTrue(gl_entries)
@@ -420,7 +420,7 @@ class TestSalesInvoice(unittest.TestCase):
 		# cancel
 		si.cancel()
 
-		gle = frappe.db.sql("""select * from `tabGL Entry`
+		gle = frappe.db.sql("""select * from tabGL_Entry
 			where voucher_type='Sales Invoice' and voucher_no=%s""", si.name)
 
 		self.assertFalse(gle)
@@ -444,7 +444,7 @@ class TestSalesInvoice(unittest.TestCase):
 		si.submit()
 
 		# check stock ledger entries
-		sle = frappe.db.sql("""select * from `tabStock Ledger Entry`
+		sle = frappe.db.sql("""select * from tabStock_Ledger_Entry
 			where voucher_type = 'Sales Invoice' and voucher_no = %s""",
 			si.name, as_dict=1)[0]
 		self.assertTrue(sle)
@@ -453,7 +453,7 @@ class TestSalesInvoice(unittest.TestCase):
 
 		# check gl entries
 		gl_entries = frappe.db.sql("""select account, debit, credit
-			from `tabGL Entry` where voucher_type='Sales Invoice' and voucher_no=%s
+			from tabGL_Entry where voucher_type='Sales Invoice' and voucher_no=%s
 			order by account asc, debit asc""", si.name, as_dict=1)
 		self.assertTrue(gl_entries)
 
@@ -475,7 +475,7 @@ class TestSalesInvoice(unittest.TestCase):
 			self.assertEquals(expected_gl_entries[i][2], gle.credit)
 
 		si.cancel()
-		gle = frappe.db.sql("""select * from `tabGL Entry`
+		gle = frappe.db.sql("""select * from tabGL_Entry
 			where voucher_type='Sales Invoice' and voucher_no=%s""", si.name)
 
 		self.assertFalse(gle)
@@ -484,7 +484,7 @@ class TestSalesInvoice(unittest.TestCase):
 
 		set_perpetual_inventory(0)
 
-		frappe.db.sql("delete from `tabPOS Setting`")
+		frappe.db.sql("delete from tabPOS_Setting")
 
 	def make_pos_setting(self):
 		pos_setting = frappe.get_doc({
@@ -529,7 +529,7 @@ class TestSalesInvoice(unittest.TestCase):
 		si.submit()
 
 		# check stock ledger entries
-		sle = frappe.db.sql("""select * from `tabStock Ledger Entry`
+		sle = frappe.db.sql("""select * from tabStock_Ledger_Entry
 			where voucher_type = 'Sales Invoice' and voucher_no = %s""",
 			si.name, as_dict=1)[0]
 		self.assertTrue(sle)
@@ -538,7 +538,7 @@ class TestSalesInvoice(unittest.TestCase):
 
 		# check gl entries
 		gl_entries = frappe.db.sql("""select account, debit, credit
-			from `tabGL Entry` where voucher_type='Sales Invoice' and voucher_no=%s
+			from tabGL_Entry where voucher_type='Sales Invoice' and voucher_no=%s
 			order by account asc, debit asc""", si.name, as_dict=1)
 		self.assertTrue(gl_entries)
 
@@ -554,7 +554,7 @@ class TestSalesInvoice(unittest.TestCase):
 			self.assertEquals(expected_gl_entries[i][2], gle.credit)
 
 		si.cancel()
-		gle = frappe.db.sql("""select * from `tabGL Entry`
+		gle = frappe.db.sql("""select * from tabGL_Entry
 			where voucher_type='Sales Invoice' and voucher_no=%s""", si.name)
 
 		self.assertFalse(gle)
@@ -570,7 +570,7 @@ class TestSalesInvoice(unittest.TestCase):
 		si.submit()
 
 		gl_entries = frappe.db.sql("""select account, debit, credit
-			from `tabGL Entry` where voucher_type='Sales Invoice' and voucher_no=%s
+			from tabGL_Entry where voucher_type='Sales Invoice' and voucher_no=%s
 			order by account asc""", si.name, as_dict=1)
 		self.assertTrue(gl_entries)
 
@@ -596,7 +596,7 @@ class TestSalesInvoice(unittest.TestCase):
 		si.submit()
 
 		gl_entries = frappe.db.sql("""select account, debit, credit
-			from `tabGL Entry` where voucher_type='Sales Invoice' and voucher_no=%s
+			from tabGL_Entry where voucher_type='Sales Invoice' and voucher_no=%s
 			order by account asc""", si.name, as_dict=1)
 		self.assertTrue(gl_entries)
 
@@ -651,17 +651,17 @@ class TestSalesInvoice(unittest.TestCase):
 		si.submit()
 		si.load_from_db()
 
-		self.assertTrue(frappe.db.sql("""select name from `tabJournal Voucher Detail`
+		self.assertTrue(frappe.db.sql("""select name from tabJournal_Voucher_Detail
 			where against_invoice=%s""", si.name))
 
-		self.assertTrue(frappe.db.sql("""select name from `tabJournal Voucher Detail`
+		self.assertTrue(frappe.db.sql("""select name from tabJournal_Voucher_Detail
 			where against_invoice=%s and credit=300""", si.name))
 
 		self.assertEqual(si.outstanding_amount, 261.8)
 
 		si.cancel()
 
-		self.assertTrue(not frappe.db.sql("""select name from `tabJournal Voucher Detail`
+		self.assertTrue(not frappe.db.sql("""select name from tabJournal_Voucher_Detail
 			where against_invoice=%s""", si.name))
 
 	def test_recurring_invoice(self):
@@ -670,9 +670,9 @@ class TestSalesInvoice(unittest.TestCase):
 		test_recurring_document(self, test_records)
 
 	def clear_stock_account_balance(self):
-		frappe.db.sql("delete from `tabStock Ledger Entry`")
+		frappe.db.sql("delete from tabStock_Ledger_Entry")
 		frappe.db.sql("delete from tabBin")
-		frappe.db.sql("delete from `tabGL Entry`")
+		frappe.db.sql("delete from tabGL_Entry")
 
 	def test_serialized(self):
 		from erpnext.stock.doctype.stock_entry.test_stock_entry import make_serialized_item

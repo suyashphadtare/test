@@ -25,7 +25,7 @@ def execute():
 			frappe.db.sql("""update tabAccount set root_type=%s where name like %s
 				and ifnull(parent_account, '')=''""", (root_type, "%" + key + "%"))
 
-	for root in frappe.db.sql("""SELECT name, lft, rgt, root_type FROM `tabAccount`
+	for root in frappe.db.sql("""SELECT name, lft, rgt, root_type FROM tabAccount
 		WHERE ifnull(parent_account, '')=''""",	as_dict=True):
 			if root.root_type:
 				frappe.db.sql("""UPDATE tabAccount SET root_type=%s WHERE lft>%s and rgt<%s""",

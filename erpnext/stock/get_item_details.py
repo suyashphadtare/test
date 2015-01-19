@@ -261,18 +261,18 @@ def get_pos_settings_item_details(company, args, pos_settings=None):
 	return res
 
 def get_pos_settings(company):
-	pos_settings = frappe.db.sql("""select * from `tabPOS Setting` where user = %s
+	pos_settings = frappe.db.sql("""select * from tabPOS_Setting where user = %s
 		and company = %s""", (frappe.session['user'], company), as_dict=1)
 
 	if not pos_settings:
-		pos_settings = frappe.db.sql("""select * from `tabPOS Setting`
+		pos_settings = frappe.db.sql("""select * from tabPOS_Setting
 			where ifnull(user,'') = '' and company = %s""", company, as_dict=1)
 
 	return pos_settings and pos_settings[0] or None
 
 
 def get_serial_nos_by_fifo(args, item_doc):
-	return "\n".join(frappe.db.sql_list("""select name from `tabSerial No`
+	return "\n".join(frappe.db.sql_list("""select name from tabSerial_No
 		where item_code=%(item_code)s and warehouse=%(warehouse)s and status='Available'
 		order by timestamp(purchase_date, purchase_time) asc limit %(qty)s""", {
 			"item_code": args.item_code,

@@ -67,7 +67,7 @@ def get_consumed_details(filters):
 	for d in frappe.db.sql("""select sle.item_code, i.item_name, i.description, 
 		i.stock_uom, sle.actual_qty, sle.stock_value_difference, 
 		sle.voucher_no, sle.voucher_type
-		from `tabStock Ledger Entry` sle, `tabItem` i 
+		from tabStock_Ledger_Entry sle, tabItem i 
 		where sle.item_code=i.name and sle.actual_qty < 0 %s""" % conditions, values, as_dict=1):
 			consumed_details.setdefault(d.item_code, []).append(d)
 
@@ -78,9 +78,9 @@ def get_suppliers_details(filters):
 	supplier = filters.get('supplier')
 
 	for d in frappe.db.sql("""select pr.supplier, pri.item_code from 
-		`tabPurchase Receipt` pr, `tabPurchase Receipt Item` pri 
+		tabPurchase_Receipt pr, tabPurchase_Receipt_Item pri 
 		where pr.name=pri.parent and pr.docstatus=1 and 
-		pri.item_code=(select name from `tabItem` where 
+		pri.item_code=(select name from tabItem where 
 			ifnull(is_stock_item, 'Yes')='Yes' and name=pri.item_code)""", as_dict=1):
 			item_supplier_map.setdefault(d.item_code, []).append(d.supplier)
 	
@@ -92,5 +92,5 @@ def get_suppliers_details(filters):
 	return item_supplier_map
 
 def get_material_transfer_vouchers():
-	return frappe.db.sql_list("""select name from `tabStock Entry` where 
+	return frappe.db.sql_list("""select name from tabStock_Entry where 
 		purpose='Material Transfer' and docstatus=1""")

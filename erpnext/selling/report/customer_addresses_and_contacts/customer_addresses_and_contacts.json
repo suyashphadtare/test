@@ -10,7 +10,7 @@
  "module": "Selling",
  "name": "Customer Addresses and Contacts",
  "owner": "Administrator",
- "query": "SELECT\n\t`tabCustomer`.name as customer_id,\n\t`tabCustomer`.customer_name,\n\t`tabCustomer`.customer_group,\n\t`tabAddress`.address_line1,\n\t`tabAddress`.address_line2,\n\t`tabAddress`.city,\n\t`tabAddress`.state,\n\t`tabAddress`.pincode,\n\t`tabAddress`.country,\n\t`tabAddress`.is_primary_address, \n\t`tabContact`.first_name,\n\t`tabContact`.last_name,\n\t`tabContact`.phone,\n\t`tabContact`.mobile_no,\n\t`tabContact`.email_id,\n\t`tabContact`.is_primary_contact\nFROM\n\t`tabCustomer`\n\tleft join `tabAddress` on (\n\t\t`tabAddress`.customer=`tabCustomer`.name\n\t)\n\tleft join `tabContact` on (\n\t\t`tabContact`.customer=`tabCustomer`.name\n\t)\nWHERE\n\t`tabCustomer`.docstatus<2\nORDER BY\n\t`tabCustomer`.name asc",
+ "query": "SELECT\n\ttabCustomer.name as customer_id,\n\ttabCustomer.customer_name,\n\ttabCustomer.customer_group,\n\ttabAddress.address_line1,\n\ttabAddress.address_line2,\n\ttabAddress.city,\n\ttabAddress.state,\n\ttabAddress.pincode,\n\ttabAddress.country,\n\ttabAddress.is_primary_address, \n\ttabContact.first_name,\n\ttabContact.last_name,\n\ttabContact.phone,\n\ttabContact.mobile_no,\n\ttabContact.email_id,\n\ttabContact.is_primary_contact\nFROM\n\ttabCustomer\n\tleft join tabAddress on (\n\t\ttabAddress.customer=tabCustomer.name\n\t)\n\tleft join tabContact on (\n\t\ttabContact.customer=tabCustomer.name\n\t)\nWHERE\n\ttabCustomer.docstatus<2\nORDER BY\n\ttabCustomer.name asc",
  "ref_doctype": "Customer",
  "report_name": "Customer Addresses And Contacts",
  "report_type": "Query Report"

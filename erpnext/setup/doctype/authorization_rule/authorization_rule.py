@@ -11,7 +11,7 @@ from frappe.model.document import Document
 
 class AuthorizationRule(Document):
 	def check_duplicate_entry(self):
-		exists = frappe.db.sql("""select name, docstatus from `tabAuthorization Rule`
+		exists = frappe.db.sql("""select name, docstatus from tabAuthorization_Rule
 			where transaction = %s and based_on = %s and system_user = %s
 			and system_role = %s and approving_user = %s and approving_role = %s
 			and to_emp =%s and to_designation=%s and name != %s""",

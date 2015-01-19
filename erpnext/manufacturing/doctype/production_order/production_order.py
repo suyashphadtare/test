@@ -31,7 +31,7 @@ class ProductionOrder(Document):
 
 	def validate_bom_no(self):
 		if self.bom_no:
-			bom = frappe.db.sql("""select name from `tabBOM` where name=%s and docstatus=1
+			bom = frappe.db.sql("""select name from tabBOM where name=%s and docstatus=1
 				and is_active=1 and item=%s"""
 				, (self.bom_no, self.production_item), as_dict =1)
 			if not bom:
@@ -39,7 +39,7 @@ class ProductionOrder(Document):
 
 	def validate_sales_order(self):
 		if self.sales_order:
-			so = frappe.db.sql("""select name, delivery_date from `tabSales Order`
+			so = frappe.db.sql("""select name, delivery_date from tabSales_Order
 				where name=%s and docstatus = 1""", self.sales_order, as_dict=1)
 
 			if len(so):
@@ -62,18 +62,18 @@ class ProductionOrder(Document):
 
 	def validate_production_order_against_so(self):
 		# already ordered qty
-		ordered_qty_against_so = frappe.db.sql("""select sum(qty) from `tabProduction Order`
+		ordered_qty_against_so = frappe.db.sql("""select sum(qty) from tabProduction_Order
 			where production_item = %s and sales_order = %s and docstatus < 2 and name != %s""",
 			(self.production_item, self.sales_order, self.name))[0][0]
 
 		total_qty = flt(ordered_qty_against_so) + flt(self.qty)
 
 		# get qty from Sales Order Item table
-		so_item_qty = frappe.db.sql("""select sum(qty) from `tabSales Order Item`
+		so_item_qty = frappe.db.sql("""select sum(qty) from tabSales_Order_Item
 			where parent = %s and item_code = %s""",
 			(self.sales_order, self.production_item))[0][0]
 		# get qty from Packing Item table
-		dnpi_qty = frappe.db.sql("""select sum(qty) from `tabPacked Item`
+		dnpi_qty = frappe.db.sql("""select sum(qty) from tabPacked_Item
 			where parent = %s and parenttype = 'Sales Order' and item_code = %s""",
 			(self.sales_order, self.production_item))[0][0]
 		# total qty in SO
@@ -97,7 +97,7 @@ class ProductionOrder(Document):
 
 		if status != 'Stopped':
 			stock_entries = frappe._dict(frappe.db.sql("""select purpose, sum(fg_completed_qty)
-				from `tabStock Entry` where production_order=%s and docstatus=1
+				from tabStock_Entry where production_order=%s and docstatus=1
 				group by purpose""", self.name))
 
 			status = "Submitted"
@@ -112,7 +112,7 @@ class ProductionOrder(Document):
 
 	def update_produced_qty(self):
 		produced_qty = frappe.db.sql("""select sum(fg_completed_qty)
-			from `tabStock Entry` where production_order=%s and docstatus=1
+			from tabStock_Entry where production_order=%s and docstatus=1
 			and purpose='Manufacture'""", self.name)
 		produced_qty = flt(produced_qty[0][0]) if produced_qty else 0
 
@@ -132,7 +132,7 @@ class ProductionOrder(Document):
 
 	def on_cancel(self):
 		# Check whether any stock entry exists against this Production Order
-		stock_entry = frappe.db.sql("""select name from `tabStock Entry`
+		stock_entry = frappe.db.sql("""select name from tabStock_Entry
 			where production_order = %s and docstatus = 1""", self.name)
 		if stock_entry:
 			frappe.throw(_("Cannot cancel because submitted Stock Entry {0} exists").format(stock_entry[0][0]))
@@ -158,11 +158,11 @@ class ProductionOrder(Document):
 			self.save()
 
 	def bom_operations(self):
-		bom = frappe.db.sql("""select name from `tabBOM` where item=%s
+		bom = frappe.db.sql("""select name from tabBOM where item=%s
 		and ifnull(is_default, 0)=1""", self.production_item)
 		if bom:
 			bom_no = bom[0][0]
-			bom_operation=frappe.db.sql("select * from `tabBOM Operation` where parent='%s'"%(bom_no),as_dict=1)
+			bom_operation=frappe.db.sql("select * from tabBOM_Operation where parent='%s'"%(bom_no),as_dict=1)
 			self.set('bom_operation', [])
 			for data in bom_operation:
 				nl = self.append('bom_operation', {})
@@ -199,14 +199,14 @@ class ProductionOrder(Document):
 @frappe.whitelist()
 def get_item_details(item):
 	res = frappe.db.sql("""select stock_uom, description
-		from `tabItem` where (ifnull(end_of_life, "")="" or end_of_life > now())
+		from tabItem where (ifnull(end_of_life, "")="" or end_of_life > now())
 		and name=%s""", item, as_dict=1)
 
 	if not res:
 		return {}
 
 	res = res[0]
-	bom = frappe.db.sql("""select name as bom_no,total_fixed_cost  from `tabBOM` where item=%s
+	bom = frappe.db.sql("""select name as bom_no,total_fixed_cost  from tabBOM where item=%s
 		and ifnull(is_default, 0)=1""", item, as_dict=1)
 	if bom:
 		res.update(bom[0])

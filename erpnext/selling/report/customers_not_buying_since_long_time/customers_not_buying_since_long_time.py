@@ -36,13 +36,13 @@ def get_so_details():
 				so.net_total)) as 'total_order_considered',
 			max(so.transaction_date) as 'last_sales_order_date',
 			DATEDIFF(CURDATE(), max(so.transaction_date)) as 'days_since_last_order'
-		from `tabCustomer` cust, `tabSales Order` so
+		from tabCustomer cust, tabSales_Order so
 		where cust.name = so.customer and so.docstatus = 1
 		group by cust.name
 		order by 'days_since_last_order' desc """,as_list=1)
 
 def get_last_so_amt(customer):
-	res =  frappe.db.sql("""select net_total from `tabSales Order`
+	res =  frappe.db.sql("""select net_total from tabSales_Order
 		where customer ='%(customer)s' and docstatus = 1 order by transaction_date desc
 		limit 1""" % {'customer':customer})
 

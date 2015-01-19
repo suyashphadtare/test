@@ -18,7 +18,7 @@ class SalaryStructure(Document):
 	def get_employee_details(self):
 		ret = {}
 		det = frappe.db.sql("""select employee_name, branch, designation, department
-			from `tabEmployee` where name = %s""", self.employee)
+			from tabEmployee where name = %s""", self.employee)
 		if det:
 			ret = {
 				'employee_name': cstr(det[0][0]),
@@ -31,7 +31,7 @@ class SalaryStructure(Document):
 
 	def get_ss_values(self,employee):
 		basic_info = frappe.db.sql("""select bank_name, bank_ac_no
-			from `tabEmployee` where name =%s""", employee)
+			from tabEmployee where name =%s""", employee)
 		ret = {'bank_name': basic_info and basic_info[0][0] or '',
 			'bank_ac_no': basic_info and basic_info[0][1] or ''}
 		return ret
@@ -52,7 +52,7 @@ class SalaryStructure(Document):
 		self.make_table('Deduction Type','deduction_details', 'Salary Structure Deduction')
 
 	def check_existing(self):
-		ret = frappe.db.sql("""select name from `tabSalary Structure` where is_active = 'Yes'
+		ret = frappe.db.sql("""select name from tabSalary_Structure where is_active = 'Yes'
 			and employee = %s and name!=%s""", (self.employee,self.name))
 
 		if ret and self.is_active=='Yes':

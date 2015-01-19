@@ -29,7 +29,7 @@ def get_applicable_block_dates(from_date, to_date, employee=None,
 	block_dates = []
 	for block_list in get_applicable_block_lists(employee, company, all_lists):
 		block_dates.extend(frappe.db.sql("""select block_date, reason 
-			from `tabLeave Block List Date` where parent=%s 
+			from tabLeave_Block_List_Date where parent=%s 
 			and block_date between %s and %s""", (block_list, from_date, to_date), 
 			as_dict=1))
 			
@@ -58,7 +58,7 @@ def get_applicable_block_lists(employee=None, company=None, all_lists=False):
 		add_block_list(block_list)
 
 	# global
-	for block_list in frappe.db.sql_list("""select name from `tabLeave Block List`
+	for block_list in frappe.db.sql_list("""select name from tabLeave_Block_List
 		where ifnull(applies_to_all_departments,0)=1 and company=%s""", company):
 		add_block_list(block_list)
 		
@@ -66,4 +66,4 @@ def get_applicable_block_lists(employee=None, company=None, all_lists=False):
 	
 def is_user_in_allow_list(block_list):
 	return frappe.session.user in frappe.db.sql_list("""select allow_user
-		from `tabLeave Block List Allow` where parent=%s""", block_list)
+		from tabLeave_Block_List_Allow where parent=%s""", block_list)

@@ -77,11 +77,11 @@ class LeaveApplication(Document):
 					LeaveDayBlockedError)
 
 	def get_holidays(self):
-		tot_hol = frappe.db.sql("""select count(*) from `tabHoliday` h1, `tabHoliday List` h2, `tabEmployee` e1
+		tot_hol = frappe.db.sql("""select count(*) from tabHoliday h1, tabHoliday_List h2, tabEmployee e1
 			where e1.name = %s and h1.parent = h2.name and e1.holiday_list = h2.name
 			and h1.holiday_date between %s and %s""", (self.employee, self.from_date, self.to_date))
 		if not tot_hol:
-			tot_hol = frappe.db.sql("""select count(*) from `tabHoliday` h1, `tabHoliday List` h2
+			tot_hol = frappe.db.sql("""select count(*) from tabHoliday h1, tabHoliday_List h2
 				where h1.parent = h2.name and h1.holiday_date between %s and %s
 				and ifnull(h2.is_default,0) = 1 and h2.fiscal_year = %s""",
 				(self.from_date, self.to_date, self.fiscal_year))
@@ -129,7 +129,7 @@ class LeaveApplication(Document):
 
 		for d in frappe.db.sql("""select name, leave_type, posting_date,
 			from_date, to_date
-			from `tabLeave Application`
+			from tabLeave_Application
 			where
 			employee = %(employee)s
 			and docstatus < 2
@@ -160,7 +160,7 @@ class LeaveApplication(Document):
 		if len(leave_approvers) and self.leave_approver not in leave_approvers:
 			frappe.throw(_("Leave approver must be one of {0}").format(comma_or(leave_approvers)), InvalidLeaveApproverError)
 
-		elif self.leave_approver and not frappe.db.sql("""select name from `tabUserRole`
+		elif self.leave_approver and not frappe.db.sql("""select name from tabUserRole
 			where parent=%s and role='Leave Approver'""", self.leave_approver):
 			frappe.throw(_("{0} ({1}) must have role 'Leave Approver'")\
 				.format(get_fullname(self.leave_approver), self.leave_approver), InvalidLeaveApproverError)
@@ -219,14 +219,14 @@ class LeaveApplication(Document):
 @frappe.whitelist()
 def get_leave_balance(employee, leave_type, fiscal_year):
 	leave_all = frappe.db.sql("""select total_leaves_allocated
-		from `tabLeave Allocation` where employee = %s and leave_type = %s
+		from tabLeave_Allocation where employee = %s and leave_type = %s
 		and fiscal_year = %s and docstatus = 1""", (employee,
 			leave_type, fiscal_year))
 
 	leave_all = leave_all and flt(leave_all[0][0]) or 0
 
 	leave_app = frappe.db.sql("""select SUM(total_leave_days)
-		from `tabLeave Application`
+		from tabLeave_Application
 		where employee = %s and leave_type = %s and fiscal_year = %s
 		and status="Approved" and docstatus = 1""", (employee, leave_type, fiscal_year))
 	leave_app = leave_app and flt(leave_app[0][0]) or 0
@@ -235,7 +235,7 @@ def get_leave_balance(employee, leave_type, fiscal_year):
 	return ret
 
 def is_lwp(leave_type):
-	lwp = frappe.db.sql("select is_lwp from `tabLeave Type` where name = %s", leave_type)
+	lwp = frappe.db.sql("select is_lwp from tabLeave_Type where name = %s", leave_type)
 	return lwp and cint(lwp[0][0]) or 0
 
 @frappe.whitelist()
@@ -279,7 +279,7 @@ def add_department_leaves(events, start, end, employee, company):
 def add_leaves(events, start, end, match_conditions=None):
 	query = """select name, from_date, to_date, employee_name, half_day,
 		status, employee, docstatus
-		from `tabLeave Application` where
+		from tabLeave_Application where
 		(from_date between %s and %s or to_date between %s and %s)
 		and docstatus < 2
 		and status!="Rejected" """
@@ -322,7 +322,7 @@ def add_holidays(events, start, end, employee, company):
 		return
 
 	for holiday in frappe.db.sql("""select name, holiday_date, description
-		from `tabHoliday` where parent=%s and holiday_date between %s and %s""",
+		from tabHoliday where parent=%s and holiday_date between %s and %s""",
 		(applicable_holiday_list, start, end), as_dict=True):
 			events.append({
 				"doctype": "Holiday",

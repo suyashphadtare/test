@@ -13,7 +13,7 @@ def execute():
 		docs_with_discount_amount[dt] = records
 
 	for dt, discounted_records in docs_with_discount_amount.items():
-		frappe.db.sql("""update `tabSales Taxes and Charges`
+		frappe.db.sql("""update tabSales_Taxes_and_Charges
 			set tax_amount_after_discount_amount = tax_amount
 			where parenttype = %s and parent not in (%s)""" %
 			('%s', ', '.join(['%s']*(len(discounted_records)+1))),

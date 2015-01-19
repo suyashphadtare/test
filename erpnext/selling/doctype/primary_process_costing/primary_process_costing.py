@@ -24,7 +24,7 @@ class PrimaryProcessCosting(Document):
 		return "done"
 
 	def update_new_rfq(self,idx):
-		rfq_name=frappe.db.sql("select name from `tabPrimary Process RFQ` where docstatus=0 order by creation desc limit 1",as_list=1)
+		rfq_name=frappe.db.sql("select name from tabPrimary_Process_RFQ where docstatus=0 order by creation desc limit 1",as_list=1)
 		if rfq_name:
 			for item in self.get('primary_process'):
 				if item.idx==idx:

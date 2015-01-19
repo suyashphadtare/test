@@ -19,11 +19,11 @@ class TimeLogBatchTest(unittest.TestCase):
 		delete_time_log_and_batch()
 
 def delete_time_log_and_batch():
-	for name in frappe.db.sql_list("select name from `tabTime Log Batch` where docstatus=1"):
+	for name in frappe.db.sql_list("select name from tabTime_Log_Batch where docstatus=1"):
 		frappe.get_doc("Time Log Batch", name).cancel()
 		frappe.delete_doc("Time Log Batch", name)
 
-	for name in frappe.db.sql_list("select name from `tabTime Log` where docstatus=1"):
+	for name in frappe.db.sql_list("select name from tabTime_Log where docstatus=1"):
 		frappe.get_doc("Time Log", name).cancel()
 		frappe.delete_doc("Time Log", name)
 

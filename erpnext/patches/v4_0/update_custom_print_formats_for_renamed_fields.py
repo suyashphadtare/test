@@ -27,7 +27,7 @@ def execute():
 	condition = " or ".join("""html like "%%{}%%" """.format(d[0].replace("_", "\\_")) for d in fields_list
 		if d[0] != "amount")
 
-	for name, html in frappe.db.sql("""select name, html from `tabPrint Format`
+	for name, html in frappe.db.sql("""select name, html from tabPrint_Format
 		where standard = 'No' and ({}) and html not like '%%frappe.%%'""".format(condition)):
 			html = html.replace("wn.", "frappe.")
 			for from_field, to_field in fields_list:

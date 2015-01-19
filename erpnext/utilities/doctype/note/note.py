@@ -24,10 +24,10 @@ def get_permission_query_conditions(user):
 	if user == "Administrator":
 		return ""
 
-	return """(`tabNote`.public=1 or `tabNote`.owner="{user}" or exists (
-		select name from `tabNote User`
-			where `tabNote User`.parent=`tabNote`.name
-			and `tabNote User`.user="{user}"))""".format(user=user)
+	return """(tabNote.public=1 or tabNote.owner="{user}" or exists (
+		select name from tabNote_User
+			where tabNote_User.parent=tabNote.name
+			and tabNote_User.user="{user}"))""".format(user=user)
 
 def has_permission(doc, ptype, user):
 	if doc.public == 1 or user == "Administrator":

@@ -208,9 +208,9 @@ class TestDeliveryNote(unittest.TestCase):
 		self.assertRaises(SerialNoStatusError, dn.submit)
 
 	def clear_stock_account_balance(self):
-		frappe.db.sql("""delete from `tabBin`""")
-		frappe.db.sql("delete from `tabStock Ledger Entry`")
-		frappe.db.sql("delete from `tabGL Entry`")
+		frappe.db.sql("""delete from tabBin""")
+		frappe.db.sql("delete from tabStock_Ledger_Entry")
+		frappe.db.sql("delete from tabGL_Entry")
 
 test_dependencies = ["Sales BOM"]
 

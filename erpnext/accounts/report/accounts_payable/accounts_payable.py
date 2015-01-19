@@ -14,7 +14,7 @@ def execute(filters=None):
 	entries = get_gl_entries(filters)
 	account_map = dict(((r.name, r) for r in frappe.db.sql("""select acc.name, 
 		supp.supplier_name, supp.name as supplier 
-		from `tabAccount` acc, `tabSupplier` supp 
+		from tabAccount acc, tabSupplier supp 
 		where acc.master_type="Supplier" and supp.name=acc.master_name""", as_dict=1)))
 
 	entries_after_report_date = [[gle.voucher_type, gle.voucher_no] 
@@ -86,7 +86,7 @@ def get_columns(supplier_naming_by):
 def get_gl_entries(filters, before_report_date=True):
 	conditions, supplier_accounts = get_conditions(filters, before_report_date)
 	gl_entries = []
-	gl_entries = frappe.db.sql("""select * from `tabGL Entry` 
+	gl_entries = frappe.db.sql("""select * from tabGL_Entry 
 		where docstatus < 2 %s order by posting_date, account""" % 
 		(conditions), tuple(supplier_accounts), as_dict=1)
 	return gl_entries
@@ -100,7 +100,7 @@ def get_conditions(filters, before_report_date=True):
 	if filters.get("account"):
 		supplier_accounts = [filters["account"]]
 	else:
-		supplier_accounts = frappe.db.sql_list("""select name from `tabAccount` 
+		supplier_accounts = frappe.db.sql_list("""select name from tabAccount 
 			where ifnull(master_type, '') = 'Supplier' and docstatus < 2 %s""" % 
 			conditions, filters)
 	
@@ -119,8 +119,8 @@ def get_conditions(filters, before_report_date=True):
 	
 def get_account_supplier_type_map():
 	account_supplier_type_map = {}
-	for each in frappe.db.sql("""select acc.name, supp.supplier_type from `tabSupplier` supp, 
-			`tabAccount` acc where supp.name = acc.master_name group by acc.name"""):
+	for each in frappe.db.sql("""select acc.name, supp.supplier_type from tabSupplier supp, 
+			tabAccount acc where supp.name = acc.master_name group by acc.name"""):
 		account_supplier_type_map[each[0]] = each[1]
 
 	return account_supplier_type_map
@@ -138,7 +138,7 @@ def get_voucher_details():
 def get_outstanding_amount(gle, report_date):
 	payment_amount = frappe.db.sql("""
 		select sum(ifnull(debit, 0)) - sum(ifnull(credit, 0)) 
-		from `tabGL Entry` 
+		from tabGL_Entry 
 		where account = %s and posting_date <= %s and against_voucher_type = %s 
 		and against_voucher = %s and name != %s""", 
 		(gle.account, report_date, gle.voucher_type, gle.voucher_no, gle.name))[0][0]

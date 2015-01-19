@@ -52,7 +52,7 @@ def get_stock_ledger_entries(filters):
 	query = """select item_code, voucher_type, voucher_no,
 		voucher_detail_no, posting_date, posting_time, stock_value,
 		warehouse, actual_qty as qty
-		from `tabStock Ledger Entry`"""
+		from tabStock_Ledger_Entry"""
 
 	if filters.get("company"):
 		query += """ where company=%(company)s"""
@@ -75,7 +75,7 @@ def get_item_sales_bom():
 
 	for d in frappe.db.sql("""select parenttype, parent, parent_item,
 		item_code, warehouse, -1*qty as total_qty, parent_detail_docname
-		from `tabPacked Item` where docstatus=1""", as_dict=True):
+		from tabPacked_Item where docstatus=1""", as_dict=True):
 		item_sales_bom.setdefault(d.parenttype, frappe._dict()).setdefault(d.parent,
 			frappe._dict()).setdefault(d.parent_item, []).append(d)
 
@@ -95,7 +95,7 @@ def get_source_data(filters):
 		item.item_code, item.item_name, item.description, item.warehouse,
 		item.qty, item.base_rate, item.base_amount, item.name as "item_row",
 		timestamp(dn.posting_date, dn.posting_time) as posting_datetime
-		from `tabDelivery Note` dn, `tabDelivery Note Item` item
+		from tabDelivery_Note dn, tabDelivery_Note_Item item
 		where item.parent = dn.name and dn.docstatus = 1 %s
 		order by dn.posting_date desc, dn.posting_time desc""" % (conditions,), filters, as_dict=1)
 
@@ -104,7 +104,7 @@ def get_source_data(filters):
 		item.item_code, item.item_name, item.description, item.warehouse,
 		item.qty, item.base_rate, item.base_amount, item.name as "item_row",
 		timestamp(si.posting_date, si.posting_time) as posting_datetime
-		from `tabSales Invoice` si, `tabSales Invoice Item` item
+		from tabSales_Invoice si, tabSales_Invoice_Item item
 		where item.parent = si.name and si.docstatus = 1 %s
 		and si.update_stock = 1
 		order by si.posting_date desc, si.posting_time desc""" % (conditions,), filters, as_dict=1)

@@ -39,12 +39,12 @@ class MaterialRequest(BuyingController):
 		for so_no in so_items.keys():
 			for item in so_items[so_no].keys():
 				already_indented = frappe.db.sql("""select sum(ifnull(qty, 0))
-					from `tabMaterial Request Item`
+					from tabMaterial_Request_Item
 					where item_code = %s and sales_order_no = %s and
 					docstatus = 1 and parent != %s""", (item, so_no, self.name))
 				already_indented = already_indented and flt(already_indented[0][0]) or 0
 
-				actual_so_qty = frappe.db.sql("""select sum(ifnull(qty, 0)) from `tabSales Order Item`
+				actual_so_qty = frappe.db.sql("""select sum(ifnull(qty, 0)) from tabSales_Order_Item
 					where parent = %s and item_code = %s and docstatus = 1""", (so_no, item))
 				actual_so_qty = actual_so_qty and flt(actual_so_qty[0][0]) or 0
 
@@ -105,7 +105,7 @@ class MaterialRequest(BuyingController):
 		self.update_bin(is_submit = 1, is_stopped = 0)
 
 	def check_modified_date(self):
-		mod_db = frappe.db.sql("""select modified from `tabMaterial Request` where name = %s""",
+		mod_db = frappe.db.sql("""select modified from tabMaterial_Request where name = %s""",
 			self.name)
 		date_diff = frappe.db.sql("""select TIMEDIFF('%s', '%s')"""
 			% (mod_db[0][0], cstr(self.modified)))
@@ -147,7 +147,7 @@ class MaterialRequest(BuyingController):
 		for d in item_doclist:
 			if d.name in mr_items:
 				d.ordered_qty =  flt(frappe.db.sql("""select sum(transfer_qty)
-					from `tabStock Entry Detail` where material_request = %s
+					from tabStock_Entry_Detail where material_request = %s
 					and material_request_item = %s and docstatus = 1""",
 					(self.name, d.name))[0][0])
 				frappe.db.set_value(d.doctype, d.name, "ordered_qty", d.ordered_qty)
@@ -289,7 +289,7 @@ def get_material_requests_based_on_supplier(supplier):
 		{"default_supplier": supplier})]
 	if supplier_items:
 		material_requests = frappe.db.sql_list("""select distinct mr.name
-			from `tabMaterial Request` mr, `tabMaterial Request Item` mr_item
+			from tabMaterial_Request mr, tabMaterial_Request_Item mr_item
 			where mr.name = mr_item.parent
 			and mr_item.item_code in (%s)
 			and mr.material_request_type = 'Purchase'

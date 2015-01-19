@@ -52,7 +52,7 @@ class PackingSlip(Document):
 				raise_exception=1)
 
 
-		res = frappe.db.sql("""SELECT name FROM `tabPacking Slip`
+		res = frappe.db.sql("""SELECT name FROM tabPacking_Slip
 			WHERE delivery_note = %(delivery_note)s AND docstatus = 1 AND
 			((from_case_no BETWEEN %(from_case_no)s AND %(to_case_no)s)
 			OR (to_case_no BETWEEN %(from_case_no)s AND %(to_case_no)s)
@@ -95,11 +95,11 @@ class PackingSlip(Document):
 		# gets item code, qty per item code, latest packed qty per item code and stock uom
 		res = frappe.db.sql("""select item_code, ifnull(sum(qty), 0) as qty,
 			(select sum(ifnull(psi.qty, 0) * (abs(ps.to_case_no - ps.from_case_no) + 1))
-				from `tabPacking Slip` ps, `tabPacking Slip Item` psi
+				from tabPacking_Slip ps, tabPacking_Slip_Item psi
 				where ps.name = psi.parent and ps.docstatus = 1
 				and ps.delivery_note = dni.parent and psi.item_code=dni.item_code) as packed_qty,
 			stock_uom, item_name
-			from `tabDelivery Note Item` dni
+			from tabDelivery_Note_Item dni
 			where parent=%s %s
 			group by item_code""" % ("%s", condition),
 			tuple([self.delivery_note] + rows), as_dict=1)
@@ -140,7 +140,7 @@ class PackingSlip(Document):
 			Returns the next case no. for a new packing slip for a delivery
 			note
 		"""
-		recommended_case_no = frappe.db.sql("""SELECT MAX(to_case_no) FROM `tabPacking Slip`
+		recommended_case_no = frappe.db.sql("""SELECT MAX(to_case_no) FROM tabPacking_Slip
 			WHERE delivery_note = %s AND docstatus=1""", self.delivery_note)
 
 		return cint(recommended_case_no[0][0]) + 1
@@ -160,8 +160,8 @@ class PackingSlip(Document):
 
 def item_details(doctype, txt, searchfield, start, page_len, filters):
 	from erpnext.controllers.queries import get_match_cond
-	return frappe.db.sql("""select name, item_name, description from `tabItem`
-				where name in ( select item_code FROM `tabDelivery Note Item`
+	return frappe.db.sql("""select name, item_name, description from tabItem
+				where name in ( select item_code FROM tabDelivery_Note_Item
 	 						where parent= %s)
 	 			and %s like "%s" %s
 	 			limit  %s, %s """ % ("%s", searchfield, "%s",

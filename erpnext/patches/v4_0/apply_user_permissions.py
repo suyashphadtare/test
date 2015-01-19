@@ -15,17 +15,17 @@ def update_hr_permissions():
 	from frappe.core.page.user_permissions import user_permissions
 
 	# add set user permissions rights to HR Manager
-	frappe.db.sql("""update `tabDocPerm` set `set_user_permissions`=1 where parent in ('Employee', 'Leave Application')
+	frappe.db.sql("""update tabDocPerm set `set_user_permissions`=1 where parent in ('Employee', 'Leave Application')
 		and role='HR Manager' and permlevel=0 and `read`=1""")
 
 	# apply user permissions on Employee and Leave Application
-	frappe.db.sql("""update `tabDocPerm` set `apply_user_permissions`=1 where parent in ('Employee', 'Leave Application')
+	frappe.db.sql("""update tabDocPerm set `apply_user_permissions`=1 where parent in ('Employee', 'Leave Application')
 		and role in ('Employee', 'Leave Approver') and permlevel=0 and `read`=1""")
 
 	frappe.clear_cache()
 
 	# save employees to run on_update events
-	for employee in frappe.db.sql_list("""select name from `tabEmployee` where docstatus < 2"""):
+	for employee in frappe.db.sql_list("""select name from tabEmployee where docstatus < 2"""):
 		try:
 			emp = frappe.get_doc("Employee", employee)
 			emp.ignore_mandatory = True

@@ -24,7 +24,7 @@ class SalesPartner(WebsiteGenerator):
 			return frappe.db.convert_to_lists(frappe.db.sql("""
 				select name, CONCAT(IFNULL(first_name,''),
 					' ',IFNULL(last_name,'')),contact_no,email_id
-				from `tabContact` where sales_partner = %s""", nm))
+				from tabContact where sales_partner = %s""", nm))
 		else:
 			return ''
 

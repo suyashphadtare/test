@@ -37,7 +37,7 @@ class PurchaseCommon(BuyingController):
 
 			# update last purchsae rate
 			if last_purchase_rate:
-				frappe.db.sql("""update `tabItem` set last_purchase_rate = %s where name = %s""",
+				frappe.db.sql("""update tabItem set last_purchase_rate = %s where name = %s""",
 					(flt(last_purchase_rate), d.item_code))
 
 	def get_last_purchase_rate(self, obj):
@@ -73,7 +73,7 @@ class PurchaseCommon(BuyingController):
 				frappe.throw(_("Please enter quantity for Item {0}").format(d.item_code))
 
 			# udpate with latest quantities
-			bin = frappe.db.sql("""select projected_qty from `tabBin` where
+			bin = frappe.db.sql("""select projected_qty from tabBin where
 				item_code = %s and warehouse = %s""", (d.item_code, d.warehouse), as_dict=1)
 
 			f_lst ={'projected_qty': bin and flt(bin[0]['projected_qty']) or 0, 'ordered_qty': 0, 'received_qty' : 0}
@@ -84,7 +84,7 @@ class PurchaseCommon(BuyingController):
 					d.set(x, f_lst[x])
 
 			item = frappe.db.sql("""select is_stock_item, is_purchase_item,
-				is_sub_contracted_item, end_of_life from `tabItem` where name=%s""", d.item_code)
+				is_sub_contracted_item, end_of_life from tabItem where name=%s""", d.item_code)
 
 			from erpnext.stock.doctype.item.item import validate_end_of_life
 			validate_end_of_life(d.item_code, item[0][3])
@@ -107,7 +107,7 @@ class PurchaseCommon(BuyingController):
 			# if is not stock item
 			f = [getattr(d, "schedule_date", None), d.item_code, d.description]
 
-			ch = frappe.db.sql("""select is_stock_item from `tabItem` where name = %s""", d.item_code)
+			ch = frappe.db.sql("""select is_stock_item from tabItem where name = %s""", d.item_code)
 
 			if ch and ch[0][0] == 'Yes':
 				# check for same items

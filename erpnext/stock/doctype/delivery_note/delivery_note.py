@@ -38,7 +38,7 @@ class DeliveryNote(SellingController):
 		}]
 
 	def onload(self):
-		billed_qty = frappe.db.sql("""select sum(ifnull(qty, 0)) from `tabSales Invoice Item`
+		billed_qty = frappe.db.sql("""select sum(ifnull(qty, 0)) from tabSales_Invoice_Item
 			where docstatus=1 and delivery_note=%s""", self.name)
 		if billed_qty:
 			total_qty = sum((item.qty for item in self.get("delivery_note_details")))
@@ -64,7 +64,7 @@ class DeliveryNote(SellingController):
 	def set_actual_qty(self):
 		for d in self.get('delivery_note_details'):
 			if d.item_code and d.warehouse:
-				actual_qty = frappe.db.sql("""select actual_qty from `tabBin`
+				actual_qty = frappe.db.sql("""select actual_qty from tabBin
 					where item_code = %s and warehouse = %s""", (d.item_code, d.warehouse))
 				d.actual_qty = actual_qty and flt(actual_qty[0][0]) or 0
 
@@ -122,7 +122,7 @@ class DeliveryNote(SellingController):
 	def validate_proj_cust(self):
 		"""check for does customer belong to same project as entered.."""
 		if self.project_name and self.customer:
-			res = frappe.db.sql("""select name from `tabProject`
+			res = frappe.db.sql("""select name from tabProject
 				where name = %s and (customer = %s or
 					ifnull(customer,'')='')""", (self.project_name, self.customer))
 			if not res:
@@ -214,14 +214,14 @@ class DeliveryNote(SellingController):
 
 	def check_next_docstatus(self):
 		submit_rv = frappe.db.sql("""select t1.name
-			from `tabSales Invoice` t1,`tabSales Invoice Item` t2
+			from tabSales_Invoice t1,tabSales_Invoice_Item t2
 			where t1.name = t2.parent and t2.delivery_note = %s and t1.docstatus = 1""",
 			(self.name))
 		if submit_rv:
 			frappe.throw(_("Sales Invoice {0} has already been submitted").format(submit_rv[0][0]))
 
 		submit_in = frappe.db.sql("""select t1.name
-			from `tabInstallation Note` t1, `tabInstallation Note Item` t2
+			from tabInstallation_Note t1, tabInstallation_Note_Item t2
 			where t1.name = t2.parent and t2.prevdoc_docname = %s and t1.docstatus = 1""",
 			(self.name))
 		if submit_in:
@@ -231,7 +231,7 @@ class DeliveryNote(SellingController):
 		"""
 			Cancel submitted packing slips related to this delivery note
 		"""
-		res = frappe.db.sql("""SELECT name FROM `tabPacking Slip` WHERE delivery_note = %s
+		res = frappe.db.sql("""SELECT name FROM tabPacking_Slip WHERE delivery_note = %s
 			AND docstatus = 1""", self.name)
 
 		if res:
@@ -285,7 +285,7 @@ def get_invoiced_qty_map(delivery_note):
 	"""returns a map: {dn_detail: invoiced_qty}"""
 	invoiced_qty_map = {}
 
-	for dn_detail, qty in frappe.db.sql("""select dn_detail, qty from `tabSales Invoice Item`
+	for dn_detail, qty in frappe.db.sql("""select dn_detail, qty from tabSales_Invoice_Item
 		where delivery_note=%s and docstatus=1""", delivery_note):
 			if not invoiced_qty_map.get(dn_detail):
 				invoiced_qty_map[dn_detail] = 0

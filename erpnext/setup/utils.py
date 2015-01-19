@@ -50,10 +50,10 @@ def before_tests():
 			"password"			:"test"
 		})
 
-	frappe.db.sql("delete from `tabLeave Allocation`")
-	frappe.db.sql("delete from `tabLeave Application`")
-	frappe.db.sql("delete from `tabSalary Slip`")
-	frappe.db.sql("delete from `tabItem Price`")
+	frappe.db.sql("delete from tabLeave_Allocation")
+	frappe.db.sql("delete from tabLeave_Application")
+	frappe.db.sql("delete from tabSalary_Slip")
+	frappe.db.sql("delete from tabItem_Price")
 	frappe.db.commit()
 
 def get_exchange_rate(from_currency, to_currency):

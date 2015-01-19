@@ -52,7 +52,7 @@ def get_stock_ledger_entries(filters):
 	conditions = get_conditions(filters)
 	return frappe.db.sql("""select item_code, batch_no, warehouse,
 		posting_date, actual_qty
-		from `tabStock Ledger Entry`
+		from tabStock_Ledger_Entry
 		where docstatus < 2 %s order by item_code, warehouse""" %
 		conditions, as_dict=1)
 

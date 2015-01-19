@@ -10,7 +10,7 @@ from erpnext.accounts.doctype.journal_voucher.test_journal_voucher import test_r
 class TestPeriodClosingVoucher(unittest.TestCase):
 	def test_closing_entry(self):
 		# clear GL Entries
-		frappe.db.sql("""delete from `tabGL Entry`""")
+		frappe.db.sql("""delete from tabGL_Entry""")
 		jv = frappe.copy_doc(jv_records[2])
 		jv.insert()
 		jv.submit()
@@ -28,7 +28,7 @@ class TestPeriodClosingVoucher(unittest.TestCase):
 		pcv.submit()
 
 		gl_entries = frappe.db.sql("""select account, debit, credit
-			from `tabGL Entry` where voucher_type='Period Closing Voucher' and voucher_no=%s
+			from tabGL_Entry where voucher_type='Period Closing Voucher' and voucher_no=%s
 			order by account asc, debit asc""", pcv.name, as_dict=1)
 
 		self.assertTrue(gl_entries)

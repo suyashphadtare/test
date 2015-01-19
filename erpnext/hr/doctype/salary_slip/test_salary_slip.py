@@ -9,8 +9,8 @@ from erpnext.hr.doctype.salary_structure.salary_structure import make_salary_sli
 
 class TestSalarySlip(unittest.TestCase):
 	def setUp(self):
-		frappe.db.sql("""delete from `tabLeave Application`""")
-		frappe.db.sql("""delete from `tabSalary Slip`""")
+		frappe.db.sql("""delete from tabLeave_Application""")
+		frappe.db.sql("""delete from tabSalary_Slip""")
 		from erpnext.hr.doctype.leave_application.test_leave_application import _test_records as leave_applications
 		la = frappe.copy_doc(leave_applications[2])
 		la.insert()

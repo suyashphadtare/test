@@ -6,7 +6,7 @@ import frappe
 import re
 
 def execute():
-	for name, html in frappe.db.sql("""select name, html from `tabPrint Format`
+	for name, html in frappe.db.sql("""select name, html from tabPrint_Format
 		where standard = 'No' and html like '%%purchase\\_tax\\_details%%'"""):
 			html = re.sub(r"\bpurchase_tax_details\b", "other_charges", html)
 			frappe.db.set_value("Print Format", name, "html", html)

@@ -28,7 +28,7 @@ class TransactionBase(StatusUpdater):
 			self._add_calendar_event(opts)
 
 	def delete_events(self):
-		frappe.delete_doc("Event", frappe.db.sql_list("""select name from `tabEvent`
+		frappe.delete_doc("Event", frappe.db.sql_list("""select name from tabEvent
 			where ref_type=%s and ref_name=%s""", (self.doctype, self.name)),
 			ignore_permissions=True)
 
@@ -90,7 +90,7 @@ class TransactionBase(StatusUpdater):
 						self.validate_value(field, condition, prevdoc_values[field], doc)
 
 def delete_events(ref_type, ref_name):
-	frappe.delete_doc("Event", frappe.db.sql_list("""select name from `tabEvent`
+	frappe.delete_doc("Event", frappe.db.sql_list("""select name from tabEvent
 		where ref_type=%s and ref_name=%s""", (ref_type, ref_name)), for_reload=True)
 
 class UOMMustBeIntegerError(frappe.ValidationError): pass

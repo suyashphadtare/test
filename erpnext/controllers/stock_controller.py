@@ -121,7 +121,7 @@ class StockController(AccountsController):
 		stock_ledger = {}
 		for sle in frappe.db.sql("""select warehouse, stock_value_difference,
 			voucher_detail_no, item_code, posting_date, actual_qty
-			from `tabStock Ledger Entry` where voucher_type=%s and voucher_no=%s""",
+			from tabStock_Ledger_Entry where voucher_type=%s and voucher_no=%s""",
 			(self.doctype, self.name), as_dict=True):
 				stock_ledger.setdefault(sle.voucher_detail_no, []).append(sle)
 		return stock_ledger
@@ -202,7 +202,7 @@ class StockController(AccountsController):
 		make_sl_entries(sl_entries, is_amended)
 
 	def make_gl_entries_on_cancel(self):
-		if frappe.db.sql("""select name from `tabGL Entry` where voucher_type=%s
+		if frappe.db.sql("""select name from tabGL_Entry where voucher_type=%s
 			and voucher_no=%s""", (self.doctype, self.name)):
 				self.make_gl_entries()
 
@@ -210,7 +210,7 @@ class StockController(AccountsController):
 		serialized_items = []
 		item_codes = list(set([d.item_code for d in self.get(self.fname)]))
 		if item_codes:
-			serialized_items = frappe.db.sql_list("""select name from `tabItem`
+			serialized_items = frappe.db.sql_list("""select name from tabItem
 				where has_serial_no='Yes' and name in ({})""".format(", ".join(["%s"]*len(item_codes))),
 				tuple(item_codes))
 
@@ -219,7 +219,7 @@ class StockController(AccountsController):
 def update_gl_entries_after(posting_date, posting_time, for_warehouses=None, for_items=None,
 		warehouse_account=None):
 	def _delete_gl_entries(voucher_type, voucher_no):
-		frappe.db.sql("""delete from `tabGL Entry`
+		frappe.db.sql("""delete from tabGL_Entry
 			where voucher_type=%s and voucher_no=%s""", (voucher_type, voucher_no))
 
 	if not warehouse_account:
@@ -265,7 +265,7 @@ def get_future_stock_vouchers(posting_date, posting_time, for_warehouses=None, f
 		values += for_warehouses
 
 	for d in frappe.db.sql("""select distinct sle.voucher_type, sle.voucher_no
-		from `tabStock Ledger Entry` sle
+		from tabStock_Ledger_Entry sle
 		where timestamp(sle.posting_date, sle.posting_time) >= timestamp(%s, %s) {condition}
 		order by timestamp(sle.posting_date, sle.posting_time) asc, name asc""".format(condition=condition),
 		tuple([posting_date, posting_time] + values), as_dict=True):
@@ -276,7 +276,7 @@ def get_future_stock_vouchers(posting_date, posting_time, for_warehouses=None, f
 def get_voucherwise_gl_entries(future_stock_vouchers, posting_date):
 	gl_entries = {}
 	if future_stock_vouchers:
-		for d in frappe.db.sql("""select * from `tabGL Entry`
+		for d in frappe.db.sql("""select * from tabGL_Entry
 			where posting_date >= %s and voucher_no in (%s)""" %
 			('%s', ', '.join(['%s']*len(future_stock_vouchers))),
 			tuple([posting_date] + [d[1] for d in future_stock_vouchers]), as_dict=1):

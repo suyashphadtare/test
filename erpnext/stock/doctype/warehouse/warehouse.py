@@ -80,21 +80,21 @@ class Warehouse(Document):
 
 	def on_trash(self):
 		# delete bin
-		bins = frappe.db.sql("select * from `tabBin` where warehouse = %s",
+		bins = frappe.db.sql("select * from tabBin where warehouse = %s",
 			self.name, as_dict=1)
 		for d in bins:
 			if d['actual_qty'] or d['reserved_qty'] or d['ordered_qty'] or \
 					d['indented_qty'] or d['projected_qty'] or d['planned_qty']:
 				throw(_("Warehouse {0} can not be deleted as quantity exists for Item {1}").format(self.name, d['item_code']))
 			else:
-				frappe.db.sql("delete from `tabBin` where name = %s", d['name'])
+				frappe.db.sql("delete from tabBin where name = %s", d['name'])
 
 		warehouse_account = frappe.db.get_value("Account",
 			{"account_type": "Warehouse", "master_name": self.name})
 		if warehouse_account:
 			frappe.delete_doc("Account", warehouse_account)
 
-		if frappe.db.sql("""select name from `tabStock Ledger Entry`
+		if frappe.db.sql("""select name from tabStock_Ledger_Entry
 				where warehouse = %s""", self.name):
 			throw(_("Warehouse can not be deleted as stock ledger entry exists for this warehouse."))
 
@@ -110,7 +110,7 @@ class Warehouse(Document):
 			if self.company != frappe.db.get_value("Warehouse", new_warehouse, "company"):
 				frappe.throw(_("Both Warehouse must belong to same Company"))
 
-			frappe.db.sql("delete from `tabBin` where warehouse=%s", olddn)
+			frappe.db.sql("delete from tabBin where warehouse=%s", olddn)
 
 		from erpnext.accounts.utils import rename_account_for
 		rename_account_for("Warehouse", olddn, newdn, merge, self.company)
@@ -127,7 +127,7 @@ class Warehouse(Document):
 		frappe.db.set_default("allow_negative_stock", 1)
 
 		for item in frappe.db.sql("""select distinct item_code from (
-			select name as item_code from `tabItem` where ifnull(is_stock_item, 'Yes')='Yes'
+			select name as item_code from tabItem where ifnull(is_stock_item, 'Yes')='Yes'
 			union
 			select distinct item_code from tabBin) a"""):
 				repost_stock(item[0], newdn)

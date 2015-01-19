@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 import frappe
 
 def execute():
-	for d in frappe.db.sql("select name from `tabBOM` where docstatus < 2"):
+	for d in frappe.db.sql("select name from tabBOM where docstatus < 2"):
 		try:	
 			document = frappe.get_doc('BOM', d[0])
 			if document.docstatus == 1:

@@ -17,7 +17,7 @@ class Task(Document):
 		}
 
 	def get_customer_details(self):
-		cust = frappe.db.sql("select customer_name from `tabCustomer` where name=%s", self.customer)
+		cust = frappe.db.sql("select customer_name from tabCustomer where name=%s", self.customer)
 		if cust:
 			ret = {'customer_name': cust and cust[0][0] or ''}
 			return ret
@@ -61,7 +61,7 @@ def get_events(start, end, filters=None):
 				conditions += " and " + key + ' = "' + filters[key].replace('"', '\"') + '"'
 
 	data = frappe.db.sql("""select name, exp_start_date, exp_end_date,
-		subject, status, project from `tabTask`
+		subject, status, project from tabTask
 		where ((ifnull(exp_start_date, '0000-00-00')!= '0000-00-00') \
 				and (exp_start_date between %(start)s and %(end)s) \
 			or ((ifnull(exp_start_date, '0000-00-00')!= '0000-00-00') \
@@ -75,7 +75,7 @@ def get_events(start, end, filters=None):
 
 def get_project(doctype, txt, searchfield, start, page_len, filters):
 	from erpnext.controllers.queries import get_match_cond
-	return frappe.db.sql(""" select name from `tabProject`
+	return frappe.db.sql(""" select name from tabProject
 			where %(key)s like "%(txt)s"
 				%(mcond)s
 			order by name

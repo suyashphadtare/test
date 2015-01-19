@@ -23,7 +23,7 @@ class CustomerIssue(TransactionBase):
 
 	def on_cancel(self):
 		lst = frappe.db.sql("""select t1.name
-			from `tabMaintenance Visit` t1, `tabMaintenance Visit Purpose` t2
+			from tabMaintenance_Visit t1, tabMaintenance_Visit_Purpose t2
 			where t2.parent = t1.name and t2.prevdoc_docname = %s and	t1.docstatus!=2""",
 			(self.name))
 		if lst:
@@ -44,7 +44,7 @@ def make_maintenance_visit(source_name, target_doc=None):
 		target_doc.prevdoc_docname = source_parent.name
 
 	visit = frappe.db.sql("""select t1.name
-		from `tabMaintenance Visit` t1, `tabMaintenance Visit Purpose` t2
+		from tabMaintenance_Visit t1, tabMaintenance_Visit_Purpose t2
 		where t2.parent=t1.name and t2.prevdoc_docname=%s
 		and t1.docstatus=1 and t1.completion_status='Fully Completed'""", source_name)
 

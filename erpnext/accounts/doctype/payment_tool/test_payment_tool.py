@@ -190,6 +190,6 @@ class TestPaymentTool(unittest.TestCase):
 		self.assertEquals(new_jv.get("cheque_date"), paytool.reference_date)
 
 	def clear_table_entries(self):
-		frappe.db.sql("""delete from `tabGL Entry` where (account = "_Test Customer 3 - _TC" or account = "_Test Supplier 1 - _TC")""")
-		frappe.db.sql("""delete from `tabSales Order` where customer_name = "_Test Customer 3" """)
-		frappe.db.sql("""delete from `tabPurchase Order` where supplier_name = "_Test Supplier 1" """)
+		frappe.db.sql("""delete from tabGL_Entry where (account = "_Test Customer 3 - _TC" or account = "_Test Supplier 1 - _TC")""")
+		frappe.db.sql("""delete from tabSales_Order where customer_name = "_Test Customer 3" """)
+		frappe.db.sql("""delete from tabPurchase_Order where supplier_name = "_Test Supplier 1" """)

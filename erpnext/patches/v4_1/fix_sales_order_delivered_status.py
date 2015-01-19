@@ -6,9 +6,9 @@ import frappe
 
 def execute():
 	for si in frappe.db.sql_list("""select name
-		from `tabSales Invoice`
+		from tabSales_Invoice
 		where ifnull(update_stock,0) = 1 and docstatus = 1 and exists(
-			select name from `tabSales Invoice Item` where parent=`tabSales Invoice`.name and
+			select name from tabSales_Invoice_Item where parent=tabSales_Invoice.name and
 				ifnull(so_detail, "") != "")"""):
 
 		invoice = frappe.get_doc("Sales Invoice", si)

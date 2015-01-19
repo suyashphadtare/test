@@ -13,7 +13,7 @@ from frappe.model.document import Document
 class PaymenttoInvoiceMatchingTool(Document):
 	def get_voucher_details(self):
 		total_amount = frappe.db.sql("""select sum(ifnull(debit, 0)) - sum(ifnull(credit, 0))
-			from `tabGL Entry`
+			from tabGL_Entry
 			where voucher_type = %s and voucher_no = %s
 				and account = %s and ifnull(against_voucher, '') != voucher_no""",
 			(self.voucher_type, self.voucher_no, self.account))
@@ -22,7 +22,7 @@ class PaymenttoInvoiceMatchingTool(Document):
 
 		reconciled_payment = frappe.db.sql("""
 			select abs(sum(ifnull(debit, 0)) - sum(ifnull(credit, 0)))
-			from `tabGL Entry`
+			from tabGL_Entry
 			where against_voucher_type = %s and against_voucher = %s and account = %s
 		""", (self.voucher_type, self.voucher_no, self.account))
 
@@ -53,12 +53,12 @@ class PaymenttoInvoiceMatchingTool(Document):
 			 	abs(ifnull(t2.debit, 0) - ifnull(t2.credit, 0)) as unmatched_amount, t1.remark,
 			 	t2.against_account, t2.name as voucher_detail_no, t2.is_advance
 			from
-				`tabJournal Voucher` t1, `tabJournal Voucher Detail` t2
+				tabJournal_Voucher t1, tabJournal_Voucher_Detail t2
 			where
 				t1.name = t2.parent and t1.docstatus = 1 and t2.account = %s
 				and ifnull(t2.against_voucher, '')='' and ifnull(t2.against_invoice, '')=''
 				and ifnull(t2.against_jv, '')='' and t2.%s > 0 and t1.name != %s
-				and not exists (select * from `tabJournal Voucher Detail`
+				and not exists (select * from tabJournal_Voucher_Detail
 					where parent=%s and against_jv = t1.name) %s
 			group by t1.name, t2.name """ %	('%s', dr_or_cr, '%s', '%s', cond),
 			(self.account, self.voucher_no, self.voucher_no), as_dict=1)
@@ -73,7 +73,7 @@ class PaymenttoInvoiceMatchingTool(Document):
 					select
 						ifnull(abs(sum(ifnull(debit, 0)) - sum(ifnull(credit, 0))), 0)
 					from
-						`tabGL Entry`
+						tabGL_Entry
 					where
 						account = %s and against_voucher_type = "Journal Voucher"
 						and ifnull(against_voucher, '') = %s
@@ -149,7 +149,7 @@ def get_voucher_nos(doctype, txt, searchfield, start, page_len, filters):
 		select
 			voucher_no, posting_date, ifnull(abs(sum(ifnull(debit, 0)) - sum(ifnull(credit, 0))), 0) as amount
 		from
-			`tabGL Entry`
+			tabGL_Entry
 		where
 			account = %s and voucher_type = %s and voucher_no like %s
 			and ifnull(against_voucher, '') = ''
@@ -161,7 +161,7 @@ def get_voucher_nos(doctype, txt, searchfield, start, page_len, filters):
 			select
 				ifnull(abs(sum(ifnull(debit, 0)) - sum(ifnull(credit, 0))), 0)
 			from
-				`tabGL Entry`
+				tabGL_Entry
 			where
 				account = %s and against_voucher_type = %s and ifnull(against_voucher, '') = %s
 		""", (filters["account"], filters["voucher_type"], d.voucher_no))

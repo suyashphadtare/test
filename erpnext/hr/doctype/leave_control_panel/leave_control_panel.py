@@ -20,7 +20,7 @@ class LeaveControlPanel(Document):
 				else:
 					condition += " and " + l[1]+ "= '" +l[0] +"'"
 				flag = 1
-		emp_query = "select name from `tabEmployee` "
+		emp_query = "select name from tabEmployee "
 		if flag == 1:
 			emp_query += condition
 		e = frappe.db.sql(emp_query)

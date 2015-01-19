@@ -14,7 +14,7 @@ class Newsletter(Document):
 	def onload(self):
 		if self.email_sent:
 			self.get("__onload").status_count = dict(frappe.db.sql("""select status, count(name)
-				from `tabBulk Email` where ref_doctype=%s and ref_docname=%s
+				from tabBulk_Email where ref_doctype=%s and ref_docname=%s
 				group by status""", (self.doctype, self.name))) or None
 
 	def test_send(self, doctype="Lead"):
@@ -75,7 +75,7 @@ class Newsletter(Document):
 
 			return frappe.db.sql_list("""select
 				if(ifnull(company_email, '')!='', company_email, personal_email) as email_id
-				from `tabEmployee` where status='Active'""")
+				from tabEmployee where status='Active'""")
 
 		elif self.email_list:
 			email_list = [cstr(email).strip() for email in self.email_list.split(",")]

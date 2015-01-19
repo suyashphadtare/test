@@ -103,7 +103,7 @@ class PurchaseInvoice(BuyingController):
 	# ------------------------------------------------------------
 	def check_for_acc_head_of_supplier(self):
 		if self.supplier and self.credit_to:
-			acc_head = frappe.db.sql("select master_name from `tabAccount` where name = %s", self.credit_to)
+			acc_head = frappe.db.sql("select master_name from tabAccount where name = %s", self.credit_to)
 
 			if (acc_head and cstr(acc_head[0][0]) != cstr(self.supplier)) or (not acc_head and (self.credit_to != cstr(self.supplier) + " - " + self.company_abbr)):
 				msgprint("Credit To: %s do not match with Supplier: %s for Company: %s.\n If both correctly entered, please select Master Type and Master Name in account master." %(self.credit_to,self.supplier,self.company), raise_exception=1)
@@ -115,7 +115,7 @@ class PurchaseInvoice(BuyingController):
 		for d in self.get('entries'):
 			if d.purchase_order and not d.purchase_order in check_list and not d.purchase_receipt:
 				check_list.append(d.purchase_order)
-				stopped = frappe.db.sql("select name from `tabPurchase Order` where status = 'Stopped' and name = %s", d.purchase_order)
+				stopped = frappe.db.sql("select name from tabPurchase_Order where status = 'Stopped' and name = %s", d.purchase_order)
 				if stopped:
 					throw(_("Purchase Order {0} is 'Stopped'").format(d.purchase_order))
 
@@ -211,11 +211,11 @@ class PurchaseInvoice(BuyingController):
 	def check_prev_docstatus(self):
 		for d in self.get('entries'):
 			if d.purchase_order:
-				submitted = frappe.db.sql("select name from `tabPurchase Order` where docstatus = 1 and name = %s", d.purchase_order)
+				submitted = frappe.db.sql("select name from tabPurchase_Order where docstatus = 1 and name = %s", d.purchase_order)
 				if not submitted:
 					frappe.throw(_("Purchase Order {0} is not submitted").format(d.purchase_order))
 			if d.purchase_receipt:
-				submitted = frappe.db.sql("select name from `tabPurchase Receipt` where docstatus = 1 and name = %s", d.purchase_receipt)
+				submitted = frappe.db.sql("select name from tabPurchase_Receipt where docstatus = 1 and name = %s", d.purchase_receipt)
 				if not submitted:
 					frappe.throw(_("Purchase Receipt {0} is not submitted").format(d.purchase_receipt))
 
@@ -326,7 +326,7 @@ class PurchaseInvoice(BuyingController):
 					# Post reverse entry for Stock-Received-But-Not-Billed if it is booked in Purchase Receipt
 					negative_expense_booked_in_pi = None
 					if item.purchase_receipt:
-						negative_expense_booked_in_pi = frappe.db.sql("""select name from `tabGL Entry`
+						negative_expense_booked_in_pi = frappe.db.sql("""select name from tabGL_Entry
 							where voucher_type='Purchase Receipt' and voucher_no=%s and account=%s""",
 							(item.purchase_receipt, expenses_included_in_valuation))
 
@@ -403,7 +403,7 @@ def get_expense_account(doctype, txt, searchfield, start, page_len, filters):
 	# expense account can be any Debit account,
 	# but can also be a Liability account with account_type='Expense Account' in special circumstances.
 	# Hence the first condition is an "OR"
-	return frappe.db.sql("""select tabAccount.name from `tabAccount`
+	return frappe.db.sql("""select tabAccount.name from tabAccount
 			where (tabAccount.report_type = "Profit and Loss"
 					or tabAccount.account_type = "Expense Account")
 				and tabAccount.group_or_ledger="Ledger"

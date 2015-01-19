@@ -6,7 +6,7 @@ import frappe, os, json
 
 def import_charts():
 	print "Importing Chart of Accounts"
-	frappe.db.sql("""delete from `tabChart of Accounts`""")
+	frappe.db.sql("""delete from tabChart_of_Accounts""")
 	charts_dir = os.path.join(os.path.dirname(__file__), "charts")
 	for fname in os.listdir(charts_dir):
 		if fname.endswith(".json"):

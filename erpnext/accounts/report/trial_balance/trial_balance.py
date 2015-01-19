@@ -45,7 +45,7 @@ def validate_filters(filters):
 		filters.to_date = filters.year_end_date
 
 def get_data(filters):
-	accounts = frappe.db.sql("""select * from `tabAccount` where company=%s order by lft""",
+	accounts = frappe.db.sql("""select * from tabAccount where company=%s order by lft""",
 		filters.company, as_dict=True)
 
 	if not accounts:
@@ -53,7 +53,7 @@ def get_data(filters):
 
 	accounts, accounts_by_name = filter_accounts(accounts)
 
-	min_lft, max_rgt = frappe.db.sql("""select min(lft), max(rgt) from `tabAccount`
+	min_lft, max_rgt = frappe.db.sql("""select min(lft), max(rgt) from tabAccount
 		where company=%s""", (filters.company,))[0]
 
 	gl_entries_by_account = get_gl_entries(filters.company, None, filters.to_date, min_lft, max_rgt,

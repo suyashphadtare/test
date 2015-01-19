@@ -65,7 +65,7 @@ def get_columns(filters):
 def get_costcenter_target_details(filters):
 	return frappe.db.sql("""select cc.name, cc.distribution_id, 
 		cc.parent_cost_center, bd.account, bd.budget_allocated 
-		from `tabCost Center` cc, `tabBudget Detail` bd 
+		from tabCost_Center cc, tabBudget_Detail bd 
 		where bd.parent=cc.name and bd.fiscal_year=%s and 
 		cc.company=%s order by cc.name""" % ('%s', '%s'), 
 		(filters.get("fiscal_year"), filters.get("company")), as_dict=1)
@@ -75,7 +75,7 @@ def get_target_distribution_details(filters):
 	target_details = {}
 
 	for d in frappe.db.sql("""select bd.name, bdd.month, bdd.percentage_allocation  
-		from `tabBudget Distribution Detail` bdd, `tabBudget Distribution` bd
+		from tabBudget_Distribution_Detail bdd, tabBudget_Distribution bd
 		where bdd.parent=bd.name and bd.fiscal_year=%s""", (filters["fiscal_year"]), as_dict=1):
 			target_details.setdefault(d.name, {}).setdefault(d.month, flt(d.percentage_allocation))
 
@@ -85,7 +85,7 @@ def get_target_distribution_details(filters):
 def get_actual_details(filters):
 	ac_details = frappe.db.sql("""select gl.account, gl.debit, gl.credit, 
 		gl.cost_center, MONTHNAME(gl.posting_date) as month_name 
-		from `tabGL Entry` gl, `tabBudget Detail` bd 
+		from tabGL_Entry gl, tabBudget_Detail bd 
 		where gl.fiscal_year=%s and company=%s
 		and bd.account=gl.account and bd.parent=gl.cost_center""" % ('%s', '%s'), 
 		(filters.get("fiscal_year"), filters.get("company")), as_dict=1)
